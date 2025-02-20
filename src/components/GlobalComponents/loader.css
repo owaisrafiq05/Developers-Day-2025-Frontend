@@ -1,0 +1,75 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100vh;
+  background: black;
+  color: white;
+}
+
+h1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10vw;
+  font-family: "Reval";
+  width: 100%;
+  text-align: center;
+}
+
+.header .letter {
+  display: inline-block;
+  line-height: 1em;
+}
+
+.overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: white;
+  color: black;
+  z-index: 10;
+}
+
+.preloader {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  z-index: 10;
+  transition: all 0.5s ease;
+  animation: removePreloader 0.5s ease;
+  animation-delay: 4s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes removePreloader {
+  from {
+    height: 100vh;
+    opacity: 1;
+    pointer-events: all;
+  }
+  to {
+    height: 0vh;
+    opacity: 1;
+    pointer-events: none;
+  }
+}
+
+@media(max-width: 800px) {
+  h1 {
+    font-size: 20vw;
+  }
+} 
