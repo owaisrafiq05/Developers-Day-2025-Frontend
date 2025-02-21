@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
         {/* commented for now
          <Loader /> 
         */}
-        <Menu />
+        {/* <Menu /> */}
         <div className="w-full h-full min-h-screen">
           {children}
         </div>

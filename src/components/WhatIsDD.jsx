@@ -24,7 +24,9 @@ const WhatIsDD = () => {
     // paragraph anim
     para.current.innerHTML = para.current.textContent
       .split("")
-      .map((char) => `<span className="z-10" style="z-index: 10">${char}</span>`)
+      .map(
+        (char) => `<span className="z-10" style="z-index: 10">${char}</span>`
+      )
       .join("");
 
     gsap.from(para.current.querySelectorAll("span"), {
