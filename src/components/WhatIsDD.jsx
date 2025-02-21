@@ -1,14 +1,15 @@
 "use client";
 
 import gsap from "gsap";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const WhatIsDD = () => {
   const heading = useRef(null);
   const para = useRef(null);
+  const [animatedText, setAnimatedText] = useState(""); // Store processed text
 
   useEffect(() => {
-    // heading anim
+    // Heading Animation
     gsap.from(heading.current, {
       scrollTrigger: {
         trigger: heading.current,
@@ -21,28 +22,40 @@ const WhatIsDD = () => {
       duration: 1,
     });
 
-    // paragraph anim
-    para.current.innerHTML = para.current.textContent
-      .split("")
+    // Only modify text once, before animation
+    const originalText =
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est atque natus maxime! Ex nam in saepe sunt rerum quis mollitia sapiente expedita, culpa nobis deleniti, hic quo similique maxime ratione ea! Corrupti, laudantium! Voluptatem eaque natus dolore voluptate repellendus expedita.";
+
+    const words = originalText.split(" ");
+    const wrappedText = words
       .map(
-        (char) => `<span className="z-10" style="z-index: 10">${char}</span>`
+        (word) =>
+          `<span style="display: inline-block; opacity: 0;">${word}&nbsp;</span>`
       )
       .join("");
 
-    gsap.from(para.current.querySelectorAll("span"), {
-      scrollTrigger: {
-        trigger: para.current,
-        start: "top 85%",
-        end: "top 35%",
-        scrub: true,
-      },
-      opacity: 0,
-      y: 50,
-      duration: 1,
-      stagger: 0.01,
-      delay: 1,
-      zIndex: 10,
-    });
+    setAnimatedText(wrappedText); // Update state with processed text
+
+    // Wait for state update before selecting spans
+    setTimeout(() => {
+      if (para.current) {
+        const spans = para.current.querySelectorAll("span");
+
+        gsap.to(spans, {
+          scrollTrigger: {
+            trigger: para.current,
+            start: "top 85%",
+            end: "top 35%",
+            scrub: true,
+          },
+          opacity: 1,
+          y: 0,
+          stagger: 0.02,
+          duration: 1,
+        });
+      }
+    }, 100); // Small delay to ensure spans are present
+
   }, []);
 
   return (
@@ -52,16 +65,11 @@ const WhatIsDD = () => {
       </h1>
 
       <div>
-        {/* <h3 className="text-2xl">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        </h3> */}
-        <p ref={para} className="z-10 text-xl max-w-[1000px]">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Est atque
-          natus maxime! Ex nam in saepe sunt rerum quis mollitia sapiente
-          expedita, culpa nobis deleniti, hic quo similique maxime ratione ea!
-          Corrupti, laudantium! Voluptatem eaque natus dolore voluptate
-          repellendus expedita.
-        </p>
+        <p
+          ref={para}
+          className="z-10 text-xl max-w-[1000px]"
+          dangerouslySetInnerHTML={{ __html: animatedText }}
+        />
       </div>
     </div>
   );
