@@ -1,3 +1,4 @@
+import Stats from "@/components/Stats";
 import WhatIsDD from "@/components/WhatIsDD";
 
 export default function Home() {
@@ -8,7 +9,13 @@ export default function Home() {
           Index <sup>(01)</sup>
         </h1> */}
       </div>
-      <WhatIsDD />
+      
+      <div className="bg-gradient-to-br from-red-700 to-red-800 ">
+        <WhatIsDD />
+        <br/>
+        <br/>
+        <Stats />
+      </div>
     </>
   );
 }

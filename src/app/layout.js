@@ -14,7 +14,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} bg-black`}>
-        <Loader />
+        {/* commented for now
+         <Loader /> 
+        */}
         <Menu />
         <div className="w-full h-full min-h-screen pt-60">
           {children}
