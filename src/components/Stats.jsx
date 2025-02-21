@@ -27,7 +27,7 @@ const Stats = () => {
   }, []);
   return (
     <div className="flex items-center justify-center flex-col gap-4 px-10 pb-10">
-      <h1 className="text-3xl" ref={heading}>
+      <h1 className="text-3xl font-bold" ref={heading}>
         Stats
       </h1>
       <div className="flex gap-4 justify-center items-center flex-wrap">
@@ -51,7 +51,7 @@ const Stats = () => {
                   separator=","
                   direction="up"
                   duration={1}
-                  className="count-up-text"
+                  className="count-up-text font-bold"
                   // startWhen={false}
                 />
                 +
@@ -78,7 +78,7 @@ const Stats = () => {
                 separator=","
                 direction="up"
                 duration={1}
-                className="count-up-text"
+                className="count-up-text font-bold"
                 // startWhen={false}
               />
               +
@@ -105,7 +105,7 @@ const Stats = () => {
                 separator=","
                 direction="up"
                 duration={1}
-                className="count-up-text"
+                className="count-up-text font-bold"
                 // startWhen={false}
               />
               +

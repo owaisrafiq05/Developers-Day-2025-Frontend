@@ -1,9 +1,15 @@
-import { Inter } from "next/font/google";
+import { Inter, Lexend } from "next/font/google";
 import "./globals.css";
 import Menu from "../components/GlobalComponents/Menu.js";
 import Loader from "../components/GlobalComponents/Loader";
 
 const inter = Inter({ subsets: ["latin"] });
+const lexend = Lexend({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+
+});
 
 export const metadata = {
   title: "NextJS x GSAP",
@@ -13,14 +19,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-black`}>
+      <body className={`${lexend.className} bg-black`}>
         {/* commented for now
          <Loader /> 
         */}
         {/* <Menu /> */}
-        <div className="w-full h-full min-h-screen">
-          {children}
-        </div>
+        <div className="w-full h-full min-h-screen">{children}</div>
       </body>
     </html>
   );
