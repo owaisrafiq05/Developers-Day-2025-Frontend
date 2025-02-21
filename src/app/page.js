@@ -1,9 +1,26 @@
+import Hero from "@/components/Hero";
+import Squares from "@/components/Squares/Squares";
+import Stats from "@/components/Stats";
+import WhatIsDD from "@/components/WhatIsDD";
+
 export default function Home() {
   return (
-    <div className="page-content hero">
-      <h1>
-        Index <sup>(01)</sup>
-      </h1>
-    </div>
+    <>
+      <Hero />
+
+      <div className="py-10 bg-gradient-to-br from-[#141414] to-[#0a0a0a] relative">
+        <Squares
+          speed={0.5}
+          squareSize={40}
+          direction="diagonal" // up, down, left, right, diagonal
+          borderColor="#000"
+          hoverFillColor="#222"
+        />
+        <WhatIsDD />
+        <br />
+        <br />
+        <Stats />
+      </div>
+    </>
   );
 }

@@ -35,7 +35,7 @@ const Loader = () => {
   }, []);
 
   return (
-    <div className="overlay">
+    <div className="loader overlay">
       <div className="preloader">
         <img src="./logo2.png"></img>
       </div>
