@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import SpotlightCard from "./SpotlightCard/SpotlightCard";
 
 const Stats = () => {
   const heading = useRef(null);
@@ -32,39 +33,45 @@ const Stats = () => {
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.4, delay: 1 }}
-          className="w-[275px] h-[200px] p-10 bg-gradient-to-br from-[#6e0a0a] to-[#3f070a] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
+          className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
-          <h1 className="text-5xl text-left w-full">99+</h1>
-          <p className="text-left">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita,
-            veniam.
-          </p>
+          <SpotlightCard className="absolute top-0 left-0  p-10 w-full h-full  bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+            <h1 className="text-5xl text-left w-full mb-2">99+</h1>
+            <p className="text-left">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Expedita, veniam.
+            </p>
+          </SpotlightCard>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.4, delay: 1.5 }}
-          className="w-[275px] h-[200px] p-10 bg-gradient-to-br from-[#6e0a0a] to-[#3f070a] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
+          transition={{ duration: 0.4, delay: 1 }}
+          className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
-          <h1 className="text-5xl text-left w-full">99+</h1>
-          <p className="text-left">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita,
-            veniam.
-          </p>
+          <SpotlightCard className="absolute top-0 left-0  p-10 w-full h-full  bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+            <h1 className="text-5xl text-left w-full mb-2">99+</h1>
+            <p className="text-left">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Expedita, veniam.
+            </p>
+          </SpotlightCard>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.4, delay: 2 }}
-          className="w-[275px] h-[200px] p-10 bg-gradient-to-br from-[#6e0a0a] to-[#3f070a] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
+          transition={{ duration: 0.4, delay: 1 }}
+          className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
-          <h1 className="text-5xl text-left w-full">99+</h1>
-          <p className="text-left">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita,
-            veniam.
-          </p>
+          <SpotlightCard className="absolute top-0 left-0  p-10 w-full h-full  bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+            <h1 className="text-5xl text-left w-full mb-2">99+</h1>
+            <p className="text-left">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Expedita, veniam.
+            </p>
+          </SpotlightCard>
         </motion.div>
       </div>
     </div>
