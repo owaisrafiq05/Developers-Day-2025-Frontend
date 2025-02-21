@@ -4,6 +4,8 @@ import gsap from "gsap";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import SpotlightCard from "./SpotlightCard/SpotlightCard";
+import CountUp from "./CountUp/CountUp";
+import GradientText from "./GradientText/GradientText";
 
 const Stats = () => {
   const heading = useRef(null);
@@ -25,7 +27,7 @@ const Stats = () => {
   }, []);
   return (
     <div className="flex items-center justify-center flex-col gap-4 px-10 pb-10">
-      <h1 className="text-3xl" ref={heading}>
+      <h1 className="text-3xl font-bold" ref={heading}>
         Stats
       </h1>
       <div className="flex gap-4 justify-center items-center flex-wrap">
@@ -36,7 +38,25 @@ const Stats = () => {
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
           <SpotlightCard className="absolute top-0 left-0  p-10 w-full h-full  bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
-            <h1 className="text-5xl text-left w-full mb-2">99+</h1>
+            {/* <GradientText
+              colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+              animationSpeed={3}
+              showBorder={false}
+              className="custom-class text-5xl text-left w-full mb-2"
+            > */}
+              <h1 className="text-5xl text-left w-full mb-2">
+                <CountUp
+                  from={0}
+                  to={300}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text font-bold"
+                  // startWhen={false}
+                />
+                +
+              </h1>
+            {/* </GradientText> */}
             <p className="text-left">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
               Expedita, veniam.
@@ -51,7 +71,19 @@ const Stats = () => {
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
           <SpotlightCard className="absolute top-0 left-0  p-10 w-full h-full  bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
-            <h1 className="text-5xl text-left w-full mb-2">99+</h1>
+            <h1 className="text-5xl text-left w-full mb-2">
+              <CountUp
+                from={0}
+                to={300}
+                separator=","
+                direction="up"
+                duration={1}
+                className="count-up-text font-bold"
+                // startWhen={false}
+              />
+              +
+            </h1>
+
             <p className="text-left">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
               Expedita, veniam.
@@ -66,7 +98,18 @@ const Stats = () => {
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
           <SpotlightCard className="absolute top-0 left-0  p-10 w-full h-full  bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
-            <h1 className="text-5xl text-left w-full mb-2">99+</h1>
+            <h1 className="text-5xl text-left w-full mb-2">
+              <CountUp
+                from={0}
+                to={300}
+                separator=","
+                direction="up"
+                duration={1}
+                className="count-up-text font-bold"
+                // startWhen={false}
+              />
+              +
+            </h1>
             <p className="text-left">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
               Expedita, veniam.

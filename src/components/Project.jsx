@@ -61,7 +61,7 @@ export default function Projects() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative w-full overflow-hidden py-16">
+    <section ref={sectionRef} className="relative w-full items-center justify-center overflow-hidden py-16">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-white">Event Highlights</h2>
         <p className="text-red-600 mt-1">Showcasing the Best in Tech: Competitions, Careers & More</p>
