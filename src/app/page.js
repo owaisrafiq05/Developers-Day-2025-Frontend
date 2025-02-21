@@ -2,6 +2,7 @@ import Hero from "@/components/Hero";
 import Squares from "@/components/Squares/Squares";
 import Stats from "@/components/Stats";
 import WhatIsDD from "@/components/WhatIsDD";
+import Projects from "@/components/Project";
 
 export default function Home() {
   return (
@@ -17,9 +18,10 @@ export default function Home() {
           hoverFillColor="#222"
         />
         <WhatIsDD />
-        <br />
-        <br />
+        <br/>
+        <br/>
         <Stats />
+        <Projects/>
       </div>
     </>
   );

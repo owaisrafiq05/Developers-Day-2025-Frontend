@@ -20,10 +20,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${lexend.className} bg-black`}>
-        {/* commented for now
-         <Loader /> 
-        */}
-        {/* <Menu /> */}
+         {/* <Loader />  */}
+         <Menu />
         <div className="w-full h-full min-h-screen">{children}</div>
       </body>
     </html>

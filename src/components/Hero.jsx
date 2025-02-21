@@ -2,6 +2,8 @@
 
 import Balatro from "./Balatro/Balatro";
 import Orb from "./Orb/Orb";
+import CountUp from "./CountUp/CountUp";
+import Countdown from "./Counter";
 
 const Hero = () => {
   return (
@@ -17,8 +19,13 @@ const Hero = () => {
         spinSpeed={4.0}
       />
 
-      <h1 className="text-7xl font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">Developers Day <sup className="text-4xl absolute">'25</sup></h1>
-
+      <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        Developers Day <sup className="text-2xl md:text-4xl absolute">'25</sup>
+      </h1>
+      
+      <div className="pt-18 z-1"> {/* Added margin-top to create space */}
+        <Countdown />
+      </div>
       {/* <div style={{ width: "300px", height: "300px", position: "relative" }}>
         <Orb
           hoverIntensity={0.5}
