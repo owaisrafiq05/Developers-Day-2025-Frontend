@@ -1,10 +1,11 @@
 "use client";
 
 import Balatro from "./Balatro/Balatro";
-import Orb from "./Orb/Orb";
-import CountUp from "./CountUp/CountUp";
+// import Orb from "./Orb/Orb";
+// import CountUp from "./CountUp/CountUp";
 import Countdown from "./Counter";
-import { FaLocationPin, FaCalendar } from "react-icons/fa6";
+import { FaLocationDot, FaCalendarDays } from "react-icons/fa6";
+import GradientText from "./GradientText/GradientText";
 
 const Hero = () => {
   return (
@@ -20,16 +21,33 @@ const Hero = () => {
         spinSpeed={4.0}
       />
 
-      <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold relative">
-        Developers Day <sup className="text-2xl md:text-4xl relative">'25</sup>
-      </h1>
+      <div className="relative flex">
+        <GradientText
+          className="text-4xl md:text-6xl lg:text-7xl font-bold relative bg-none"
+          colors={["#ffaa40", "#9c40ff", "#ffaa40"]}
+          animationSpeed={8}
+          showBorder={false}
+        >
+          {/* <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold relative"> */}
+          Developers Day {/* </h1> */}
+        </GradientText>
+        <sup className="text-2xl md:text-4xl relative">
+          <GradientText
+            colors={["#9c40ff", "#ffaa40", "#9c40ff"]}
+            animationSpeed={20}
+            showBorder={false}
+          >
+            '25
+          </GradientText>
+        </sup>
+      </div>
 
       <div className="relative flex gap-8 items-center justify-center">
         <div className="flex gap-2 items-center justify-center">
-          <FaLocationPin /> <h3>FAST NUCES KHI</h3>
+          <FaLocationDot /> <h3>FAST NUCES KHI</h3>
         </div>
         <div className="flex gap-2 items-center justify-center">
-          <FaCalendar /> <h3>April 17, 2025</h3>
+          <FaCalendarDays /> <h3>April 17, 2025</h3>
         </div>
       </div>
 

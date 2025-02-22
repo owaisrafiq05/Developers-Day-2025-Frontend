@@ -49,6 +49,7 @@ export default function Countdown() {
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">
         {timeUnits.map((unit) => (
           <motion.div
+          key={unit.label}
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.4, delay: 1 }}
