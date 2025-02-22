@@ -117,10 +117,3 @@
   align-items: center; /* Center items vertically */
   justify-content: space-between; /* Space between logo and hamburger */
 }
-
-.hamburger-icon {
-  cursor: pointer; /* Change cursor to pointer */
-  display: flex; /* Ensure it takes up space */
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally */
-}

@@ -37,13 +37,13 @@ export default function Countdown() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center  min-h-screen p-6">
+    <div className="flex flex-col items-center justify-center z-0 relative">
        <motion.div
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.2, delay: 0.5 }}>
-      <div className="text-center mb-8">
-        <h2 className="text-3xl md:text-5xl font-bold text-white">Event Starts In...</h2>
+      <div className="text-center mb-6">
+        <h2 className="text-3xl md:text-3xl font-semibold text-white relative">Event Starts In...</h2>
       </div>
       </motion.div>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">

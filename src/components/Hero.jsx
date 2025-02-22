@@ -4,10 +4,11 @@ import Balatro from "./Balatro/Balatro";
 import Orb from "./Orb/Orb";
 import CountUp from "./CountUp/CountUp";
 import Countdown from "./Counter";
+import { FaLocationPin, FaCalendar } from "react-icons/fa6";
 
 const Hero = () => {
   return (
-    <div className="w-full h-screen relative">
+    <div className="w-full h-screen relative flex flex-col items-center justify-center gap-6">
       <Balatro
         isRotate={false}
         mouseInteraction={true}
@@ -19,11 +20,22 @@ const Hero = () => {
         spinSpeed={4.0}
       />
 
-      <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        Developers Day <sup className="text-2xl md:text-4xl absolute">'25</sup>
+      <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold relative">
+        Developers Day <sup className="text-2xl md:text-4xl relative">'25</sup>
       </h1>
-      
-      <div className="pt-18 z-1"> {/* Added margin-top to create space */}
+
+      <div className="relative flex gap-8 items-center justify-center">
+        <div className="flex gap-2 items-center justify-center">
+          <FaLocationPin /> <h3>FAST NUCES KHI</h3>
+        </div>
+        <div className="flex gap-2 items-center justify-center">
+          <FaCalendar /> <h3>April 17, 2025</h3>
+        </div>
+      </div>
+
+      <div className="pt-18 z-1">
+        {" "}
+        {/* Added margin-top to create space */}
         <Countdown />
       </div>
       {/* <div style={{ width: "300px", height: "300px", position: "relative" }}>

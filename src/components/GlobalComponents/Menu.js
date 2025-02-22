@@ -6,6 +6,7 @@ import Image from "next/image";
 import "./menu.css";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import { FaBars, FaCross, FaXmark } from "react-icons/fa6";
 
 const menuLinks = [
   { path: "/", label: "Home" },
@@ -60,22 +61,18 @@ const Menu = () => {
   }, [isMenuOpen]);
 
   return (
-    <div className="menu-container" ref={container}>
+    <div className="menu-container z-40" ref={container}>
       <div className="menu-bar flex items-center justify-between">
         <div className="menu-logo">
           <Link href={"/"}>
             <Image src="/logo.png" alt="Logo" width={150} height={50} />
           </Link>
         </div>
-        <div className="menu-open" onClick={toggleMenu}>
-          <div className="hamburger-icon">
-            <svg width="50" height="50" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="15" cy="15" r="15" fill="red" />
-              <path d="M7 10H23" stroke="black" strokeWidth="2" />
-              <path d="M7 15H23" stroke="black" strokeWidth="2" />
-              <path d="M7 20H23" stroke="black" strokeWidth="2" />
-            </svg>
-          </div>
+        <div
+          className="menu-open absolute top-[60px] right-[60px]"
+          onClick={toggleMenu}
+        >
+          <FaBars className="p-2 text-[2.5rem] rounded-md cursor-pointer hover:scale-110 transition-all duration-100" />
         </div>
       </div>
       <div className="menu-overlay">
@@ -84,17 +81,23 @@ const Menu = () => {
             <Image src="/logo.png" alt="Logo" width={150} height={50} />
           </div>
           <div className="menu-open" onClick={toggleMenu}>
-          <div className="hamburger-icon">
+            <div
+              className="menu-open absolute top-[60px] right-[60px]"
+              onClick={toggleMenu}
+            >
+              <FaBars className="p-2 text-white text-[2.5rem] rounded-md cursor-pointer hover:scale-110 transition-all duration-100" />
+            </div>
+            {/* <div className="hamburger-icon">
             <svg width="50" height="50" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="15" cy="15" r="15" fill="red" />
               <path d="M7 10H23M7 15H23M7 20H23" stroke="black" strokeWidth="2" />
             </svg>
+          </div> */}
           </div>
-        </div>
         </div>
 
         <div className="menu-close-icon">
-          <p onClick={toggleMenu}>&#x2715;</p>
+          <FaXmark onClick={toggleMenu} className="text-[2.5rem]" />
         </div>
         <div className="menu-copy">
           <div className="menu-links">
@@ -102,7 +105,7 @@ const Menu = () => {
               return (
                 <div className="menu-link-item" key={link.label}>
                   <div className="menu-link-item-holder" onClick={toggleMenu}>
-                    <Link href={link.path} className="menu-link">
+                    <Link href={link.path} className="menu-link ">
                       {link.label}
                     </Link>
                   </div>

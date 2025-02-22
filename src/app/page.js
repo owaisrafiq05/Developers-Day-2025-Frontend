@@ -21,6 +21,7 @@ export default function Home() {
         <br/>
         <br/>
         <Stats />
+        <br/>
         <Projects/>
       </div>
     </>
