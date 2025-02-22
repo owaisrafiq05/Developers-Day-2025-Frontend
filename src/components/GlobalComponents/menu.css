@@ -31,7 +31,7 @@
   width: 100vw;
   height: 100vh;
   padding: 2em;
-  background: linear-gradient(135deg, #ff0055, #000000);
+  background: linear-gradient(135deg, #ff002b, #000000);
   z-index: 2;
   display: flex;
   clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
@@ -74,15 +74,16 @@
 .menu-link-item {
   width: 100%; /* Ensure full width for each item */
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-  margin: 1em 0; /* Vertical spacing between links */
+  margin: 0.5em 0; /* Vertical spacing between links */
 }
 
 .menu-link-item-holder {
   position: relative;
+  line-height: 50px;
 }
 
 .menu-link-item-holder a {
-  color: #000;
+  /* color: #000; */
   font-size: 80px;
   font-weight: 400;
   letter-spacing: -0.02em;

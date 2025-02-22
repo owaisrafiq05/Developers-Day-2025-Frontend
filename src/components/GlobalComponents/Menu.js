@@ -105,7 +105,7 @@ const Menu = () => {
               return (
                 <div className="menu-link-item" key={link.label}>
                   <div className="menu-link-item-holder" onClick={toggleMenu}>
-                    <Link href={link.path} className="menu-link ">
+                    <Link href={link.path} className="menu-link text-white">
                       {link.label}
                     </Link>
                   </div>
