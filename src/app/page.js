@@ -21,7 +21,7 @@ export default function Home() {
         <br/>
         <br/>
         <Stats />
-        <Projects/>
+        {/* <Projects/> */}
       </div>
     </>
   );
