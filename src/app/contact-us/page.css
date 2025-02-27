@@ -1,0 +1,6 @@
+@media only screen and (max-width: 600px) {
+  .my-map {
+    max-width: 100% !important;
+    width: 100%;
+  }
+}

@@ -139,7 +139,13 @@ export default function Team() {
     <div>
     <TeamHero />
     <section ref={sectionRef} className="relative overflow-hidden bg-white">
-      <Squares />
+    <Squares
+          speed={0.5}
+          squareSize={40}
+          direction="diagonal" // up, down, left, right, diagonal
+          borderColor="#000"
+          hoverFillColor="#222"
+        />
       
       <div className="container mx-auto px-4 py-16">
         {/* Hero content */}
