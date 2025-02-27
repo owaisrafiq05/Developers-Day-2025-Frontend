@@ -2,19 +2,10 @@ import Squares from "@/components/Squares/Squares";
 import Cards from "@/components/TeamComponents/Cards";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa6";
-import './page.css'
-
-const Marker = ({ text }) => <div>{text}</div>;
+import "./page.css";
+import Map from "@/components/Map";
 
 const page = () => {
-  const defaultProps = {
-    center: {
-      lat: 10.99835602,
-      lng: 77.01502627,
-    },
-    zoom: 11,
-  };
-
   return (
     <div>
       <div className="relative">
@@ -90,7 +81,9 @@ const page = () => {
           <h3 className="m-auto w-max">Your City, Your State</h3>
         </div>
 
-        <div className="my-map mt-6 max-w-[1000px] w-[90%] m-auto h-[300px] bg-gray-300 rounded-xl"></div>
+        <div className="my-map mt-6 max-w-[1000px] w-[90%] m-auto h-[300px] bg-gray-300 rounded-xl">
+          <Map />
+        </div>
       </div>
     </div>
   );
