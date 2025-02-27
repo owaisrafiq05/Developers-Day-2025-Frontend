@@ -1,18 +1,18 @@
-"use client"
-import { useEffect, useRef } from "react"
-import gsap from "gsap"
+"use client";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 
 const Cards = ({ teamMembers = [] }) => {
-  const cardRefs = useRef([])
-  const overlayRefs = useRef([])
-  const contentRefs = useRef([])
-  const indicatorRefs = useRef([])
+  const cardRefs = useRef([]);
+  const overlayRefs = useRef([]);
+  const contentRefs = useRef([]);
+  const indicatorRefs = useRef([]);
 
   useEffect(() => {
     if (teamMembers.length === 0) return;
-    
+
     // Initial animation for cards appearing
-    gsap.set(cardRefs.current, { opacity: 0, y: 50 })
+    gsap.set(cardRefs.current, { opacity: 0, y: 50 });
 
     gsap.to(cardRefs.current, {
       opacity: 1,
@@ -20,7 +20,7 @@ const Cards = ({ teamMembers = [] }) => {
       duration: 0.8,
       stagger: 0.15,
       ease: "power3.out",
-    })
+    });
 
     // Blinking animation for indicators
     indicatorRefs.current.forEach((indicator) => {
@@ -31,40 +31,40 @@ const Cards = ({ teamMembers = [] }) => {
           repeat: -1,
           yoyo: true,
           ease: "power1.inOut",
-        })
+        });
       }
-    })
-  }, [teamMembers])
+    });
+  }, [teamMembers]);
 
   const handleMouseEnter = (index) => {
     if (overlayRefs.current[index] && contentRefs.current[index]) {
       gsap.to(overlayRefs.current[index], {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         duration: 0.3,
-      })
+      });
 
       gsap.to(contentRefs.current[index], {
         y: -10,
         opacity: 1,
         duration: 0.3,
-      })
+      });
     }
-  }
+  };
 
   const handleMouseLeave = (index) => {
     if (overlayRefs.current[index] && contentRefs.current[index]) {
       gsap.to(overlayRefs.current[index], {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         duration: 0.3,
-      })
+      });
 
       gsap.to(contentRefs.current[index], {
         y: 0,
         opacity: 0.8,
         duration: 0.3,
-      })
+      });
     }
-  }
+  };
 
   // If no team members are provided, render placeholder cards
   if (!teamMembers || teamMembers.length === 0) {
@@ -108,10 +108,30 @@ const Cards = ({ teamMembers = [] }) => {
                 ref={(el) => (indicatorRefs.current[index] = el)}
                 className="w-2 h-2 bg-red-600 rounded-full mr-2"
               ></div>
-              <p className="text-sm text-red-600 uppercase tracking-wider">{member.designation}</p>
+              <p className="text-sm text-red-600 uppercase tracking-wider">
+                {member.designation}
+              </p>
             </div>
+
             <h2 className="text-2xl font-bold mb-2">{member.name}</h2>
+            
             <div className="w-12 h-1 bg-red-600 rounded-full"></div>
+            
+            {member.email ? (
+              <p className="mt-3 text-sm tracking-wider">
+                {member.email}
+              </p>
+            ) : (
+              ""
+            )}
+
+            {member.phone ? (
+              <p className="mt-1 text-sm tracking-wider">
+                {member.phone}
+              </p>
+            ) : (
+              ""
+            )}
           </div>
 
           {/* Corner accent */}
@@ -121,7 +141,7 @@ const Cards = ({ teamMembers = [] }) => {
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default Cards
+export default Cards;
