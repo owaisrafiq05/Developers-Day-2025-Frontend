@@ -198,7 +198,7 @@ const ModuleHero = () => {
       ref={sectionRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 sm:py-0"
       style={{
-        backgroundImage: "url('/images/modules/module-hero.webp')",
+        backgroundImage: "url('/images/modules/hero2.webp')",
         backgroundSize: "cover",
         backgroundPosition: "50% 50%",
         backgroundAttachment: isMobile ? "scroll" : "fixed" // Disable fixed background on mobile for better performance
