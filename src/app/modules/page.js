@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useRef, useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { motion, useInView } from "framer-motion";
@@ -7,98 +7,119 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Squares from "@/components/Squares/Squares";
 import ModuleCard from "@/components/Modules/ModuleCard";
 import ModuleHero from "@/components/Modules/ModuleHero";
+import ModuleModal from "@/components/Modules/ModuleModal";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 // Place your dummy data **right before** the Team component
 const dummyData = [
-    {
-      title: "Hackathon 2024",
-      description:
-        "A 36-hour coding challenge where developers solve real-world problems using innovative tech solutions. Compete solo or in teams!",
-      prize: "50,000",
-      category: "Tech Competitions",
-    },
-    {
-      title: "AI Challenge",
-      description:
-        "Showcase your AI/ML expertise by building intelligent solutions for healthcare, finance, and automation. Open to students and professionals.",
-      prize: "75,000",
-      category: "Tech Competitions",
-    },
-    {
-      title: "Esports Championship",
-      description:
-        "Battle it out in popular online multiplayer games. Compete against top gamers and win exciting cash prizes and gaming gear!",
-      prize: "1,00,000",
-      category: "Gaming",
-    },
-    {
-      title: "Esports Championship",
-      description:
-        "Battle it out in popular online multiplayer games. Compete against top gamers and win exciting cash prizes and gaming gear!",
-      prize: "1,00,000",
-      category: "Gaming",
-    },
-    {
-      title: "Esports Championship",
-      description:
-        "Battle it out in popular online multiplayer games. Compete against top gamers and win exciting cash prizes and gaming gear!",
-      prize: "1,00,000",
-      category: "Gaming",
-    },
-    {
-      title: "Startup Pitch Fest",
-      description:
-        "Entrepreneurs pitch their groundbreaking startup ideas to a panel of investors and industry leaders. The best pitch wins funding & mentorship.",
-      prize: "1,50,000",
-      category: "Business & Startups",
-    },
-    {
-      title: "Startup Pitch Fest",
-      description:
-        "Entrepreneurs pitch their groundbreaking startup ideas to a panel of investors and industry leaders. The best pitch wins funding & mentorship.",
-      prize: "1,50,000",
-      category: "Business & Startups",
-    },
-    {
-      title: "Startup Pitch Fest",
-      description:
-        "Entrepreneurs pitch their groundbreaking startup ideas to a panel of investors and industry leaders. The best pitch wins funding & mentorship.",
-      prize: "1,50,000",
-      category: "Business & Startups",
-    },
-    {
-      title: "Robotics Showdown",
-      description:
-        "Build and program autonomous robots to complete complex challenges. Compete in different categories like combat, line-following, and AI bots.",
-      prize: "2,00,000",
-      category: "Tech Competitions",
-    },
-    {
-      title: "Cybersecurity CTF",
-      description:
-        "Test your ethical hacking skills in a Capture The Flag (CTF) event. Solve security challenges, exploit vulnerabilities, and defend networks.",
-      prize: "1,25,000",
-      category: "Cybersecurity",
-    },
-    {
-      title: "Cybersecurity CTF",
-      description:
-        "Test your ethical hacking skills in a Capture The Flag (CTF) event. Solve security challenges, exploit vulnerabilities, and defend networks.",
-      prize: "1,25,000",
-      category: "Cybersecurity",
-    },
-    {
-      title: "Cybersecurity CTF",
-      description:
-        "Test your ethical hacking skills in a Capture The Flag (CTF) event. Solve security challenges, exploit vulnerabilities, and defend networks.",
-      prize: "1,25,000",
-      category: "Cybersecurity",
-    },
-  ];
-  
+  {
+    title: "Hackathon 2024",
+    description:
+      "A 36-hour coding challenge where developers solve real-world problems using innovative tech solutions. Compete solo or in teams!",
+    prize: "50,000",
+    entryFee: "500",
+    category: "Tech Competitions",
+    minMaxTeamMembers: "1-4",
+  },
+  {
+    title: "AI Challenge",
+    description:
+      "Showcase your AI/ML expertise by building intelligent solutions for healthcare, finance, and automation. Open to students and professionals.",
+    prize: "75,000",
+    entryFee: "500",
+    category: "Tech Competitions",
+    minMaxTeamMembers: "1-4",
+  },
+  {
+    title: "Esports Championship",
+    description:
+      "Battle it out in popular online multiplayer games. Compete against top gamers and win exciting cash prizes and gaming gear!",
+    prize: "1,00,000",
+    entryFee: "500",
+    category: "Gaming",
+    minMaxTeamMembers: "1-4",
+  },
+  {
+    title: "Esports Championship",
+    description:
+      "Battle it out in popular online multiplayer games. Compete against top gamers and win exciting cash prizes and gaming gear!",
+    prize: "1,00,000",
+    entryFee: "500",
+    category: "Gaming",
+    minMaxTeamMembers: "1-4",
+  },
+
+  {
+    title: "Esports Championship",
+    description:
+      "Battle it out in popular online multiplayer games. Compete against top gamers and win exciting cash prizes and gaming gear!",
+    prize: "1,00,000",
+    entryFee: "500",
+    category: "Gaming",
+    minMaxTeamMembers: "1-4",
+  },
+  {
+    title: "Startup Pitch Fest",
+    description:
+      "Entrepreneurs pitch their groundbreaking startup ideas to a panel of investors and industry leaders. The best pitch wins funding & mentorship.",
+    prize: "1,50,000",
+    entryFee: "500",
+    category: "Business & Startups",
+    minMaxTeamMembers: "1-4",
+  },
+  {
+    title: "Startup Pitch Fest",
+    description:
+      "Entrepreneurs pitch their groundbreaking startup ideas to a panel of investors and industry leaders. The best pitch wins funding & mentorship.",
+    prize: "1,50,000",
+    entryFee: "500",
+    category: "Business & Startups",
+    minMaxTeamMembers: "1-4",
+  },
+  {
+    title: "Startup Pitch Fest",
+    description:
+      "Entrepreneurs pitch their groundbreaking startup ideas to a panel of investors and industry leaders. The best pitch wins funding & mentorship.",
+    prize: "1,50,000",
+    entryFee: "500",
+    category: "Business & Startups",
+    minMaxTeamMembers: "1-4",
+  },
+  {
+    title: "Robotics Showdown",
+    description:
+      "Build and program autonomous robots to complete complex challenges. Compete in different categories like combat, line-following, and AI bots.",
+    prize: "2,00,000",
+    entryFee: "500",
+    category: "Tech Competitions",
+  },
+  {
+    title: "Cybersecurity CTF",
+    description:
+      "Test your ethical hacking skills in a Capture The Flag (CTF) event. Solve security challenges, exploit vulnerabilities, and defend networks.",
+    prize: "1,25,000",
+    entryFee: "500",
+    category: "Cybersecurity",
+  },
+  {
+    title: "Cybersecurity CTF",
+    description:
+      "Test your ethical hacking skills in a Capture The Flag (CTF) event. Solve security challenges, exploit vulnerabilities, and defend networks.",
+    prize: "1,25,000",
+    entryFee: "500",
+    category: "Cybersecurity",
+  },
+  {
+    title: "Cybersecurity CTF",
+    description:
+      "Test your ethical hacking skills in a Capture The Flag (CTF) event. Solve security challenges, exploit vulnerabilities, and defend networks.",
+    prize: "1,25,000",
+    entryFee: "500",
+    category: "Cybersecurity",
+  },
+];
 
 export default function Module() {
   const sectionRef = useRef(null);
@@ -107,6 +128,30 @@ export default function Module() {
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef(null);
   const searchRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalData, setModalData] = useState({
+    title: "",
+    description: "",
+    prize: "",
+    entryFee:"",
+    minMaxTeamMembers: "",
+    category:""
+  });
+
+// Update openModal function
+const openModal = (moduleData) => {
+    setModalData(moduleData);
+    setIsModalOpen(true);
+  };
+
+  // Function to handle closing the modal
+  const closeModal = () => {
+    setIsModalOpen(false); // Close the modal
+  };
+
+  useEffect(() => {
+    console.log("isModalOpen has changed:", isModalOpen);
+  }, [isModalOpen]);
 
   // Correctly define isSearchInView hook
   const isSearchInView = useInView(searchRef, {
@@ -133,26 +178,24 @@ export default function Module() {
     return () => ctx.revert();
   }, []);
 
-// Filtered modules based on search query
-const filteredData = dummyData.filter(
+  // Filtered modules based on search query
+  const filteredData = dummyData.filter(
     (module) =>
       module.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       module.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  
+
   // Get unique categories
   const categories = [...new Set(dummyData.map((module) => module.category))];
-  
+
   // Filtered categories based on search query
   const filteredCategories = [
-    ...new Set(
-      filteredData.map((module) => module.category)
-    ),
+    ...new Set(filteredData.map((module) => module.category)),
   ];
-  
+
   // Ensure that when the search query is empty, all categories are displayed
   const categoriesToShow = searchQuery ? filteredCategories : categories;
-  
+
   return (
     <div>
       <ModuleHero />
@@ -164,7 +207,7 @@ const filteredData = dummyData.filter(
               Our Modules
             </h1>
           </div>
-  
+
           {/* Search Bar */}
           <motion.div
             ref={searchRef}
@@ -191,36 +234,37 @@ const filteredData = dummyData.filter(
               >
                 Search
               </button>
-  
+
               {/* Search Suggestions Dropdown */}
-              {showDropdown && (filteredCategories.length > 0 || filteredData.length > 0) && (
-                <motion.ul
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="absolute left-0 right-0 mt-2 bg-black border border-gray-300 rounded-lg shadow-lg z-50"
-                >
-                  {filteredCategories.map((category, index) => (
-                    <li
-                      key={`cat-${index}`}
-                      className="px-4 py-2 font-bold text-white hover:bg-red-800 cursor-pointer"
-                      onMouseDown={() => setSearchQuery(category)}
-                    >
-                      {category}
-                    </li>
-                  ))}
-                </motion.ul>
-              )}
+              {showDropdown &&
+                (filteredCategories.length > 0 || filteredData.length > 0) && (
+                  <motion.ul
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="absolute left-0 right-0 mt-2 bg-black border border-gray-300 rounded-lg shadow-lg z-50"
+                  >
+                    {filteredCategories.map((category, index) => (
+                      <li
+                        key={`cat-${index}`}
+                        className="px-4 py-2 font-bold text-white hover:bg-red-800 cursor-pointer"
+                        onMouseDown={() => setSearchQuery(category)}
+                      >
+                        {category}
+                      </li>
+                    ))}
+                  </motion.ul>
+                )}
             </div>
           </motion.div>
-  
+
           {/* Sections for Each Category */}
           {categoriesToShow.map((category, categoryIndex) => {
             const modulesInCategory = filteredData.filter(
               (module) => module.category === category
             );
-  
+
             return (
               <div key={categoryIndex} className="mb-16" id={category}>
                 <h2 className="team-heading text-3xl font-bold text-white mb-6 text-center">
@@ -229,11 +273,17 @@ const filteredData = dummyData.filter(
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                   {modulesInCategory.length > 0 ? (
                     modulesInCategory.map((module, index) => (
-                      <div key={index} ref={(el) => (cardsRef.current[index] = el)}>
+                      <div
+                        key={index}
+                        ref={(el) => (cardsRef.current[index] = el)}
+                      >
                         <ModuleCard
+                          key={index}
                           title={module.title}
                           description={module.description}
                           prize={module.prize}
+                          minMaxTeamMembers={module.minMaxTeamMembers}
+                          openModal={() => openModal(module)} // Pass the entire module object
                         />
                       </div>
                     ))
@@ -246,6 +296,11 @@ const filteredData = dummyData.filter(
               </div>
             );
           })}
+          <ModuleModal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            {...modalData} // Spread the modalData state
+          />
         </div>
       </section>
     </div>

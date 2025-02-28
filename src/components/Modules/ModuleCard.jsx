@@ -1,6 +1,4 @@
-"use client";
-
-import { useState, useRef } from "react";
+import { React, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   Card,
@@ -12,14 +10,21 @@ import {
 } from "@heroui/react";
 import SpotlightCard from "../SpotlightCard/SpotlightCard";
 
-export default function ModuleCard({ title, description, prize }) {
+export default function ModuleCard({
+  title,
+  description,
+  prize,
+  category,
+  entryFee,
+  minMaxTeamMembers,
+  openModal,
+}) {
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef(null);
   const isInView = useInView(cardRef, { triggerOnce: true, threshold: 1.2 });
 
   return (
     <div className="flex items-center justify-center bg-black w-full rounded-[8px]">
-      {" "}
       {/* Full width */}
       <SpotlightCard
         spotlightColor="rgba(140, 0, 0, 0.3)"
@@ -69,6 +74,17 @@ export default function ModuleCard({ title, description, prize }) {
               <p className="text-zinc-300 text-sm md:text-base line-clamp-3">
                 {description}
               </p>
+              {/* Displaying Min-Max Team Members */}
+              <motion.div
+                className="flex items-center space-x-2 text-red-500 font-bold"
+                animate={{ x: isHovered ? 5 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <span className="text-sm md:text-base text-zinc-400">
+                  Max. Members:
+                </span>
+                <span className="text-lg md:text-xl">{minMaxTeamMembers}</span>
+              </motion.div>
               <motion.div
                 className="flex items-center space-x-2 text-red-500 font-bold"
                 animate={{ x: isHovered ? 5 : 0 }}
@@ -93,7 +109,17 @@ export default function ModuleCard({ title, description, prize }) {
                 >
                   Rulebook
                 </Button>
-                <Button className="bg-red-700 hover:bg-red-800 text-white text-sm md:text-base rounded-[12px] h-10 md:h-12">
+                <Button
+                  className="bg-red-700 hover:bg-red-800 text-white text-sm md:text-base rounded-[12px] h-10 md:h-12"
+                  onClick={() => openModal({
+                    title,
+                    description,
+                    prize,
+                    entryFee,
+                    category,
+                    minMaxTeamMembers
+                  })}
+                >
                   More Info
                 </Button>
               </motion.div>
