@@ -1,12 +1,46 @@
+"use client";
 import Squares from "@/components/Squares/Squares";
-import Cards from "@/components/TeamComponents/Cards";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa6";
 import "./page.css";
 import Map from "@/components/Map";
 import Card from "./Card";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const page = () => {
+  const ref = useRef();
+
+  useEffect(() => {
+    const el = ref.current;
+
+    // initial animation
+    gsap.fromTo(
+      el,
+      { opacity: 0, scale: 0 },
+      { opacity: 1, scale: 1, duration: 1.5, ease: "power3.out" }
+    );
+
+    // scroll triggered animation
+    gsap.fromTo(el, {opacity: 1, y: 0}, {
+      opacity: 0,
+      duration: 1,
+      scale: 0,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: el,
+        start: "bottom 10%", 
+        end: "bottom top",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    return () => ScrollTrigger.killAll();
+  }, []);
+
   return (
     <div>
       <div className="relative">
@@ -21,7 +55,10 @@ const page = () => {
           <h1 className="text-3xl font-bold">Contact Us</h1>
         </div>
 
-        <div className="flex flex-wrap gap-x-4 gap-y-0 items-center justify-center h-min py-10">
+        <div
+          className="flex flex-wrap gap-x-4 gap-y-0 items-center justify-center h-min py-10"
+          ref={ref}
+        >
           <Card
             name={"John Doe"}
             email={"NkV1o@example.com"}
@@ -82,7 +119,7 @@ const page = () => {
         </div>
 
         <div className="my-map mt-6 max-w-[1000px] w-[90%] m-auto h-[300px] bg-gray-300 rounded-xl">
-          <Map />
+          {/* <Map /> */}
         </div>
       </div>
     </div>

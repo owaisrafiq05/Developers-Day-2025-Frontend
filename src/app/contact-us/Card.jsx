@@ -2,10 +2,10 @@
 import Image from "next/image";
 import styled from "styled-components";
 
-const Card = ({ name, email, phone, designation }) => {
+const Card = ({ name, email, phone, designation, ref }) => {
   return (
     <StyledWrapper>
-      <div className="e-card playing flex flex-col items-center justify-center">
+      <div className="e-card playing flex flex-col items-center justify-center" ref={ref ? ref : null}>
         <div className="image" />
         <div className="wave wave-1" />
         <div className="wave wave-2" />
