@@ -48,7 +48,7 @@ export default function Menu() {
           <div className="flex items-center justify-between h-20 md:h-24">
             <Link href="/" className="flex items-center mt-5 mb-5">
               <Image src="/logo.png" alt="Logo" width={90} height={90} className="rounded-full" />
-              <span className="text-3xl font-bold text-white">Developers Day 2025</span>
+              <span className="text-3xl font-bold text-white  hidden sm:block">Developers Day 2025</span>
             </Link>
             <motion.button
               whileHover={{ scale: 1.05 }}
