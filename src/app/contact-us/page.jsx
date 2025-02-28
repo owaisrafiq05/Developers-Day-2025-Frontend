@@ -119,7 +119,7 @@ const page = () => {
         </div>
 
         <div className="my-map mt-6 max-w-[1000px] w-[90%] m-auto h-[300px] bg-gray-300 rounded-xl">
-          {/* <Map /> */}
+          <Map />
         </div>
       </div>
     </div>
