@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa6";
 import "./page.css";
 import Map from "@/components/Map";
+import Card from "./Card";
 
 const page = () => {
   return (
@@ -20,41 +21,40 @@ const page = () => {
           <h1 className="text-3xl font-bold">Contact Us</h1>
         </div>
 
-        <Cards
-          teamMembers={[
-            {
-              name: "Bob Williams",
-              designation: "President",
-              image: "/images/team/person.avif",
-              email: "L2NtK@example.com",
-              phone: "123-456-7890",
-            },
-            {
-              name: "Bob Williams",
-              designation: "Vice President",
-              image: "/images/team/person.avif",
-              email: "L2NtK@example.com",
-              phone: "123-456-7890",
-            },
-            {
-              name: "Bob Williams",
-              designation: "Product Manager",
-              image: "/images/team/person.avif",
-              email: "L2NtK@example.com",
-              phone: "123-456-7890",
-            },
-            {
-              name: "Bob Williams",
-              designation: "Tech Lead",
-              image: "/images/team/person.avif",
-              email: "L2NtK@example.com",
-              phone: "123-456-7890",
-            },
-          ]}
-        />
+        <div className="flex flex-wrap gap-x-4 gap-y-0 items-center justify-center h-min py-10">
+          <Card
+            name={"John Doe"}
+            email={"NkV1o@example.com"}
+            phone={"123-456-7890"}
+            designation={"President"}
+          />
+          <Card
+            name={"John Doe"}
+            email={"NkV1o@example.com"}
+            phone={"123-456-7890"}
+            designation={"Vice President"}
+          />
+          <Card
+            name={"John Doe"}
+            email={"NkV1o@example.com"}
+            phone={"123-456-7890"}
+            designation={"Product Manager"}
+          />
+          <Card
+            name={"John Doe"}
+            email={"NkV1o@example.com"}
+            phone={"123-456-7890"}
+            designation={"Tech Lead"}
+          />
+        </div>
       </div>
 
-      <div className="px-8 py-10 rounded-t-2xl">
+      <div
+        className="px-8 py-10 rounded-t-3xl"
+        style={{
+          backgroundImage: "linear-gradient(to bottom, #181818 0%, black 40%)",
+        }}
+      >
         <div className="w-full mb-10 flex gap-10 items-center justify-center">
           <Link
             href="https://www.google.com"
