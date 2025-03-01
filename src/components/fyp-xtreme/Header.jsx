@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <header className="text-center py-16 bg-gradient-to-r from-red-600 to-black">
+    <header className="hero-header text-center py-16 bg-gradient-to-r from-red-600 to-black">
       <h1 className="text-5xl font-bold">
         Final Year <span className="text-red-400">Xtreme</span>
       </h1>

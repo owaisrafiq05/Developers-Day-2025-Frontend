@@ -89,7 +89,7 @@ const Hero = () => {
         text-transform: uppercase;
         letter-spacing: 0.1rem;
       }
-      .container {
+      .hero-container {
         padding-left: var(--containerXPadding);
         padding-right: var(--containerXPadding);
       }
@@ -98,7 +98,7 @@ const Hero = () => {
         width: 100%;
         display: flex;
       }
-      header {
+      .hero-header {
         position: fixed;
         z-index: 50;
         width: 100%;
@@ -315,7 +315,7 @@ const Hero = () => {
       <div className="bg fullscreen"></div>
       <span className="strip"></span>
       <span className="number huge-font">02</span>
-      <div className="block container">
+      <div className="block container hero-container">
         <div className="heading-block">
           <h2 className="upper-text">Developers Day</h2>
           <h1 className="huge-font">25</h1>
