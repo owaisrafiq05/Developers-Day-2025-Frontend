@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import Lightning from "@/components/Lightning/Lightning";
 
 export default function SponsorShowcase() {
   const sponsors = {
@@ -28,8 +27,8 @@ export default function SponsorShowcase() {
   };
 
   return (
-    <main className="container mx-auto py-16 relative">
-      <header className="px-4 mb-16 w-full text-center mt-[80px]">
+    <main className="mx-auto relative">
+      <header className="px-4 mb-16 w-full text-center pt-[140px] pb-[80px] bg-gradient-to-br from-[#1c1c1c] to-[#310101] rounded-b-3xl">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -61,33 +60,35 @@ export default function SponsorShowcase() {
         </motion.div>
       </header>
 
-      {Object.keys(sponsors).map((tier) => (
-        <section key={tier} className="mb-20 z-30 relative px-4">
-          <div className="mb-8 flex items-center">
-            <div className="h-px flex-1 bg-gray-800"></div>
-            <h2 className="mx-4 text-2xl font-bold text-red-600">
-              {tier.toUpperCase()} SPONSORS
-            </h2>
-            <div className="h-px flex-1 bg-gray-800"></div>
-          </div>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {sponsors[tier].map((sponsor) => (
-              <div
-                key={sponsor.id}
-                className="flex flex-col items-center justify-center rounded-xl bg-gray-900 p-8 transition-transform hover:scale-105"
-              >
-                <Image
-                  src={sponsor.logo || "/placeholder.svg"}
-                  alt={sponsor.name}
-                  width={240}
-                  height={120}
-                  className="h-auto w-full object-contain"
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-      ))}
+      <div className="container m-auto">
+        {Object.keys(sponsors).map((tier) => (
+          <section key={tier} className="mb-20 z-30 relative px-4">
+            <div className="mb-8 flex items-center">
+              <div className="h-px flex-1 bg-gray-800"></div>
+              <h2 className="mx-4 text-2xl font-bold text-red-600">
+                {tier.toUpperCase()} SPONSORS
+              </h2>
+              <div className="h-px flex-1 bg-gray-800"></div>
+            </div>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {sponsors[tier].map((sponsor) => (
+                <div
+                  key={sponsor.id}
+                  className="flex flex-col items-center justify-center rounded-xl bg-gray-900 p-8 transition-transform hover:scale-105"
+                >
+                  <Image
+                    src={sponsor.logo || "/placeholder.svg"}
+                    alt={sponsor.name}
+                    width={240}
+                    height={120}
+                    className="h-auto w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
 
       <footer className="mt-24 text-center px-4">
         <p className="text-gray-500">
