@@ -27,15 +27,15 @@ export default function SponsorShowcase() {
   };
 
   return (
-    <main className="mx-auto relative" style={{
+    <main className="mx-auto " style={{
       backgroundImage: 'linear-gradient(to bottom right, black, #131313)',
     }}>
-      <header className="px-4 mb-16 w-full text-center pt-[140px] pb-[80px] bg-gradient-to-br from-[#1c1c1c] to-[#310101] rounded-b-3xl">
+      <header className="flex flex-col z-10 px-4 mb-16 w-full text-center pt-[140px] pb-[80px] bg-gradient-to-br from-[#1c1c1c] to-[#310101] rounded-b-3xl">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-4 text-5xl font-bold tracking-tight relative"
+          className="mb-4 text-5xl font-bold tracking-tight"
         >
           Our <span className="text-red-600">Sponsors</span>
         </motion.h1>
@@ -43,7 +43,7 @@ export default function SponsorShowcase() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-2xl text-lg text-gray-400 relative"
+          className="mx-auto max-w-2xl text-lg text-gray-400"
         >
           We extend our deepest gratitude to all our sponsors who make our work
           possible. Their support drives innovation and enables us to create
@@ -53,7 +53,7 @@ export default function SponsorShowcase() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mt-8 flex justify-center relative"
+          className="mt-8 flex justify-center"
         >
           <button className="group flex items-center gap-2 rounded-full border border-red-600 px-6 py-3 text-red-600 transition-all hover:bg-red-600 hover:text-white">
             Become a Sponsor
@@ -76,7 +76,7 @@ export default function SponsorShowcase() {
               {sponsors[tier].map((sponsor) => (
                 <div
                   key={sponsor.id}
-                  className="flex flex-col items-center justify-center bg-[#74111188] p-4 md:p-8 transition-transform hover:scale-105 rounded-xl"
+                  className="rounded-t-md rounded-bl-md rounded-br-3xl flex flex-col items-center justify-center bg-[#74111188] p-4 md:p-8 transition-transform hover:scale-105"
                 >
                   <Image
                     src={sponsor.logo || "/placeholder.svg"}
