@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { FaUsers, FaClipboardList } from "react-icons/fa";
-import Header from "@/components/fyp-xtreme/header";
+import Header from "@/components/fyp-xtreme/Header";
 import WhatIsFYP from "@/components/fyp-xtreme/WhatIsFYP";
 import Participation from "@/components/fyp-xtreme/Participation";
-import Registration from "@/components/fyp-xtreme/registeration";
+import Registration from "@/components/fyp-xtreme/Registeration";
 
 const FinalYearXtreme = () => {
   return (
