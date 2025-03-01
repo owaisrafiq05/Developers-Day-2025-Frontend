@@ -1,6 +1,8 @@
 "use client";
+
 import { FaBolt } from "react-icons/fa";
 import { motion } from "framer-motion";
+import SpotlightCard from "../SpotlightCard/SpotlightCard";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -18,11 +20,11 @@ const fadeInLeft = {
 
 const WhatIsFYP = () => {
   return (
-    <section className="text-white py-10 px-4 md:px-8 lg:px-12">
+    <section className="text-white py-5 px-4 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
-          className="border-b border-gray-700 pb-6 mb-8"
+          className="pb-4 mb-6 sm:mb-8"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -43,49 +45,74 @@ const WhatIsFYP = () => {
             viewport={{ once: true }}
             variants={fadeInUp}
           >
-            <p className="text-lg leading-relaxed">
-              Final Year Xtreme is the ultimate competition for final-year students to showcase their innovative
-              projects and technical skills. This platform brings together the brightest minds from universities across
-              the country to compete, collaborate, and create groundbreaking solutions.
-            </p>
-            <p className="text-lg leading-relaxed">
-              Whether you've developed a revolutionary app, designed an innovative system, or created a unique solution
-              to a real-world problem, Final Year Xtreme is your chance to gain recognition, receive expert feedback,
-              and potentially win amazing prizes.
-            </p>
+            <SpotlightCard
+              spotlightColor="rgba(255, 0, 0, 0.4)"
+              className=" rounded-xl  p-6 md:p-8 bg-transparent border-0"
+            >
+              <p className="text-lg leading-relaxed">
+                Final Year Xtreme is the ultimate competition for final-year
+                students to showcase their innovative projects and technical
+                skills. This platform brings together the brightest minds from
+                universities across the country to compete, collaborate, and
+                create groundbreaking solutions.
+              </p>
+              <p className="text-lg leading-relaxed">
+                Whether you've developed a revolutionary app, designed an
+                innovative system, or created a unique solution to a real-world
+                problem, Final Year Xtreme is your chance to gain recognition,
+                receive expert feedback, and potentially win amazing prizes.
+              </p>
+            </SpotlightCard>
           </motion.div>
 
-          {/* Key highlights box */}
+          {/* Key highlights with SpotlightCard */}
           <motion.div
-            className="bg-red-800/90 rounded-xl p-6 md:p-8 shadow-lg"
+            className="bg-transparent rounded-lg shadow-lg"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
           >
-            <h2 className="text-2xl font-bold mb-4 text-white">Key Highlights</h2>
-            <ul className="space-y-4">
-              {[
-                "Showcase your final year project to industry experts",
-                "Network with tech leaders and potential employers",
-                "Win prizes and recognition for your innovation",
-                "Get valuable feedback to improve your project",
-                "Launch your career with exposure to industry leaders",
-              ].map((highlight, index) => (
-                <motion.li
-                  key={index}
-                  className="flex items-start text-lg"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInLeft}
-                  custom={index}
-                >
-                  <span className="text-red-600 mr-3">•</span>
-                  <span>{highlight}</span>
-                </motion.li>
-              ))}
-            </ul>
+            <SpotlightCard className=" rounded-lg p-6 md:p-8 bg-red-900/80">
+              <h2 className="text-2xl font-bold mb-4 text-white">
+                Key Highlights
+              </h2>
+              <ul className="space-y-4">
+                {[
+                  "Showcase your final year project to industry experts",
+                  "Network with tech leaders and potential employers",
+                  "Win prizes and recognition for your innovation",
+                  "Get valuable feedback to improve your project",
+                  "Launch your career with exposure to industry leaders",
+                ].map((highlight, index) => (
+                  <motion.li
+                    key={index}
+                    className="flex items-start text-lg"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeInLeft}
+                    custom={index}
+                  >
+                    <motion.span
+                      className="text-red-600 mr-3"
+                      animate={{
+                        opacity: [1, 0.3, 1], // Blinking effect
+                        scale: [1, 1, 1], // Slight pulse
+                      }}
+                      transition={{
+                        repeat: Infinity, // Loop forever
+                        duration: 2, // Speed of blinking
+                        ease: "easeInOut",
+                      }}
+                    >
+                      •
+                    </motion.span>
+                    <span>{highlight}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </SpotlightCard>
           </motion.div>
         </div>
       </div>
