@@ -23,7 +23,7 @@ const menuItems = [
   { path: "/team", label: "Team", icon: <FaUsers className="text-red-700 text-4xl" /> },
   { path: "/contact-us", label: "Contact Us", icon: <FaEnvelope className="text-red-700 text-4xl" /> },
   { path: "/registration", label: "Registration", icon: <FaClipboardList className="text-red-700 text-4xl" /> },
-  { path: "/fyp-extreme", label: "FYP Extreme", icon: <FaProjectDiagram className="text-red-700 text-4xl" /> },
+  { path: "/fyp-xtreme", label: "FYP Extreme", icon: <FaProjectDiagram className="text-red-700 text-4xl" /> },
   { path: "/job-orbit", label: "Job Orbit", icon: <FaBriefcase className="text-red-700 text-4xl" /> },
   { path: "/sponsors", label: "Sponsors", icon: <FaHandshake className="text-red-700 text-4xl" /> },
 ];
@@ -86,8 +86,14 @@ export default function Menu() {
             >
               <motion.div className="relative z-50 w-full max-w-xl">
                 <div className="grid grid-cols-2 gap-4">
-                  {menuItems.map((item) => (
-                    <motion.div key={item.path}>
+                  {menuItems.map((item, index) => (
+                    <motion.div
+                      key={item.path}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                    >
                       <SpotlightCard className="bg-transparent border-transparent !p-4">
                         <Link href={item.path} onClick={handleCloseMenu}>
                           <motion.div
