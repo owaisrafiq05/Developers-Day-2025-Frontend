@@ -70,11 +70,11 @@ export default function SponsorShowcase() {
               </h2>
               <div className="h-px flex-1 bg-gray-800"></div>
             </div>
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 items-center justify-center content-center sm:grid-cols-4 lg:grid-cols-4">
               {sponsors[tier].map((sponsor) => (
                 <div
                   key={sponsor.id}
-                  className="flex flex-col items-center justify-center rounded-xl bg-gray-900 p-8 transition-transform hover:scale-105"
+                  className="flex flex-col items-center justify-center rounded-xl bg-gray-900 p-4 md:p-8 transition-transform hover:scale-105"
                 >
                   <Image
                     src={sponsor.logo || "/placeholder.svg"}
