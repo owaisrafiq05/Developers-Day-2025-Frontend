@@ -22,16 +22,19 @@ const WhatIsDD = () => {
       duration: 1,
     });
 
-    const originalText =
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est atque natus maxime! Ex nam in saepe sunt rerum quis mollitia sapiente expedita, culpa nobis deleniti, hic quo similique maxime ratione ea! Corrupti, laudantium! Voluptatem eaque natus dolore voluptate repellendus expedita.";
+    const originalText = `"Developers' Day" is not just an event; it's a burgeoning legend that's making its mark in our institution and rippling through the entire industry. With each passing year, it evolves into an industrywide phenomenon, redefining itself. And the countdown to this year's groundbreaking event is on.\n\nOur goal is very clear: to close the gap between professional and academic domains. To achieve this, we invite prominent figures from the sector to speak with our undergraduate students in person on campus.`;
 
-    const words = originalText.split(" ");
-    const wrappedText = words
-      .map(
-        (word) =>
-          `<span class="word-span">${word}&nbsp;</span>`
+    // Split paragraphs and then words
+    const paragraphs = originalText.split('\n\n');
+    const wrappedText = paragraphs
+      .map(paragraph => 
+        `<p class="mb-4">${
+          paragraph.split(' ')
+            .map(word => `<span class="word-span">${word}&nbsp;</span>`)
+            .join('')
+        }</p>`
       )
-      .join("");
+      .join('');
 
     setAnimatedText(wrappedText);
 
@@ -63,9 +66,9 @@ const WhatIsDD = () => {
       </h1>
 
       <div className="w-full max-w-[1000px] overflow-hidden">
-        <p
+        <div
           ref={para}
-          className="text-lg md:text-xl"
+          className="text-lg md:text-xl text-gray-300"
           dangerouslySetInnerHTML={{ __html: animatedText }}
         />
       </div>

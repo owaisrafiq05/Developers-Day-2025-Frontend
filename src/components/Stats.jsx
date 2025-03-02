@@ -9,7 +9,6 @@ const Stats = () => {
   const heading = useRef(null);
 
   useEffect(() => {
-    // heading anim
     gsap.from(heading.current, {
       scrollTrigger: {
         trigger: heading.current,
@@ -32,32 +31,23 @@ const Stats = () => {
         <motion.div
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.4, delay: 1 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
-          <SpotlightCard className="absolute top-0 left-0  p-10 w-full h-full  bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
-            {/* <GradientText
-              colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
-              animationSpeed={3}
-              showBorder={false}
-              className="custom-class text-5xl text-left w-full mb-2"
-            > */}
-              <h1 className="text-5xl text-left w-full mb-2">
-                <CountUp
-                  from={0}
-                  to={300}
-                  separator=","
-                  direction="up"
-                  duration={1}
-                  className="count-up-text font-bold"
-                  // startWhen={false}
-                />
-                +
-              </h1>
-            {/* </GradientText> */}
-            <p className="text-left">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Expedita, veniam.
+          <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+            <h1 className="text-5xl text-left w-full mb-2">
+              <CountUp
+                from={0}
+                to={25}
+                separator=","
+                direction="up"
+                duration={1}
+                className="count-up-text font-bold"
+              />
+              +
+            </h1>
+            <p className="text-left text-xl font-semibold">
+              COMPETITIONS
             </p>
           </SpotlightCard>
         </motion.div>
@@ -65,26 +55,23 @@ const Stats = () => {
         <motion.div
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.4, delay: 1 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
-          <SpotlightCard className="absolute top-0 left-0  p-10 w-full h-full  bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+          <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
             <h1 className="text-5xl text-left w-full mb-2">
               <CountUp
                 from={0}
-                to={300}
+                to={35}
                 separator=","
                 direction="up"
                 duration={1}
                 className="count-up-text font-bold"
-                // startWhen={false}
               />
               +
             </h1>
-
-            <p className="text-left">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Expedita, veniam.
+            <p className="text-left text-xl font-semibold">
+              COMPANIES
             </p>
           </SpotlightCard>
         </motion.div>
@@ -92,25 +79,47 @@ const Stats = () => {
         <motion.div
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.4, delay: 1 }}
+          transition={{ duration: 0.4, delay: 0.6 }}
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
-          <SpotlightCard className="absolute top-0 left-0  p-10 w-full h-full  bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+          <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
             <h1 className="text-5xl text-left w-full mb-2">
               <CountUp
                 from={0}
-                to={300}
+                to={4500}
                 separator=","
                 direction="up"
                 duration={1}
                 className="count-up-text font-bold"
-                // startWhen={false}
               />
               +
             </h1>
-            <p className="text-left">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Expedita, veniam.
+            <p className="text-left text-xl font-semibold">
+              PARTICIPANTS
+            </p>
+          </SpotlightCard>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 0, scale: 0 }}
+          whileInView={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.8 }}
+          className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
+        >
+          <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+            <h1 className="text-5xl text-left w-full mb-2">
+              <CountUp
+                from={0}
+                to={6}
+                separator=","
+                direction="up"
+                duration={1}
+                className="count-up-text font-bold"
+              />
+              +
+            </h1>
+            <p className="text-left text-xl font-semibold">
+              SEMINAR TALKS
             </p>
           </SpotlightCard>
         </motion.div>
