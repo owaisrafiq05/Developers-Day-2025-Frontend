@@ -35,7 +35,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="mt-24 w-full relative z-20 bg-[#131313] rounded-t-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.2)]">
+    <footer className="mt-4 w-full relative z-20 bg-[#131313] rounded-t-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.2)]">
       <div className="container mx-auto px-4">
         <div className="px-6 py-12 lg:px-12">
           {/* Main footer content */}
