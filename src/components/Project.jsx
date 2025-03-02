@@ -245,7 +245,7 @@ export default function EventHighlights() {
         </div>
       </div> */}
 
-      {/* Grid Layout - improved responsive grid */}
+      {/* Grid Layout - use CSS for responsive behavior */}
       <div
         ref={gridRef}
         className="relative w-full max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
@@ -253,10 +253,7 @@ export default function EventHighlights() {
         {images.map((item, index) => (
           <Tilt
             key={index}
-            options={{
-              ...defaultTiltOptions,
-              max: window?.innerWidth < 768 ? 5 : 15, // Reduce tilt on mobile
-            }}
+            options={defaultTiltOptions}
             className="grid-item"
           >
             <div
@@ -394,21 +391,29 @@ export default function EventHighlights() {
       )}
 
       <style jsx>{`
+        /* Add media query for tilt effect */
+        @media (max-width: 768px) {
+          .grid-item {
+            transform: none !important;
+            transition: none !important;
+          }
+        }
+
         @keyframes floatParticle {
           0% {
             transform: translate(0, 0) scale(1);
             opacity: 0;
           }
           25% {
-            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(1.5);
+            transform: translate(10px, -10px) scale(1.5);
             opacity: 0.5;
           }
           50% {
-            transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) scale(1);
+            transform: translate(-10px, 10px) scale(1);
             opacity: 0.3;
           }
           75% {
-            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(1.5);
+            transform: translate(10px, -10px) scale(1.5);
             opacity: 0.5;
           }
           100% {
