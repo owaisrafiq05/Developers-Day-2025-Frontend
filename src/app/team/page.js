@@ -21,7 +21,7 @@ export default function Team() {
     {
       name: "John Doe",
       designation: "Chief Executive Officer",
-      image: "/images/team/person.avif",
+      image: "/images/team/team1.jpg",
     },
     {
       name: "Jane Smith",

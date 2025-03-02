@@ -152,3 +152,36 @@ html:not(.no-scrollbar)::-webkit-scrollbar-thumb::after {
   height: 100vh !important;
   z-index: 1000;
 }
+
+
+/* Add to your existing CSS */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.group:hover .tabular-nums {
+  animation: float 2s ease-in-out infinite;
+}
+
+/* Gradient animation */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-gradient-animate {
+  background-size: 200% 200%;
+  animation: gradientFlow 3s ease infinite;
+}

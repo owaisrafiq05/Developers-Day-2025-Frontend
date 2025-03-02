@@ -24,7 +24,7 @@ const Hero = () => {
       />
       
       <Canvas
-        className="fixed top-0 left-0 canvas z-10"
+        className="fixed top-0 left-0 canvas z-10 pt-20"
         shadows
         camera={{
           fov: 45,
@@ -36,12 +36,9 @@ const Hero = () => {
         <Experience />
       </Canvas>
 
-      <div className="relative min-h-screen z-20">
+      <div className="relative min-h-full z-20">
         <div className="z-20">
           <PageHeader />
-        </div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[12rem] w-full">
-          <Countdown />
         </div>
       </div>
     </> 
