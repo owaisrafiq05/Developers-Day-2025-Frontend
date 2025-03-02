@@ -21,7 +21,9 @@ export default function Home() {
         <br/>
         <br/>
         <Stats />
-        {/* <Projects/> */}
+        <div className="relative z-10">
+          <Projects/>
+        </div>
       </div>
     </>
   );
