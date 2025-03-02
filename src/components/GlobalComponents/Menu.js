@@ -18,14 +18,14 @@ import Image from "next/image";
 import SpotlightCard from "../SpotlightCard/SpotlightCard";
 
 const menuItems = [
-  { path: "/", label: "Home", icon: <FaHome className="text-red-700 text-4xl" /> },
-  { path: "/modules", label: "Modules", icon: <FaBoxOpen className="text-red-700 text-4xl" /> },
-  { path: "/team", label: "Team", icon: <FaUsers className="text-red-700 text-4xl" /> },
-  { path: "/contact-us", label: "Contact Us", icon: <FaEnvelope className="text-red-700 text-4xl" /> },
-  { path: "/register", label: "Registration", icon: <FaClipboardList className="text-red-700 text-4xl" /> },
-  { path: "/fyp-xtreme", label: "FYP Extreme", icon: <FaProjectDiagram className="text-red-700 text-4xl" /> },
-  { path: "/job-orbit", label: "Job Orbit", icon: <FaBriefcase className="text-red-700 text-4xl" /> },
-  { path: "/sponsors", label: "Sponsors", icon: <FaHandshake className="text-red-700 text-4xl" /> },
+  { path: "/", label: "Home", icon: <FaHome className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
+  { path: "/modules", label: "Modules", icon: <FaBoxOpen className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
+  { path: "/team", label: "Team", icon: <FaUsers className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
+  { path: "/contact-us", label: "Contact Us", icon: <FaEnvelope className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
+  { path: "/register", label: "Registration", icon: <FaClipboardList className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
+  { path: "/fyp-xtreme", label: "FYP Extreme", icon: <FaProjectDiagram className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
+  { path: "/job-orbit", label: "Job Orbit", icon: <FaBriefcase className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
+  { path: "/sponsors", label: "Sponsors", icon: <FaHandshake className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
 ];
 
 export default function Menu() {
@@ -99,9 +99,9 @@ export default function Menu() {
                           <motion.div
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="flex items-center space-x-4 text-white font-semibold text-xl"
+                            className="flex items-center space-x-4 text-white font-semibold text-sm md:text-xl lg:text-xl xl:text-xl"
                           >
-                            <div className="p-2">{item.icon}</div>
+                            <div className="">{item.icon}</div>
                             <span>{item.label}</span>
                           </motion.div>
                         </Link>

@@ -7,6 +7,7 @@ import Participation from "@/components/fyp-xtreme/Participation";
 import Registration from "@/components/fyp-xtreme/Registeration";
 import SpotlightCard from "@/components/SpotlightCard/SpotlightCard";
 import Rules from "@/components/fyp-xtreme/Rules";
+import Squares from "@/components/Squares/Squares";
 
 // Fade In/Out Animation Variants
 const fadeInOut = {
@@ -17,8 +18,14 @@ const fadeInOut = {
 
 const FinalYearXtreme = () => {
   return (
-    <div className="bg-black text-white min-h-screen flex flex-col">
-
+    <div className=" text-white min-h-screen flex flex-col">
+      <Squares
+        speed={0.5}
+        squareSize={40}
+        direction="diagonal" // up, down, left, right, diagonal
+        borderColor="#000"
+        hoverFillColor="#222"
+      />
       {/* Header Section */}
       <header className="w-full border-b border-gray-700 py-8">
         <div className="mx-auto">
@@ -26,54 +33,57 @@ const FinalYearXtreme = () => {
         </div>
       </header>
 
-      <SpotlightCard spotlightColor="rgba(129, 0, 0, 0.2)" className=" rounded-xl  p-6 md:p-8 bg-transparent border-0">
-      {/* Main Content Section */}
-      <motion.section
-        className="container mx-auto space-y-20 py-10 mt-20"
-        initial="hidden"
-        whileInView="visible"
-        exit="exit"
-        variants={fadeInOut}
-        viewport={{ once: false, amount: 0.2 }} // Controls when animation triggers
+      <SpotlightCard
+        spotlightColor="rgba(129, 0, 0, 0.2)"
+        className=" rounded-xl  p-6 md:p-8 bg-transparent border-0"
       >
-        <WhatIsFYP />
-      </motion.section>
+        {/* Main Content Section */}
+        <motion.section
+          className="container mx-auto space-y-20 py-10 mt-20"
+          initial="hidden"
+          whileInView="visible"
+          exit="exit"
+          variants={fadeInOut}
+          viewport={{ once: false, amount: 0.2 }} // Controls when animation triggers
+        >
+          <WhatIsFYP />
+        </motion.section>
 
-      <motion.section
-        className="container mx-auto space-y-20 py-10 mt-20"
-        initial="hidden"
-        whileInView="visible"
-        exit="exit"
-        variants={fadeInOut}
-        viewport={{ once: false, amount: 0.2 }}
-      >
-        <Participation />
-      </motion.section>
+        <motion.section
+          className="container mx-auto space-y-20 py-10 mt-20"
+          initial="hidden"
+          whileInView="visible"
+          exit="exit"
+          variants={fadeInOut}
+          viewport={{ once: false, amount: 0.2 }}
+        >
+          <Participation />
+        </motion.section>
 
-      <motion.section
-        className="container mx-auto space-y-20 py-10 mt-20"
-        initial="hidden"
-        whileInView="visible"
-        exit="exit"
-        variants={fadeInOut}
-        viewport={{ once: false, amount: 0.2 }}
-      >
-        <Rules/>
-      </motion.section>
+        <motion.section
+          className="container mx-auto space-y-20 py-10 mt-20"
+          initial="hidden"
+          whileInView="visible"
+          exit="exit"
+          variants={fadeInOut}
+          viewport={{ once: false, amount: 0.2 }}
+        >
+          <Rules />
+        </motion.section>
 
-      {/* Registration Section */}
-      <motion.section
-        className="py-16 md:px-14 lg:px-14"
-        initial="hidden"
-        whileInView="visible"
-        exit="exit"
-        variants={fadeInOut}
-        viewport={{ once: false, amount: 0.2 }}
-      >
-        <div className="container mx-auto">
-          <Registration />
-        </div>
-      </motion.section>
+        {/* Registration Section */}
+        <motion.section
+          className="py-16 md:px-14 lg:px-14"
+          initial="hidden"
+          whileInView="visible"
+          exit="exit"
+          variants={fadeInOut}
+          viewport={{ once: false, amount: 0.2 }}
+        >
+          <div className="container mx-auto">
+            <Registration />
+          </div>
+        </motion.section>
       </SpotlightCard>
     </div>
   );

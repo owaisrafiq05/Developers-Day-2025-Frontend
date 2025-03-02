@@ -34,13 +34,15 @@ const ModuleModal = ({
                     animate={{ opacity: 1 }}   // Final state after animation
                     exit={{ opacity: 0 }}     // State when the modal is exiting
                     transition={{ duration: 0.3 }}  // Duration of the animation
+                    onClick={handleClose} // Close modal when clicking outside
                 >
                     <motion.div
-                        className="bg-[#1e1e1e] border border-[#333] rounded-lg w-[600px] h-[600px] p-6 shadow-lg overflow-auto"
+                        className="bg-[#1e1e1e] border border-[#333] rounded-lg w-[600px] h-[600px] p-6 shadow-lg overflow-auto relative"
                         initial={{ scale: 0.8 }}   // Initial scale (small size)
                         animate={{ scale: 1 }}     // Final scale (normal size)
                         exit={{ scale: 0.8 }}      // Scale down during exit animation
                         transition={{ duration: 0.3 }}  // Duration of the animation
+                        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
                     >
                         <div className="bg-[#9b2121] rounded-lg p-4 text-center">
                             <img
