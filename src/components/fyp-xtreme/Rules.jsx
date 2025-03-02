@@ -24,7 +24,7 @@ const fadeInUp = {
 const Rules = () => {
   return (
     <section className="text-white py-6 px-4 sm:px-6 md:px-8 lg:px-12">
-      <div className="bg-black text-white flex flex-col max-w-7xl mx-auto">
+      <div className="bg-transparent text-white flex flex-col max-w-7xl mx-auto">
         
         {/* Title */}
         <motion.div

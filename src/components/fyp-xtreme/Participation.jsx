@@ -19,7 +19,7 @@ const fadeInLeft = {
 
 const Participation = () => {
   return (
-    <section className="bg-black text-white mt-4 mb-4 px-4 md:px-8 lg:px-12 py-5">
+    <section className="bg-transparent text-white mt-4 mb-4 px-4 md:px-8 lg:px-12 py-5">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div

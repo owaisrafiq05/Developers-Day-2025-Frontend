@@ -56,7 +56,7 @@ const Registration = () => {
   return (
     <section
       ref={formRef}
-      className="w-full px-4 py-6 bg-gray-900 text-white rounded-lg shadow-lg mx-auto"
+      className="w-full px-4 py-6 bg-black text-white rounded-lg shadow-lg mx-auto"
 
     >
       <SpotlightCard className="bg-transparent border-0 rounded-lg !p-0 md:!p-10" spotlightColor="rgba(0, 0, 0, 0.4) ">

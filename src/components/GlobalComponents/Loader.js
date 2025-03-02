@@ -1,47 +1,123 @@
 "use client"
 
-import React, { useEffect } from "react";
-import { TweenMax, Expo } from "gsap"; // Import TweenMax and Expo
-import anime from "animejs"; // Import Anime.js
-import "./loader.css"; // Create this CSS file for the loader styles
+import { useEffect, useRef } from "react"
+import { gsap } from "gsap"
+import Image from "next/image"
+import "./loader.css"
 
 const Loader = () => {
+  const loaderRef = useRef(null)
+  const maskRef = useRef(null)
+  const textRef = useRef(null)
+  const contentRef = useRef(null)
+  const progressTextRef = useRef(null)
+  const logoRef = useRef(null)
+
   useEffect(() => {
-    // Animation logic
-    const overlay = document.querySelector(".overlay");
-    const textWrapper = document.querySelector(".header");
+    let progress = 0
+    const duration = 4
+
+    const tl = gsap.timeline()
     
-    // TweenMax animation for overlay
-    TweenMax.to(overlay, 1.2, {
-      top: "-120%",
-      ease: Expo.easeOut,
-      delay: 5,
-    });
+    // Initial setup
+    gsap.set(maskRef.current, {
+      xPercent: -100,
+    })
+    
+    gsap.set(contentRef.current, {
+      opacity: 1,
+    })
 
-    // Animating the text
-    textWrapper.innerHTML = textWrapper.textContent.replace(
-      /\S/g,
-      "<span class='letter'>$&</span>"
-    );
+    // Logo animation
+    gsap.from(logoRef.current, {
+      scale: 0.8,
+      opacity: 0,
+      duration: 1,
+      ease: "power2.out",
+    })
 
-    anime.timeline().add({
-      targets: ".header .letter",
-      translateY: [100, 0],
-      translateZ: 0,
-      easing: "easeOutExpo",
-      duration: 2000,
-      delay: (el, i) => 4800 + 40 * i,
-    });
-  }, []);
+    // Continuous logo animation
+    gsap.to(logoRef.current, {
+      scale: 1.05,
+      duration: 2,
+      yoyo: true,
+      repeat: -1,
+      ease: "power1.inOut"
+    })
+
+    // Update progress counter
+    const interval = setInterval(() => {
+      progress += Math.random() * 10
+      if (progress > 100) progress = 100
+
+      if (progressTextRef.current) {
+        progressTextRef.current.textContent = `${Math.floor(progress)}%`
+      }
+
+      if (progress >= 100) {
+        clearInterval(interval)
+        
+        // Final animation sequence
+        tl.to(maskRef.current, {
+          xPercent: 0,
+          duration: 1.5,
+          ease: "power2.inOut",
+        })
+        .to([contentRef.current, logoRef.current], {
+          opacity: 0,
+          duration: 0.5,
+          ease: "power2.inOut",
+        }, "-=0.5")
+        .to(loaderRef.current, {
+          yPercent: -100,
+          duration: 1,
+          ease: "power4.inOut",
+          onComplete: () => {
+            if (loaderRef.current) {
+              loaderRef.current.style.display = "none"
+            }
+          }
+        })
+      }
+    }, 200)
+
+    // Text reveal animation
+    gsap.to(textRef.current, {
+      opacity: 1,
+      duration: 1,
+      y: 0,
+      ease: "power2.out",
+    })
+
+    return () => {
+      clearInterval(interval)
+      tl.kill()
+    }
+  }, [])
 
   return (
-    <div className="loader overlay">
-      <div className="preloader">
-        <img src="./logo2.png"></img>
+    <div ref={loaderRef} className="loader-container">
+      <div className="mask-container">
+        <div ref={maskRef} className="mask"></div>
+        <div ref={contentRef} className="loader-content">
+          <div ref={logoRef} className="dev-logo">
+            <Image
+              src="/logo2.png"
+              alt="Developers Day Logo"
+              width={400}
+              height={400}
+              className="logo-image"
+              priority
+            />
+          </div>
+          <h1 ref={textRef} className="loading-text">
+            <span ref={progressTextRef}>0%</span>
+          </h1>
+        </div>
       </div>
-      <h1 className="header">Powered by E-Ocean</h1>
     </div>
-  );
-};
+  )
+}
 
-export default Loader; 
+export default Loader
+
