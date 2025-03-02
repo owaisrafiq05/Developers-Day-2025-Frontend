@@ -30,7 +30,7 @@ const PageHeader = () => {
             gradientEndColor={"from-[#ff3333]"}
             show={true}
           >
-            View some of the major projects
+            Develop Ideas Into Reality
           </GradientTag>
 
           <Light
@@ -41,19 +41,13 @@ const PageHeader = () => {
 
           <div className="text-4xl md:text-6xl lg:text-8xl mt-10 ml-10 leading-snug font-bold text-white 
             [text-shadow:_0_0_30px_rgb(255_255_255_/_50%)]">
-            THE 2025 <br className="hidden md:block" />{" "}
+            2025 <br className="hidden md:block" />{" "}
             <span className="text-[#ff3333] sm:block  
               [text-shadow:_0_0_30px_rgb(255_51_51_/_40%)]">
-              DevDay
+              Developers Day
             </span>{" "}
             
           </div>
-          <p className="text-white text-[1rem] p-5 w-full lg:w-11/12 mt-5 hidden md:block lg:text-xl
-            [text-shadow:_0_0_20px_rgb(255_255_255_/_20%)]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
-            voluptates molestias sit harum temporibus! Eum odit suscipit nisi
-            unde expedita?
-          </p>
         </div>
       </div>
 
