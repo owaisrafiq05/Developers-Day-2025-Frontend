@@ -51,12 +51,12 @@ const page = () => {
           borderColor="#000"
           hoverFillColor="#222"
         />
-        <div className="relative w-full px-5 pb-5  pt-16 mb-0 flex items-center justify-center">
+        <div className="relative w-full px-5 pb-2 pt-32 mb-0 flex items-center justify-center">
           <h1 className="text-3xl font-bold">Contact Us</h1>
         </div>
 
         <div
-          className="flex flex-wrap gap-x-4 gap-y-0 items-center justify-center h-min py-10"
+          className="flex flex-wrap gap-x-4 gap-y-0 h-max items-center justify-center py-6"
           ref={ref}
         >
           <Card
