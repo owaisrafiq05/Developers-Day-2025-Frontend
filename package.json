@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@gsap/react": "^2.1.2",
     "@heroui/react": "^2.7.2",
+    "@mui/material": "^6.4.6",
     "@react-google-maps/api": "^2.20.6",
     "animejs": "^3.2.2",
+    "axios": "^1.8.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",
     "gsap": "^3.12.7",
@@ -23,6 +27,7 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-jss": "^10.10.0",
+    "sonner": "^2.0.1",
     "styled-components": "^6.1.15",
     "tailwind-merge": "^3.0.1",
     "vanilla-tilt": "^1.8.1"

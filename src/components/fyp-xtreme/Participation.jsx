@@ -1,6 +1,7 @@
 "use client";
 import { FaUsers } from "react-icons/fa";
 import { motion } from "framer-motion";
+import SpotlightCard from "../SpotlightCard/SpotlightCard";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -18,11 +19,11 @@ const fadeInLeft = {
 
 const Participation = () => {
   return (
-    <section className="bg-black text-white mt-4 mb-4 px-4 md:px-8 lg:px-12 py-10">
+    <section className="bg-black text-white mt-4 mb-4 px-4 md:px-8 lg:px-12 py-5">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
-          className="border-b border-gray-800 pb-4 mb-6"
+          className="pb-4 mb-6 sm:mb-8"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -37,35 +38,39 @@ const Participation = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Key highlights box */}
           <motion.div
-            className="bg-red-900/80 rounded-lg p-6 md:p-8 shadow-lg"
+            className="bg-red-900/80 rounded-lg shadow-lg"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
           >
-            <h2 className="text-2xl font-bold mb-4 text-white">Key Highlights</h2>
-            <ul className="space-y-3">
-              {[
-                "Open to all final-year students from recognized universities",
-                "Teams can consist of up to four members",
-                "Projects from any field of technology are welcome",
-                "Industry experts will evaluate submissions",
-                "Top teams will receive mentorship and funding opportunities",
-              ].map((highlight, index) => (
-                <motion.li
-                  key={index}
-                  className="flex items-start text-lg"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInLeft}
-                  custom={index}
-                >
-                  <span className="text-red-600 mr-2">•</span>
-                  <span>{highlight}</span>
-                </motion.li>
-              ))}
-            </ul>
+            <SpotlightCard className=" rounded-lg p-6 md:p-8 bg-red-900/80">
+              <h2 className="text-2xl font-bold mb-4 text-white">
+                Key Highlights
+              </h2>
+              <ul className="space-y-3">
+                {[
+                  "Open to all final-year students from recognized universities",
+                  "Teams can consist of up to four members",
+                  "Projects from any field of technology are welcome",
+                  "Industry experts will evaluate submissions",
+                  "Top teams will receive mentorship and funding opportunities",
+                ].map((highlight, index) => (
+                  <motion.li
+                    key={index}
+                    className="flex items-start text-lg"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeInLeft}
+                    custom={index}
+                  >
+                    <span className="text-red-600 mr-2">•</span>
+                    <span>{highlight}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </SpotlightCard>
           </motion.div>
 
           {/* Content */}
@@ -76,16 +81,23 @@ const Participation = () => {
             viewport={{ once: true }}
             variants={fadeInUp}
           >
-            <p className="text-lg leading-relaxed">
-              Final Year Xtreme is open to all final-year students eager to present their innovative projects. Whether
-              you're working solo or as part of a team, this competition is designed to showcase your technical skills
-              and creativity.
-            </p>
-            <p className="text-lg leading-relaxed">
-              If you've built a groundbreaking app, engineered an advanced system, or developed a novel solution to a
-              real-world challenge, this is your chance to shine. Gain industry recognition, valuable feedback, and
-              even potential career opportunities!
-            </p>
+            <SpotlightCard
+              spotlightColor="rgba(255, 0, 0, 0.4)"
+              className=" rounded-xl  p-6 md:p-8 bg-transparent border-0"
+            >
+              <p className="text-lg leading-relaxed">
+                Final Year Xtreme is open to all final-year students eager to
+                present their innovative projects. Whether you're working solo
+                or as part of a team, this competition is designed to showcase
+                your technical skills and creativity.
+              </p>
+              <p className="text-lg leading-relaxed">
+                If you've built a groundbreaking app, engineered an advanced
+                system, or developed a novel solution to a real-world challenge,
+                this is your chance to shine. Gain industry recognition,
+                valuable feedback, and even potential career opportunities!
+              </p>
+            </SpotlightCard>
           </motion.div>
         </div>
       </div>
