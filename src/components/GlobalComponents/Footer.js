@@ -35,9 +35,9 @@ const developers = [
     linkedin: "https://linkedin.com/in/samrivera",
   },
   {
-    name: "Muhammad Abdullah",
+    name: "Abdullah Farooqui",
     role: "Co-Head of Frontend Team",
-    linkedin: "https://linkedin.com/in/taylorkim",
+    linkedin: "https://www.linkedin.com/in/muhammad-abdullah-farooqui-24754b27a/",
   },
   {
     name: "Hashir Ali",
@@ -106,7 +106,7 @@ export default function Footer() {
   }, [])
 
   return (
-    <footer className="relative mt-32 overflow-hidden">
+    <footer className="relative mt-32 overflow-hidden w-full">
       {/* Static 3D Curved top boundary */}
       <div className="relative h-32">
         <div
@@ -139,10 +139,10 @@ export default function Footer() {
       </div>
 
       {/* Main footer content */}
-      <div className="relative bg-gradient-to-b from-black to-gray-900 pt-16 pb-8 px-4">
-        <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+      <div className="relative bg-gradient-to-b from-black to-gray-900 pt-16 pb-8 px-4 sm:px-12 md:px-20 m-auto w-full">
+        <div className=" mx-auto grid grid-cols-1 md:grid-cols-2 container lg:grid-cols-3 gap-12 w-full lg:place-items-center">
           {/* Logo and About Section */}
-          <div className="space-y-4">
+          <div className="space-y-4 h-full">
             <Link href="/" className="flex items-center space-x-3">
               <div className="footer-logo relative">
                 <div className="absolute inset-0 bg-red-500 rounded-full blur-md opacity-30 animate-pulse"></div>
@@ -179,7 +179,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
+          <div className="space-y-4 h-full">
             <h3 className="text-xl font-bold text-white relative inline-block">
               Quick Links
               <span className="absolute -bottom-1 left-0 w-1/2 h-1 bg-red-500 rounded-full"></span>
