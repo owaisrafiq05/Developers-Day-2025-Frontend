@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Balatro from "./Balatro/Balatro";
 import Countdown from "./Counter";
-import { FaLocationDot, FaCalendarDays } from "react-icons/fa6";
-import GradientText from "./GradientText/GradientText";
 import { gsap } from "gsap";
 
 const Hero = () => {

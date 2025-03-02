@@ -92,7 +92,7 @@ export default function SponsorShowcase() {
         ))}
       </div>
 
-      <footer className="mt-24 text-center px-4">
+      <footer className="mt-2 text-center px-4 pb-8">
         <p className="text-gray-500">
           Interested in becoming a sponsor?{" "}
           <a href="#" className="text-red-600 hover:underline">

@@ -1,11 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
 import gsap from "gsap";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import SpotlightCard from "./SpotlightCard/SpotlightCard";
 import CountUp from "./CountUp/CountUp";
-import GradientText from "./GradientText/GradientText";
 
 const Stats = () => {
   const heading = useRef(null);
