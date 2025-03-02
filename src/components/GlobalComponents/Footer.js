@@ -106,7 +106,7 @@ export default function Footer() {
   }, [])
 
   return (
-    <footer className="relative mt-32 overflow-hidden w-full">
+    <footer className="relative overflow-hidden w-full">
       {/* Static 3D Curved top boundary */}
       <div className="relative h-32">
         <div
