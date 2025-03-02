@@ -56,7 +56,7 @@ const Registration = () => {
   return (
     <section
       ref={formRef}
-      className="w-full px-4 py-6 bg-gray-900 text-white rounded-lg shadow-lg mx-auto "
+      className="w-full px-4 py-6 bg-gray-900 text-white rounded-lg shadow-lg mx-auto"
 
     >
       <SpotlightCard className="bg-transparent border-0 rounded-lg !p-0 md:!p-10" spotlightColor="rgba(0, 0, 0, 0.4) ">
@@ -64,11 +64,11 @@ const Registration = () => {
           Registration
         </h2>
         {/* <SpotlightCard className="bg-transparent border-0 rounded-lg" spotlightColor="rgba(0, 0, 0, 0.4) "> */}
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 ">
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Basic Fields */}
           <input
             ref={(el) => (fieldsRef.current[0] = el)}
-            className="p-3 bg-gray-800  rounded-lg border border-gray-700 focus:border-red-600 hover:border-red-600  outline-none w-full"
+            className="p-3 bg-gray-800 rounded-lg border border-gray-700 focus:border-red-600 hover:border-red-600  outline-none w-full"
             type="text"
             placeholder="Project Name"
           />

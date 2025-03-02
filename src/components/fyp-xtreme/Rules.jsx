@@ -24,17 +24,17 @@ const fadeInUp = {
 const Rules = () => {
   return (
     <section className="text-white py-6 px-4 sm:px-6 md:px-8 lg:px-12">
-      <div className=" text-white flex flex-col max-w-7xl mx-auto rounded-lg">
+      <div className="bg-black text-white flex flex-col max-w-7xl mx-auto">
         
         {/* Title */}
         <motion.div
-          className="p-6 mb-6 sm:mb-8"
+          className="pb-4 mb-6 sm:mb-8"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <h1 className="text-3xl md:text-5xl  font-extrabold flex items-center gap-3">
+          <h1 className="text-3xl md:text-5xl font-extrabold flex items-center gap-3">
             <FaScroll className="text-red-500 h-6 w-6 sm:h-8 sm:w-8 animate-pulse" />
             Competition Rules
           </h1>

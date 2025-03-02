@@ -3,6 +3,12 @@ import { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { TextPlugin } from "gsap/TextPlugin"
+import { Canvas, useThree, useFrame } from "@react-three/fiber"
+import Experience from "./Experience"
+import Squares from "@/components/Squares/Squares"
+import { OrbitControls } from "@react-three/drei"
+import { useControls } from 'leva'
+// import Countdown from "./Counter"
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin)
 
@@ -19,6 +25,12 @@ const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   
+  // const { posX, posY, posZ } = useControls('Camera', {
+  //   posX: { value: 27.216, min: -50, max: 50, step: 0.001 },
+  //   posY: { value: -0.079, min: -50, max: 50, step: 0.001 },
+  //   posZ: { value: 5.026, min: -50, max: 50, step: 0.001 }
+  // })
+
   const competitionModules = [
     { name: "Idea Submission", description: "Present your innovative concept" },
     { name: "Prototype Development", description: "Build and refine your working model" },
@@ -26,6 +38,7 @@ const Hero = () => {
     { name: "Pitch Presentation", description: "Showcase your idea to the judges" },
     { name: "Final Round", description: "Compete for the top spot in the grand finale" }
 ];
+
 
 
   // Check for mobile viewport on mount and resize
@@ -193,91 +206,130 @@ const Hero = () => {
     })
   }
 
+  // function CameraController() {
+  //   const { camera } = useThree()
+    
+  //   useEffect(() => {
+  //     camera.position.set(posX, posY, posZ)
+  //     camera.updateProjectionMatrix()
+  //   }, [camera, posX, posY, posZ])
+    
+  //   return null
+  // }
+
   return (
-    <section
-      ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 sm:py-0"
-      style={{
-        backgroundImage: "url('/images/modules/hero2.webp')",
-        backgroundSize: "cover",
-        backgroundPosition: "50% 50%",
-        backgroundAttachment: isMobile ? "scroll" : "fixed" // Disable fixed background on mobile for better performance
-      }}
-    >
-      {/* Modern gradient overlay */}
-      <div 
-        ref={overlayRef}
-        className="absolute inset-0 bg-gradient-to-tr from-black via-black/80 to-black/60"
+    <>
+      {/* Background Squares Animation */}
+      <Squares 
+        speed={0.5} 
+        squareSize={40}
+        direction='diagonal'
+        borderColor='rgba(255, 255, 255, 0.2)'
+        hoverFillColor='#222'
+        className="fixed top-0 left-0 w-screen h-screen z-0"
       />
       
-      {/* Vertical decoration line - hidden on mobile */}
-      <div 
-        ref={decorRef}
-        className="absolute hidden md:block left-1/4 top-1/2 w-px bg-gradient-to-b from-red-600/0 via-red-600 to-red-600/0 transform -translate-y-1/2"
-      />
-      
-      {/* Main content */}
-      <div ref={contentRef} className="relative w-full px-4 sm:px-6 md:px-8">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center">
-          
-          {/* Left side - Title and subtitle */}
-          <div className="text-center lg:text-left">
-            <div 
-              ref={titleWrapperRef}
-              className="inline-block bg-black/60 backdrop-blur-sm border-l-4 border-red-600 mb-4 sm:mb-6"
-            >
-              <h1 ref={titleRef} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white px-2 py-1 sm:px-4">
-                FYP <span ref={highlightRef} className="text-red-600">Xtreme</span>
-              </h1>
+      {/* 3D Canvas Experience */}
+      <Canvas
+        className="fixed top-0 left-0 canvas z-10"
+        shadows
+        camera={{
+          fov: 45,
+          near: 0.1,
+          far: 1000,
+          position: [20.3 ,  0.18,  1.30]
+        }}
+      >
+        {/* <CameraController /> */}
+        <Experience />
+        {/* <OrbitControls enableDamping /> */}
+      </Canvas>
+
+      {/* Main Content Section */}
+      <section
+        ref={sectionRef}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 sm:py-0 z-20"
+      >
+        {/* Modern gradient overlay */}
+        <div 
+          ref={overlayRef}
+          className="absolute inset-0 "
+        />
+        
+        {/* Vertical decoration line - hidden on mobile */}
+        <div 
+          ref={decorRef}
+          className="absolute hidden md:block left-1/4 top-1/2 w-px bg-gradient-to-b from-red-600/0 via-red-600 to-red-600/0 transform -translate-y-1/2"
+        />
+        
+        {/* Main content */}
+        <div ref={contentRef} className="relative w-full px-4 sm:px-6 md:px-8">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center">
+            
+            {/* Left side - Title and subtitle */}
+            <div className="text-center lg:text-left">
+              <div 
+                ref={titleWrapperRef}
+                className="inline-block bg-black/60 backdrop-blur-sm border-l-4 border-red-600 mb-4 sm:mb-6"
+              >
+                <h1 ref={titleRef} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white px-2 py-1 sm:px-4">
+                  FYP <span ref={highlightRef} className="text-red-600">Xtreme</span>
+                </h1>
+              </div>
+              
+              <p 
+                ref={subtitleRef} 
+                className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0"
+              >
+                {competitionModules[currentIndex].description}
+              </p>
             </div>
             
-            <p 
-              ref={subtitleRef} 
-              className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0"
-            >
-              {competitionModules[currentIndex].description}
-            </p>
-          </div>
-          
-          {/* Right side - Team category cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
-            {competitionModules.map((member, index) => (
-              <div
-                key={index}
-                ref={(el) => (cardRefs.current[index] = el)}
-                onClick={() => handleCardClick(index)}
-                className={`p-3 sm:p-4 rounded-lg backdrop-blur-sm cursor-pointer transition-all border-l-2 ${
-                  index === currentIndex ? 'bg-red-600/20 border-red-600' : 'bg-black/40 border-gray-700 hover:bg-black/60'
-                }`}
-                style={{
-                  boxShadow: index === currentIndex 
-                    ? "0 20px 25px -5px rgba(220, 38, 38, 0.4), 0 8px 10px -6px rgba(220, 38, 38, 0.4)" 
-                    : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
-                }}
-              >
-                <h3 className={`text-base sm:text-lg font-semibold ${
-                  index === currentIndex ? 'text-white' : 'text-gray-300'
-                }`}>
-                  {member.name}
-                </h3>
-              </div>
-            ))}
+            {/* Right side - Team category cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
+              {competitionModules.map((member, index) => (
+                <div
+                  key={index}
+                  ref={(el) => (cardRefs.current[index] = el)}
+                  onClick={() => handleCardClick(index)}
+                  className={`p-3 sm:p-4 rounded-lg backdrop-blur-sm cursor-pointer transition-all border-l-2 ${
+                    index === currentIndex ? 'bg-red-600/20 border-red-600' : 'bg-black/40 border-gray-700 hover:bg-black/60'
+                  }`}
+                  style={{
+                    boxShadow: index === currentIndex 
+                      ? "0 20px 25px -5px rgba(220, 38, 38, 0.4), 0 8px 10px -6px rgba(220, 38, 38, 0.4)" 
+                      : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+                  }}
+                >
+                  <h3 className={`text-base sm:text-lg font-semibold ${
+                    index === currentIndex ? 'text-white' : 'text-gray-300'
+                  }`}>
+                    {member.name}
+                  </h3>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      
-      {/* Decorative elements - repositioned on mobile */}
-      <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 flex space-x-1 sm:space-x-2">
-        {[0, 1, 2, 3, 4].map((_, index) => (
-          <div 
-            key={index}
-            className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full ${
-              index === currentIndex ? 'bg-red-600' : 'bg-gray-500'
-            }`}
-          />
-        ))}
-      </div>
-    </section>
+
+        {/* Countdown Timer */}
+        {/* <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-[-2rem] w-full">
+          <Countdown />
+        </div> */}
+        
+        {/* Decorative elements - repositioned on mobile */}
+        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 flex space-x-1 sm:space-x-2">
+          {[0, 1, 2, 3, 4].map((_, index) => (
+            <div 
+              key={index}
+              className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full ${
+                index === currentIndex ? 'bg-red-600' : 'bg-gray-500'
+              }`}
+            />
+          ))}
+        </div>
+      </section>
+    </>
   )
 }
 
