@@ -5,20 +5,29 @@ import styled from "styled-components";
 const Card = ({ name, email, phone, designation, ref }) => {
   return (
     <StyledWrapper>
-      <div className="e-card playing flex flex-col items-center justify-center" ref={ref ? ref : null}>
-        <div className="image" />
-        <div className="wave wave-1" />
-        <div className="wave wave-2" />
-        <div className="wave wave-3" />
-        <div className="infotop relative flex flex-col gap-0 items-center justify-center">
-          <Image src="/logo.png"  alt="logo" width={70} height={70} className="block mb-4"/>
-          {designation}
-          <div className="mt-4 flex flex-col gap-1">
-            <p className="name text-gray-200">{name}</p>
-            <p className="name text-gray-200">{email}</p>
-            <p className="name text-gray-200">{phone}</p>
+      <div
+        className="e-card rounded-t-md rounded-bl-md rounded-br-3xl playing flex flex-col items-center justify-center"
+        ref={ref ? ref : null}
+      >
+          <div className="image" />
+          <div className="wave wave-1" />
+          <div className="wave wave-2" />
+          <div className="wave wave-3" />
+          <div className="infotop relative flex flex-col gap-0 items-center justify-center">
+            <Image
+              src="/logo.png"
+              alt="logo"
+              width={70}
+              height={70}
+              className="block mb-4"
+            />
+            {designation}
+            <div className="mt-4 flex flex-col gap-1">
+              <p className="name text-gray-200">{name}</p>
+              <p className="name text-gray-200">{email}</p>
+              <p className="name text-gray-200">{phone}</p>
+            </div>
           </div>
-        </div>
       </div>
     </StyledWrapper>
   );
@@ -32,7 +41,6 @@ const StyledWrapper = styled.div`
     position: relative;
     width: 240px;
     height: 330px;
-    border-radius: 16px;
     overflow: hidden;
   }
 
