@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 const WhatIsDD = () => {
   const heading = useRef(null);
   const para = useRef(null);
-  const [animatedText, setAnimatedText] = useState(""); // Store processed text
+  const [animatedText, setAnimatedText] = useState("");
 
   useEffect(() => {
     // Heading Animation
@@ -22,7 +22,6 @@ const WhatIsDD = () => {
       duration: 1,
     });
 
-    // Only modify text once, before animation
     const originalText =
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est atque natus maxime! Ex nam in saepe sunt rerum quis mollitia sapiente expedita, culpa nobis deleniti, hic quo similique maxime ratione ea! Corrupti, laudantium! Voluptatem eaque natus dolore voluptate repellendus expedita.";
 
@@ -30,16 +29,15 @@ const WhatIsDD = () => {
     const wrappedText = words
       .map(
         (word) =>
-          `<span style="display: inline-block; opacity: 0;">${word}&nbsp;</span>`
+          `<span class="word-span">${word}&nbsp;</span>`
       )
       .join("");
 
-    setAnimatedText(wrappedText); // Update state with processed text
+    setAnimatedText(wrappedText);
 
-    // Wait for state update before selecting spans
     setTimeout(() => {
       if (para.current) {
-        const spans = para.current.querySelectorAll("span");
+        const spans = para.current.querySelectorAll(".word-span");
 
         gsap.to(spans, {
           scrollTrigger: {
@@ -54,20 +52,20 @@ const WhatIsDD = () => {
           duration: 1,
         });
       }
-    }, 100); // Small delay to ensure spans are present
+    }, 100);
 
   }, []);
 
   return (
-    <div className="z-10 w-full px-10 pt-10 flex items-center justify-center flex-col gap-4 text-center">
-      <h1 ref={heading} className="text-3xl max-w-[1000px] font-bold">
-        What is <span>Developers Day</span>?
+    <div className="relative z-10 w-full px-4 md:px-10 pt-10 flex items-center justify-center flex-col gap-4 text-center overflow-hidden">
+      <h1 ref={heading} className="text-2xl md:text-3xl max-w-[1000px] font-bold">
+        What is <span className="text-red-600">Developers Day</span>?
       </h1>
 
-      <div>
+      <div className="w-full max-w-[1000px] overflow-hidden">
         <p
           ref={para}
-          className="z-10 text-xl max-w-[1000px]"
+          className="text-lg md:text-xl"
           dangerouslySetInnerHTML={{ __html: animatedText }}
         />
       </div>
