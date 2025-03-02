@@ -2,13 +2,13 @@ import { Inter, Lexend } from "next/font/google";
 import "./globals.css";
 import Menu from "../components/GlobalComponents/Menu.js";
 import Loader from "../components/GlobalComponents/Loader";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 const lexend = Lexend({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
-
 });
 
 export const metadata = {
@@ -20,9 +20,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${lexend.className} bg-black`}>
-         {/* <Loader />  */}
-         <Menu />
-        <div className="w-full h-full min-h-screen">{children}</div>
+        {/* <Loader />  */}
+        <Menu />
+        <div className="w-full h-full min-h-screen">
+          {children}
+          <Footer />
+        </div>
       </body>
     </html>
   );
