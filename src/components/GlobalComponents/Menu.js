@@ -8,20 +8,19 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { FaBars, FaCross, FaXmark } from "react-icons/fa6";
 
-const menuLinks = [
-  { path: "/", label: "Home" },
-  { path: "/modules", label: "Modules" },
-  { path: "/team", label: "Team" },
-  { path: "/contact-us", label: "Contact Us" },
-  { path: "/registration", label: "Registration" },
-  { path: "/fyp-extreme", label: "FYP Extreme" },
-  { path: "/job-orbit", label: "Job Orbit" },
-  { path: "/sponsors", label: "Sponsors" },
+const menuItems = [
+  { path: "/", label: "Home", icon: <FaHome className="text-red-700 text-4xl" /> },
+  { path: "/modules", label: "Modules", icon: <FaBoxOpen className="text-red-700 text-4xl" /> },
+  { path: "/team", label: "Team", icon: <FaUsers className="text-red-700 text-4xl" /> },
+  { path: "/contact-us", label: "Contact Us", icon: <FaEnvelope className="text-red-700 text-4xl" /> },
+  { path: "/registration", label: "Registration", icon: <FaClipboardList className="text-red-700 text-4xl" /> },
+  { path: "/fyp-extreme", label: "FYP Extreme", icon: <FaProjectDiagram className="text-red-700 text-4xl" /> },
+  { path: "/job-orbit", label: "Job Orbit", icon: <FaBriefcase className="text-red-700 text-4xl" /> },
+  { path: "/sponsors", label: "Sponsors", icon: <FaHandshake className="text-red-700 text-4xl" /> },
 ];
 
-const Menu = () => {
-  const container = useRef();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+export default function Menu() {
+  const [isOpen, setIsOpen] = useState(false);
 
   /*GSAP*/
   const tl = useRef();
@@ -95,20 +94,48 @@ const Menu = () => {
           </div> */}
           </div>
         </div>
+      </motion.nav>
 
-        <div className="menu-close-icon">
-          <FaXmark onClick={toggleMenu} className="text-[2.5rem]" />
-        </div>
-        <div className="menu-copy">
-          <div className="menu-links">
-            {menuLinks.map((link) => {
-              return (
-                <div className="menu-link-item" key={link.label}>
-                  <div className="menu-link-item-holder" onClick={toggleMenu}>
-                    <Link href={link.path} className="menu-link text-white">
-                      {link.label}
-                    </Link>
-                  </div>
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-40"
+              onClick={handleCloseMenu}
+            />
+
+            {/* Menu Container */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-40 flex items-center justify-center"
+            >
+              <motion.div className="relative z-50 w-full max-w-xl">
+                <div className="grid grid-cols-2 gap-4">
+                  {menuItems.map((item) => (
+                    <motion.div key={item.path}>
+                      <SpotlightCard className="bg-transparent border-transparent !p-4">
+                        <Link href={item.path} onClick={handleCloseMenu}>
+                          <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex items-center space-x-4 text-white font-semibold text-xl"
+                          >
+                            <div className="p-2">{item.icon}</div>
+                            <span>{item.label}</span>
+                          </motion.div>
+                        </Link>
+                      </SpotlightCard>
+                    </motion.div>
+                  ))}
                 </div>
               );
             })}
