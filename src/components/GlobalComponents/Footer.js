@@ -7,13 +7,13 @@ import { FaLinkedin, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa"
 
 const menuItems = [
   { path: "/", label: "Home" },
-  // { path: "/modules", label: "Modules" },
+  { path: "/modules", label: "Modules" },
   // { path: "/team", label: "Team" },
   { path: "/contact-us", label: "Contact Us" },
-  // { path: "/register", label: "Registration" },
-  // { path: "/fyp-xtreme", label: "FYP Extreme" },
+  { path: "/register", label: "Registration" },
+  { path: "/fyp-xtreme", label: "FYP Extreme" },
   // { path: "/job-orbit", label: "Job Orbit" },
-  // { path: "/sponsors", label: "Sponsors" },
+  { path: "/sponsors", label: "Sponsors" },
 ]
 
 const socialLinks = [

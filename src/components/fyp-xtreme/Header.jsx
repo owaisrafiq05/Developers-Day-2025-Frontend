@@ -3,12 +3,9 @@ import { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { TextPlugin } from "gsap/TextPlugin"
-import { Canvas, useThree, useFrame } from "@react-three/fiber"
+import { Canvas } from "@react-three/fiber"
 import Experience from "./Experience"
 import Squares from "@/components/Squares/Squares"
-import { OrbitControls } from "@react-three/drei"
-import { useControls } from 'leva'
-// import Countdown from "./Counter"
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin)
 
@@ -21,25 +18,7 @@ const Hero = () => {
   const highlightRef = useRef(null)
   const subtitleRef = useRef(null)
   const decorRef = useRef(null)
-  const cardRefs = useRef([])
-  const [currentIndex, setCurrentIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
-  
-  // const { posX, posY, posZ } = useControls('Camera', {
-  //   posX: { value: 27.216, min: -50, max: 50, step: 0.001 },
-  //   posY: { value: -0.079, min: -50, max: 50, step: 0.001 },
-  //   posZ: { value: 5.026, min: -50, max: 50, step: 0.001 }
-  // })
-
-  const competitionModules = [
-    { name: "Idea Submission", description: "Present your innovative concept" },
-    { name: "Prototype Development", description: "Build and refine your working model" },
-    { name: "Technical Evaluation", description: "Expert assessment of feasibility & impact" },
-    { name: "Pitch Presentation", description: "Showcase your idea to the judges" },
-    { name: "Final Round", description: "Compete for the top spot in the grand finale" }
-];
-
-
 
   // Check for mobile viewport on mount and resize
   useEffect(() => {
@@ -67,7 +46,6 @@ const Hero = () => {
     const highlight = highlightRef.current
     const subtitle = subtitleRef.current
     const decor = decorRef.current
-    const cards = cardRefs.current
 
     // Reset GSAP animations on component mount
     const ctx = gsap.context(() => {
@@ -79,20 +57,10 @@ const Hero = () => {
       gsap.set(highlight, { opacity: 0, scale: 0.8 })
       gsap.set(subtitle, { opacity: 0, y: 20 })
       gsap.set(decor, { opacity: 0, height: 0 })
-      gsap.set(cards, { 
-        opacity: 0, 
-        x: (i) => (!isMobile && i % 2 === 0 ? -50 : isMobile ? 0 : 50), 
-        y: 30 
-      })
 
-      // Main animation sequence
+      // Main animation sequence - removed ScrollTrigger
       const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: "bottom top",
-          scrub: false,
-        },
+        delay: 0.2 // Small delay before animation starts
       })
 
       tl.to(overlay, { 
@@ -129,33 +97,13 @@ const Hero = () => {
         ease: "power3.out"
       }, "-=0.4")
       .to(decor, {
-        opacity: isMobile ? 0 : 1, // Hide decoration line on mobile
+        opacity: isMobile ? 0 : 1,
         height: isMobile ? 0 : "65vh",
         duration: 1.5,
         ease: "power3.inOut"
       }, "-=1")
-      .to(cards, {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "back.out(1.5)"
-      }, "-=1.3")
 
-      // Floating animation for cards - reduced on mobile
-      cards.forEach((card, index) => {
-        gsap.to(card, {
-          y: isMobile ? (index % 2 === 0 ? 5 : -5) : (index % 2 === 0 ? 10 : -10),
-          duration: 2 + index * 0.2,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: index * 0.1
-        })
-      })
-
-      // Parallax background effect - reduced on mobile
+      // Optional: Add parallax effect on scroll
       gsap.to(section, {
         backgroundPosition: isMobile ? "50% 60%" : "50% 70%",
         ease: "none",
@@ -173,49 +121,7 @@ const Hero = () => {
       ctx.revert()
       ScrollTrigger.getAll().forEach((st) => st.kill())
     }
-  }, [isMobile]) // Re-run when isMobile changes
-
-  // Handle card click
-  const handleCardClick = (index) => {
-    setCurrentIndex(index)
-    
-    // Animate text change
-    gsap.to(subtitleRef.current, {
-      opacity: 0,
-      y: -10,
-      duration: 0.3,
-      onComplete: () => {
-        gsap.to(subtitleRef.current, {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-        })
-      }
-    })
-    
-    // Highlight active card
-    cardRefs.current.forEach((card, i) => {
-      gsap.to(card, {
-        scale: i === index ? 1.1 : 1,
-        boxShadow: i === index 
-          ? "0 20px 25px -5px rgba(220, 38, 38, 0.4), 0 8px 10px -6px rgba(220, 38, 38, 0.4)" 
-          : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-        duration: 0.4,
-        ease: "power2.out"
-      })
-    })
-  }
-
-  // function CameraController() {
-  //   const { camera } = useThree()
-    
-  //   useEffect(() => {
-  //     camera.position.set(posX, posY, posZ)
-  //     camera.updateProjectionMatrix()
-  //   }, [camera, posX, posY, posZ])
-    
-  //   return null
-  // }
+  }, [isMobile])
 
   return (
     <>
@@ -240,34 +146,31 @@ const Hero = () => {
           position: [20.3 ,  0.18,  1.30]
         }}
       >
-        {/* <CameraController /> */}
         <Experience />
-        {/* <OrbitControls enableDamping /> */}
       </Canvas>
 
       {/* Main Content Section */}
       <section
         ref={sectionRef}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 sm:py-0 z-20"
+        className="relative min-h-screen flex items-center overflow-hidden py-16 sm:py-0 z-20"
       >
         {/* Modern gradient overlay */}
         <div 
           ref={overlayRef}
-          className="absolute inset-0 "
+          className="absolute inset-0"
         />
         
         {/* Vertical decoration line - hidden on mobile */}
         <div 
           ref={decorRef}
-          className="absolute hidden md:block left-1/4 top-1/2 w-px bg-gradient-to-b from-red-600/0 via-red-600 to-red-600/0 transform -translate-y-1/2"
+          className="hidden left-1/4 top-1/2 w-px bg-gradient-to-b from-red-600/0 via-red-600 to-red-600/0 transform -translate-y-1/2"
         />
         
         {/* Main content */}
         <div ref={contentRef} className="relative w-full px-4 sm:px-6 md:px-8">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center">
-            
-            {/* Left side - Title and subtitle */}
-            <div className="text-center lg:text-left">
+          <div className="max-w-6xl mx-auto">
+            {/* Left-aligned content container */}
+            <div className="max-w-xl ml-0 md:ml-8 lg:ml-16">
               <div 
                 ref={titleWrapperRef}
                 className="inline-block bg-black/60 backdrop-blur-sm border-l-4 border-red-600 mb-4 sm:mb-6"
@@ -279,54 +182,12 @@ const Hero = () => {
               
               <p 
                 ref={subtitleRef} 
-                className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0"
+                className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-8"
               >
-                {competitionModules[currentIndex].description}
+                Unleash your potential in the ultimate final year project competition
               </p>
             </div>
-            
-            {/* Right side - Team category cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
-              {competitionModules.map((member, index) => (
-                <div
-                  key={index}
-                  ref={(el) => (cardRefs.current[index] = el)}
-                  onClick={() => handleCardClick(index)}
-                  className={`p-3 sm:p-4 rounded-lg backdrop-blur-sm cursor-pointer transition-all border-l-2 ${
-                    index === currentIndex ? 'bg-red-600/20 border-red-600' : 'bg-black/40 border-gray-700 hover:bg-black/60'
-                  }`}
-                  style={{
-                    boxShadow: index === currentIndex 
-                      ? "0 20px 25px -5px rgba(220, 38, 38, 0.4), 0 8px 10px -6px rgba(220, 38, 38, 0.4)" 
-                      : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
-                  }}
-                >
-                  <h3 className={`text-base sm:text-lg font-semibold ${
-                    index === currentIndex ? 'text-white' : 'text-gray-300'
-                  }`}>
-                    {member.name}
-                  </h3>
-                </div>
-              ))}
-            </div>
           </div>
-        </div>
-
-        {/* Countdown Timer */}
-        {/* <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-[-2rem] w-full">
-          <Countdown />
-        </div> */}
-        
-        {/* Decorative elements - repositioned on mobile */}
-        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 flex space-x-1 sm:space-x-2">
-          {[0, 1, 2, 3, 4].map((_, index) => (
-            <div 
-              key={index}
-              className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full ${
-                index === currentIndex ? 'bg-red-600' : 'bg-gray-500'
-              }`}
-            />
-          ))}
         </div>
       </section>
     </>

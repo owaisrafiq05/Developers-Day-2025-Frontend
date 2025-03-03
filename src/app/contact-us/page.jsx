@@ -77,6 +77,12 @@ const page = () => {
             designation={"Technical Lead"}
             title={"For Competition Inquiries"}
           />
+          <Card
+            name={"Wajheeh Ali Khan"}
+            phone={"+92 331 2321775"}
+            designation={"SOP Head"}
+            title={"For General Inquiries"}
+          />
         </div>
       </div>
 

@@ -15,109 +15,196 @@ if (typeof window !== "undefined") {
 // Place your dummy data **right before** the Team component
 const dummyData = [
   {
-    title: "Hackathon 2024",
-    description:
-      "A 36-hour coding challenge where developers solve real-world problems using innovative tech solutions. Compete solo or in teams!",
-    prize: "50,000",
-    entryFee: "500",
-    category: "Tech Competitions",
+    title: "Hackathon",
+    description: "A 36-hour coding challenge where developers solve real-world problems using innovative tech solutions.",
+    prize: "To Be Decided",
+    entryFee: "1550",
+    category: "CS Competitions",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "Competitive Programming",
+    description: "Compete in algorithmic challenges and improve your coding skills.",
+    prize: "To Be Decided",
+    entryFee: "1550",
+    category: "CS Competitions",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "AI Showdown",
+    description: "Showcase your AI skills in this competitive event.",
+    prize: "To Be Decided",
+    entryFee: "1550",
+    category: "CS Competitions",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "Query Master",
+    description: "Test your database querying skills in this exciting competition.",
+    prize: "To Be Decided",
+    entryFee: "1550",
+    category: "CS Competitions",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "UI/UX Design",
+    description: "Design user-friendly interfaces and experiences in this competition.",
+    prize: "To Be Decided",
+    entryFee: "1550",
+    category: "CS Competitions",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "Fix Fast",
+    description: "Solve bugs and issues in a race against time.",
+    prize: "To Be Decided",
+    entryFee: "1550",
+    category: "CS Competitions",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "Code Sprint",
+    description: "A fast-paced coding competition to solve as many problems as possible.",
+    prize: "To Be Decided",
+    entryFee: "1050",
+    category: "CS Competitions",
+    minMaxTeamMembers: "1-2",
+  },
+  {
+    title: "Code Roulette: Expect the unexpected",
+    description: "A surprise coding challenge where anything can happen.",
+    prize: "To Be Decided",
+    entryFee: "1550",
+    category: "CS Competitions",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "Web Nexus",
+    description: "Build and deploy web applications in a competitive environment.",
+    prize: "To Be Decided",
+    entryFee: "1550",
+    category: "CS Competitions",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "Cyber Quiz",
+    description: "Test your knowledge in cybersecurity through a quiz competition.",
+    prize: "To Be Decided",
+    entryFee: "1550",
+    category: "CS Competitions",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "Human Ludo",
+    description: "A fun and strategic game where players navigate a board to reach the finish line.",
+    prize: "To Be Decided",
+    entryFee: "1250",
+    category: "General Competition",
+    minMaxTeamMembers: "2-4",
+  },
+  {
+    title: "Reels",
+    description: "A competition to create the best short video reel.",
+    prize: "To Be Decided",
+    entryFee: "850",
+    category: "General Competition",
+    minMaxTeamMembers: "1-1",
+  },
+  {
+    title: "Photography",
+    description: "Showcase your photography skills in this exciting competition.",
+    prize: "To Be Decided",
+    entryFee: "850",
+    category: "General Competition",
+    minMaxTeamMembers: "1-1",
+  },
+  {
+    title: "Chess",
+    description: "Compete in a classic game of strategy and skill.",
+    prize: "To Be Decided",
+    entryFee: "850",
+    category: "General Competition",
+    minMaxTeamMembers: "1-1",
+  },
+  {
+    title: "Math Olympiad",
+    description: "Test your math skills in this challenging competition.",
+    prize: "To Be Decided",
+    entryFee: "1250",
+    category: "General Competition",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "Squid Game",
+    description: "Participate in a series of games to win the ultimate prize.",
+    prize: "To Be Decided",
+    entryFee: "550",
+    category: "General Competition",
+    minMaxTeamMembers: "1-1",
+  },
+  {
+    title: "Detective Dilemma - By TNC",
+    description: "Solve mysteries and challenges in this detective-themed competition.",
+    prize: "To Be Decided",
+    entryFee: "2050",
+    category: "General Competition",
+    minMaxTeamMembers: "3-5",
+  },
+  {
+    title: "The Escape Lab - By TNC",
+    description: "Work together to solve puzzles and escape the room.",
+    prize: "To Be Decided",
+    entryFee: "2050",
+    category: "General Competition",
+    minMaxTeamMembers: "3-5",
+  },
+  {
+    title: "Circuit Design",
+    description: "Design and create a circuit that meets specific requirements.",
+    prize: "To Be Decided",
+    entryFee: "1050",
+    category: "EE Competitions",
+    minMaxTeamMembers: "1-2",
+  },
+  {
+    title: "Soldering",
+    description: "Compete in soldering skills to create a functional circuit.",
+    prize: "To Be Decided",
+    entryFee: "1550",
+    category: "EE Competitions",
+    minMaxTeamMembers: "1-3",
+  },
+  {
+    title: "Robo Soccer",
+    description: "Build and program robots to compete in a soccer match.",
+    prize: "To Be Decided",
+    entryFee: "2050",
+    category: "EE Competitions",
     minMaxTeamMembers: "1-4",
   },
   {
-    title: "AI Challenge",
-    description:
-      "Showcase your AI/ML expertise by building intelligent solutions for healthcare, finance, and automation. Open to students and professionals.",
-    prize: "75,000",
-    entryFee: "500",
-    category: "Tech Competitions",
+    title: "Robo War",
+    description: "Design robots to battle against each other in a competitive arena.",
+    prize: "To Be Decided",
+    entryFee: "2050",
+    category: "EE Competitions",
     minMaxTeamMembers: "1-4",
   },
   {
-    title: "Esports Championship",
-    description:
-      "Battle it out in popular online multiplayer games. Compete against top gamers and win exciting cash prizes and gaming gear!",
-    prize: "1,00,000",
-    entryFee: "500",
-    category: "Gaming",
+    title: "Line Following Robot",
+    description: "Create a robot that can follow a line autonomously.",
+    prize: "To Be Decided",
+    entryFee: "2050",
+    category: "EE Competitions",
     minMaxTeamMembers: "1-4",
   },
   {
-    title: "Esports Championship",
-    description:
-      "Battle it out in popular online multiplayer games. Compete against top gamers and win exciting cash prizes and gaming gear!",
-    prize: "1,00,000",
-    entryFee: "500",
-    category: "Gaming",
+    title: "Robo Sumo",
+    description: "Build robots to compete in a sumo wrestling match.",
+    prize: "To Be Decided",
+    entryFee: "2050",
+    category: "EE Competitions",
     minMaxTeamMembers: "1-4",
-  },
-
-  {
-    title: "Esports Championship",
-    description:
-      "Battle it out in popular online multiplayer games. Compete against top gamers and win exciting cash prizes and gaming gear!",
-    prize: "1,00,000",
-    entryFee: "500",
-    category: "Gaming",
-    minMaxTeamMembers: "1-4",
-  },
-  {
-    title: "Startup Pitch Fest",
-    description:
-      "Entrepreneurs pitch their groundbreaking startup ideas to a panel of investors and industry leaders. The best pitch wins funding & mentorship.",
-    prize: "1,50,000",
-    entryFee: "500",
-    category: "Business & Startups",
-    minMaxTeamMembers: "1-4",
-  },
-  {
-    title: "Startup Pitch Fest",
-    description:
-      "Entrepreneurs pitch their groundbreaking startup ideas to a panel of investors and industry leaders. The best pitch wins funding & mentorship.",
-    prize: "1,50,000",
-    entryFee: "500",
-    category: "Business & Startups",
-    minMaxTeamMembers: "1-4",
-  },
-  {
-    title: "Startup Pitch Fest",
-    description:
-      "Entrepreneurs pitch their groundbreaking startup ideas to a panel of investors and industry leaders. The best pitch wins funding & mentorship.",
-    prize: "1,50,000",
-    entryFee: "500",
-    category: "Business & Startups",
-    minMaxTeamMembers: "1-4",
-  },
-  {
-    title: "Robotics Showdown",
-    description:
-      "Build and program autonomous robots to complete complex challenges. Compete in different categories like combat, line-following, and AI bots.",
-    prize: "2,00,000",
-    entryFee: "500",
-    category: "Tech Competitions",
-  },
-  {
-    title: "Cybersecurity CTF",
-    description:
-      "Test your ethical hacking skills in a Capture The Flag (CTF) event. Solve security challenges, exploit vulnerabilities, and defend networks.",
-    prize: "1,25,000",
-    entryFee: "500",
-    category: "Cybersecurity",
-  },
-  {
-    title: "Cybersecurity CTF",
-    description:
-      "Test your ethical hacking skills in a Capture The Flag (CTF) event. Solve security challenges, exploit vulnerabilities, and defend networks.",
-    prize: "1,25,000",
-    entryFee: "500",
-    category: "Cybersecurity",
-  },
-  {
-    title: "Cybersecurity CTF",
-    description:
-      "Test your ethical hacking skills in a Capture The Flag (CTF) event. Solve security challenges, exploit vulnerabilities, and defend networks.",
-    prize: "1,25,000",
-    entryFee: "500",
-    category: "Cybersecurity",
   },
 ];
 
@@ -208,11 +295,6 @@ const openModal = (moduleData) => {
           hoverFillColor="#222"
         />
         <div className="container mx-auto px-3 md:px-16 py-16">
-          <div className="text-center mb-8">
-            <h1 className="team-heading text-4xl md:text-5xl font-bold">
-              Our Modules
-            </h1>
-          </div>
 
           {/* Search Bar */}
           <motion.div

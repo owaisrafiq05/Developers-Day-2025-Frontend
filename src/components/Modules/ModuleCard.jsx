@@ -90,9 +90,8 @@ export default function ModuleCard({
                 animate={{ x: isHovered ? 5 : 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <span className="text-lg md:text-xl">Rs.{prize}</span>
+                <span className="text-lg md:text-xl">Entry Fee:{entryFee}</span>
                 <span className="text-sm md:text-base text-zinc-400">
-                  PRIZE POOL
                 </span>
               </motion.div>
             </CardBody>

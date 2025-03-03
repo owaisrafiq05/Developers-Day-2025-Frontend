@@ -68,7 +68,7 @@ const ModuleModal = ({
                                     <FaTrophy className="mr-1" /> {/* Prize Pool Icon */}
                                     Prize Pool
                                 </div>
-                                <div className="text-white font-medium text-lg">Rs.{prize}</div> {/* Correct usage */}
+                                <div className="text-white font-medium text-lg">{prize}</div> {/* Correct usage */}
                             </div>
                         </div>
                         <div className="bg-[#333] rounded-lg p-4 mt-4">
