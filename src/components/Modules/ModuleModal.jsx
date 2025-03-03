@@ -2,6 +2,7 @@ import { React, useState } from "react";
 import { FaDollarSign, FaTrophy, FaUsers, FaInfoCircle } from "react-icons/fa"; // Import additional icons
 import { Button } from "@heroui/react";
 import { motion, AnimatePresence } from "framer-motion"; // Import AnimatePresence for exit animation
+import Link from "next/link";
 
 const ModuleModal = ({ 
     isOpen, 
@@ -95,9 +96,11 @@ const ModuleModal = ({
                             >
                                 Close
                             </Button>
+                            <Link href={"/registration"}>
                             <Button className="bg-[#d32f2f] text-white py-2 px-4 rounded-md text-sm">
                                 Register Now
                             </Button>
+                            </Link>
                         </div>
                         <Button 
                             onClick={handleClose} 

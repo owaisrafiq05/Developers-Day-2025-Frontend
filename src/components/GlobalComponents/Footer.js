@@ -10,7 +10,7 @@ const menuItems = [
   { path: "/modules", label: "Modules" },
   // { path: "/team", label: "Team" },
   { path: "/contact-us", label: "Contact Us" },
-  { path: "/register", label: "Registration" },
+  { path: "/registration", label: "Registration" },
   { path: "/fyp-xtreme", label: "FYP Extreme" },
   // { path: "/job-orbit", label: "Job Orbit" },
   { path: "/sponsors", label: "Sponsors" },

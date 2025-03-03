@@ -1,10 +1,9 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { TextPlugin } from "gsap/TextPlugin"
 
-gsap.registerPlugin(ScrollTrigger, TextPlugin)
+gsap.registerPlugin(TextPlugin)
 
 const RegisterHero = () => {
   const sectionRef = useRef(null)
@@ -44,14 +43,9 @@ const RegisterHero = () => {
       gsap.set([title, highlight, subtitle], { opacity: 0, y: 20 })
       gsap.set(formWrapper, { opacity: 0, x: 50 })
 
-      // Animation sequence
+      // Main animation sequence - removed ScrollTrigger
       const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: "bottom top",
-          scrub: false,
-        },
+        delay: 0.2 // Small delay before animation starts
       })
 
       tl.to(overlay, { 
@@ -83,23 +77,10 @@ const RegisterHero = () => {
         duration: 1,
         ease: "back.out(1.7)"
       }, "-=0.4")
-
-      // Parallax effect
-      gsap.to(section, {
-        backgroundPosition: isMobile ? "50% 60%" : "50% 70%",
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      })
     }, section)
 
     return () => {
       ctx.revert()
-      ScrollTrigger.getAll().forEach((st) => st.kill())
     }
   }, [isMobile])
 

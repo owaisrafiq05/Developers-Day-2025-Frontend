@@ -1,10 +1,9 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { TextPlugin } from "gsap/TextPlugin"
 
-gsap.registerPlugin(ScrollTrigger, TextPlugin)
+gsap.registerPlugin(TextPlugin)
 
 const ModuleHero = () => {
   const sectionRef = useRef(null)
@@ -55,14 +54,9 @@ const ModuleHero = () => {
       gsap.set(subtitle, { opacity: 0, y: 20 })
       gsap.set(decor, { opacity: 0, height: 0 })
 
-      // Main animation sequence
+      // Main animation sequence - removed ScrollTrigger
       const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: "bottom top",
-          scrub: false,
-        },
+        delay: 0.2 // Small delay before animation starts
       })
 
       tl.to(overlay, { 
@@ -104,24 +98,11 @@ const ModuleHero = () => {
         duration: 1.5,
         ease: "power3.inOut"
       }, "-=1")
-
-      // Parallax background effect - reduced on mobile
-      gsap.to(section, {
-        backgroundPosition: isMobile ? "50% 60%" : "50% 70%",
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      })
     }, section)
 
     // Cleanup function
     return () => {
       ctx.revert()
-      ScrollTrigger.getAll().forEach((st) => st.kill())
     }
   }, [isMobile])
 
@@ -145,7 +126,7 @@ const ModuleHero = () => {
       {/* Vertical decoration line - hidden on mobile */}
       <div 
         ref={decorRef}
-        className="absolute hidden md:block left-1/4 top-1/2 w-px bg-gradient-to-b from-red-600/0 via-red-600 to-red-600/0 transform -translate-y-1/2"
+        className="absolute hidden left-1/4 top-1/2 w-px bg-gradient-to-b from-red-600/0 via-red-600 to-red-600/0 transform -translate-y-1/2"
       />
       
       {/* Main content */}

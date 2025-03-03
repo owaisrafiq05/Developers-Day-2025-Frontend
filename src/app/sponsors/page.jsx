@@ -4,30 +4,27 @@ import { motion } from "framer-motion";
 
 export default function SponsorShowcase() {
   const sponsors = {
-    platinum: Array.from({ length: 4 }, (_, i) => ({
-      id: `platinum-${i + 1}`,
-      name: `Platinum Sponsor ${i + 1}`,
+    title: {
+      id: "title-sponsor",
+      name: "Title Sponsor",
       logo: "/sample-sponsor.png",
-    })),
-    gold: Array.from({ length: 8 }, (_, i) => ({
+    },
+    gold: Array.from({ length: 4 }, (_, i) => ({
       id: `gold-${i + 1}`,
       name: `Gold Sponsor ${i + 1}`,
-      logo: "/sample-sponsor.png",
     })),
-    silver: Array.from({ length: 16 }, (_, i) => ({
+    silver: Array.from({ length: 4 }, (_, i) => ({
       id: `silver-${i + 1}`,
       name: `Silver Sponsor ${i + 1}`,
-      logo: "/sample-sponsor.png",
     })),
-    bronze: Array.from({ length: 22 }, (_, i) => ({
+    bronze: Array.from({ length: 4 }, (_, i) => ({
       id: `bronze-${i + 1}`,
       name: `Bronze Sponsor ${i + 1}`,
-      logo: "/sample-sponsor.png",
     })),
   };
 
   return (
-    <main className="mx-auto " style={{
+    <main className="mx-auto" style={{
       backgroundImage: 'linear-gradient(to bottom right, black, #131313)',
     }}>
       <header className="flex flex-col z-10 px-4 mb-16 w-full text-center pt-[140px] pb-[80px] bg-gradient-to-br from-[#1c1c1c] to-[#310101] rounded-b-3xl">
@@ -55,15 +52,42 @@ export default function SponsorShowcase() {
           transition={{ duration: 0.5 }}
           className="mt-8 flex justify-center"
         >
-          <button className="group flex items-center gap-2 rounded-full border border-red-600 px-6 py-3 text-red-600 transition-all hover:bg-red-600 hover:text-white">
-            Become a Sponsor
-            {/* <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" /> */}
-          </button>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSc8-_ooB3Yulbnc8qz_nXDuSJ0h9fMd19b5tziEl8UG6Nf_Ow/viewform">
+            <button className="group flex items-center gap-2 rounded-full border border-red-600 px-6 py-3 text-red-600 transition-all hover:bg-red-600 hover:text-white">
+              Become a Sponsor
+            </button>
+          </a>
         </motion.div>
       </header>
 
       <div className="container m-auto">
-        {Object.keys(sponsors).map((tier) => (
+        {/* Title Sponsor Section */}
+        <section className="mb-20 z-30 relative px-4">
+          <div className="mb-8 flex items-center">
+            <div className="h-px flex-1 bg-gray-800"></div>
+            <h2 className="mx-4 text-2xl font-bold text-red-600">
+              TITLE SPONSOR
+            </h2>
+            <div className="h-px flex-1 bg-gray-800"></div>
+          </div>
+          <div className="flex justify-center">
+            <div className="rounded-t-md rounded-bl-md rounded-br-3xl flex flex-col items-center justify-center bg-[#74111188] p-4 md:p-8 transition-transform hover:scale-105">
+              {sponsors.title.logo ? (
+                <Image
+                  src={sponsors.title.logo}
+                  alt={sponsors.title.name}
+                  width={240}
+                  height={120}
+                  className="h-auto w-full object-contain"
+                />
+              ) : (
+                <p className="text-white">To Be Announced</p>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {Object.keys(sponsors).filter(tier => tier !== 'title').map((tier) => (
           <section key={tier} className="mb-20 z-30 relative px-4">
             <div className="mb-8 flex items-center">
               <div className="h-px flex-1 bg-gray-800"></div>
@@ -78,24 +102,29 @@ export default function SponsorShowcase() {
                   key={sponsor.id}
                   className="rounded-t-md rounded-bl-md rounded-br-3xl flex flex-col items-center justify-center bg-[#74111188] p-4 md:p-8 transition-transform hover:scale-105"
                 >
-                  <Image
-                    src={sponsor.logo || "/placeholder.svg"}
-                    alt={sponsor.name}
-                    width={240}
-                    height={120}
-                    className="h-auto w-full object-contain"
-                  />
+                  {sponsor.logo ? (
+                    <Image
+                      src={sponsor.logo}
+                      alt={sponsor.name}
+                      width={240}
+                      height={120}
+                      className="h-auto w-full object-contain"
+                    />
+                  ) : (
+                    <p className="text-white">To Be Announced</p>
+                  )}
                 </div>
               ))}
             </div>
           </section>
         ))}
+
       </div>
 
       <footer className="mt-2 text-center px-4 pb-8">
         <p className="text-gray-500">
           Interested in becoming a sponsor?{" "}
-          <a href="#" className="text-red-600 hover:underline">
+          <a href="" className="text-red-600 hover:underline">
             Contact us
           </a>{" "}
           for more information.

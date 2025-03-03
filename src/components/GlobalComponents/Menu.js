@@ -22,7 +22,7 @@ const menuItems = [
   { path: "/modules", label: "Modules", icon: <FaBoxOpen className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
   // { path: "/team", label: "Team", icon: <FaUsers className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
   { path: "/contact-us", label: "Contact Us", icon: <FaEnvelope className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
-  { path: "/register", label: "Registration", icon: <FaClipboardList className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
+  { path: "/registration", label: "Registration", icon: <FaClipboardList className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
   { path: "/fyp-xtreme", label: "FYP Extreme", icon: <FaProjectDiagram className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
   // { path: "/job-orbit", label: "Job Orbit", icon: <FaBriefcase className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
   { path: "/sponsors", label: "Sponsors", icon: <FaHandshake className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
@@ -45,7 +45,7 @@ export default function Menu() {
         className="fixed top-0 left-0 right-0 z-50 bg-black/5 backdrop-blur-md"
       >
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-20 md:h-24">
+          <div className="flex items-center justify-between h-16 md:h-20">
             <Link href="/" className="flex items-center mt-5 mb-5">
               <Image src="/logo.png" alt="Logo" width={90} height={90} className="rounded-full" />
               <span className="text-3xl font-bold text-white hidden sm:block">Developers Day 2025</span>
