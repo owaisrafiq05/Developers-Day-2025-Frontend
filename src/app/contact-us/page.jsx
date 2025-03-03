@@ -60,28 +60,22 @@ const page = () => {
           ref={ref}
         >
           <Card
-            name={"John Doe"}
-            email={"NkV1o@example.com"}
-            phone={"123-456-7890"}
-            designation={"President"}
+            name={"Abubakr Danish"}
+            phone={"+92 333 2475885"}
+            designation={"Secretary"}
+            title={"For Sponsorship Inquiries"}
           />
           <Card
-            name={"John Doe"}
-            email={"NkV1o@example.com"}
-            phone={"123-456-7890"}
-            designation={"Vice President"}
+            name={"Hanzala Shamsi"}
+            phone={"+92 344 0775484"}
+            designation={"General Secretary"}
+            title={"For Registration Inquiries"}
           />
           <Card
-            name={"John Doe"}
-            email={"NkV1o@example.com"}
-            phone={"123-456-7890"}
-            designation={"Product Manager"}
-          />
-          <Card
-            name={"John Doe"}
-            email={"NkV1o@example.com"}
-            phone={"123-456-7890"}
-            designation={"Tech Lead"}
+            name={"Muhammad Shaheer Luqman"}
+            phone={"+92 310 0124127"}
+            designation={"Technical Lead"}
+            title={"For Competition Inquiries"}
           />
         </div>
       </div>
@@ -94,19 +88,19 @@ const page = () => {
       >
         <div className="w-full mb-10 flex gap-10 items-center justify-center">
           <Link
-            href="https://www.google.com"
+            href="https://www.facebook.com/acmnuceskhi/"
             className=" hover:scale-110 duration-200 transition-transform"
           >
             <FaFacebook className="text-3xl text-blue-600 pointer-events-none" />
           </Link>
           <Link
-            href="https://www.google.com"
+            href="https://www.linkedin.com/company/acmnuceskhi"
             className=" hover:scale-110 duration-200 transition-transform"
           >
             <FaLinkedin className="text-3xl text-blue-500 pointer-events-none" />
           </Link>
           <Link
-            href="https://www.google.com"
+            href="https://www.instagram.com/acmnuceskhi/"
             className=" hover:scale-110 duration-200 transition-transform"
           >
             <FaInstagram className="text-3xl text-red-600 pointer-events-none" />
@@ -114,8 +108,9 @@ const page = () => {
         </div>
 
         <div className="">
-          <h3 className="m-auto w-max">1234 Main Street</h3>
-          <h3 className="m-auto w-max">Your City, Your State</h3>
+          <h3 className="m-auto w-max">St-4, Sector 17-D, NH 5, Karachi, Sindh</h3>
+          <h3 className="m-auto w-max">(021) 111 128 128</h3>
+          <h3 className="m-auto w-max">info.khi@nu.edu.pk</h3>
         </div>
 
         <div className="my-map mt-6 max-w-[1000px] w-[90%] m-auto h-[300px] bg-gray-300 rounded-xl">

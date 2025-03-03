@@ -2,7 +2,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 
-const Card = ({ name, email, phone, designation, ref }) => {
+const Card = ({ name, phone, designation, title, ref }) => {
   return (
     <StyledWrapper>
       <div
@@ -21,10 +21,10 @@ const Card = ({ name, email, phone, designation, ref }) => {
               height={70}
               className="block mb-4"
             />
-            {designation}
+            {title}
             <div className="mt-4 flex flex-col gap-1">
               <p className="name text-gray-200">{name}</p>
-              <p className="name text-gray-200">{email}</p>
+              <p className="name text-gray-200">{designation}</p>
               <p className="name text-gray-200">{phone}</p>
             </div>
           </div>
