@@ -1,6 +1,6 @@
 import RegisterHero from '@/components/Register/RegisterHero'
-import RegistrationForm from '@/components/Register/RegistrationForm'
 import Squares from "@/components/Squares/Squares";
+import MultiStepForm from '@/components/Register/MultiStepForm';
 
 export default function Register() {
   return (
@@ -17,7 +17,7 @@ export default function Register() {
         />
         </div>
         <div className="relative z-2">
-          <RegistrationForm />
+          <MultiStepForm />
         </div>
       </div>
     </main>
