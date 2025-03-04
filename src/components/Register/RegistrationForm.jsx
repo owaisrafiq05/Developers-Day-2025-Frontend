@@ -314,14 +314,18 @@ const RegistrationForm = () => {
         <p className="text-gray-300">The payment for the selected competition <strong>{formData.competitionName}</strong> is <strong>${selectedCompetitionPrice}</strong>.</p>
         
         <div className="text-gray-300">
-          <h4 className="font-semibold">Developers Day Competition Registration Policies</h4>
-          <h5 className="font-semibold">Privacy Policy</h5>
+          <h4 className="font-semibold pt-4">Developers Day Competition Registration Policies</h4>
+          <br style={{ display: 'none' }} />
+          <h5 className="font-semibold pt-4">Privacy Policy</h5>
+          <br style={{ display: 'none' }} />
           <p>All personal data collected during registration will be kept strictly confidential and will only be used for purposes related to Developers Day. We will not share, sell, or distribute your information to any third party.</p>
           
-          <h5 className="font-semibold">Refund Policy</h5>
+          <h5 className="font-semibold pt-4">Refund Policy</h5>
+          <br style={{ display: 'none' }} />
           <p>Developers Day follows a strict no refund policy for competition registrations. However, if a team has an empty slot, they may add a teammate by contacting the Developers Day 25 PR team before the event.</p>
           
-          <h5 className="font-semibold">Terms and Conditions</h5>
+          <h5 className="font-semibold pt-4">Terms and Conditions</h5>
+          <br style={{ display: 'none' }} />
           <ol className="list-decimal pl-5">
             <li>Participants must adhere to all competition rules and guidelines provided before and during the event.</li>
             <li>Any violation of the rules may result in immediate disqualification from the competition.</li>
