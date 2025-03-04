@@ -14,10 +14,31 @@ const competitionPrices = dummyData.reduce((acc, module) => {
   return acc;
 }, {});
 
+const CustomInput = ({ label, name, value, onChange, onBlur, type = "text", placeholder }) => {
+  return (
+    <div className="form-field">
+      <label className="block text-sm font-medium text-gray-300 mb-2">
+        {label} {type === "text" && <span className="text-red-500">*</span>}
+      </label>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-700 text-white placeholder-gray-400
+        focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors duration-200"
+        placeholder={placeholder}
+      />
+    </div>
+  );
+};
+
 const RegistrationForm = () => {
   const formRef = useRef(null)
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAgreed, setIsAgreed] = useState(false);
   
   // Combine all form fields into a single state object
   const [formData, setFormData] = useState({
@@ -104,8 +125,12 @@ const RegistrationForm = () => {
   const validateStep = (step) => {
     switch(step) {
       case 1:
-        // Allow moving to the next step without filling all fields
-        return true; // Change this to true to allow moving to the next step
+        // Ensure a competition is selected
+        if (!formData.competitionName) {
+          toast.error("Please select a competition.");
+          return false;
+        }
+        return true; // Allow moving to the next step if competition is selected
 
       case 2:
         if (!formData.leaderName || !formData.leaderEmail || !formData.leaderContact || !formData.leaderCNIC) {
@@ -161,16 +186,21 @@ const RegistrationForm = () => {
       setCurrentStep(prev => prev + 1);
       gsap.to(window, {
         duration: 0.5,
-        scrollTo: { top: formRef.current.offsetTop, left: 0, offsetY: 50 } // Corrected scrollTo options
+        scrollTo: formRef.current.offsetTop + 50 // Adjusting the scroll position directly
       });
     }
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!validateStep(currentStep)) return
+    e.preventDefault();
+    if (!validateStep(currentStep) || !isAgreed) {
+      if (!isAgreed) {
+        toast.error("You must agree to the privacy policies to submit the form.");
+      }
+      return;
+    }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       const response = await axios.post('/api/register', {
         Competition_Name: formData.competitionName,
@@ -191,49 +221,13 @@ const RegistrationForm = () => {
         Institution: formData.institution,
         BA_Id: formData.baId
       });
-      toast.success(response.data.message)
+      toast.success(response.data.message);
       // Reset form or redirect
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Registration failed')
+      toast.error(error.response?.data?.message || 'Registration failed');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
-
-  // Custom Input Component
-  const CustomInput = ({ label, value, onChange, onBlur, name, type = "text", required = false }) => {
-    return (
-      <div className="form-field">
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          {label} {required && <span className="text-red-500">*</span>}
-        </label>
-        <input
-          type={type}
-          name={name}
-          value={value}
-          onChange={handleInputChange} // Use the updated handler
-          onBlur={() => onBlur(name, value)}
-          required={required}
-          className={`w-full px-4 py-3 rounded-lg bg-gray-800/50 border ${
-            (name === 'leaderEmail' && !validateEmail(value)) || 
-            (name === 'leaderCNIC' && value.length !== 13) || 
-            (name === 'leaderContact' && value.length !== 11) ? 'border-red-500' : 'border-gray-700'
-          } text-white placeholder-gray-400
-          focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500
-          transition-colors duration-200`}
-          placeholder={`Enter ${label}`}
-        />
-        {name === 'leaderEmail' && !validateEmail(value) && (
-          <div className="text-red-500 text-xs mt-1">Invalid email format</div>
-        )}
-        {name === 'leaderCNIC' && value.length !== 13 && (
-          <div className="text-red-500 text-xs mt-1">CNIC must be 13 digits</div>
-        )}
-        {name === 'leaderContact' && value.length !== 11 && (
-          <div className="text-red-500 text-xs mt-1">Contact must be 11 digits</div>
-        )}
-      </div>
-    );
   };
 
   // Progress Stepper Component
@@ -308,15 +302,56 @@ const RegistrationForm = () => {
   const PaymentStep = () => {
     const selectedCompetitionPrice = competitionPrices[formData.competitionName] || 0;
 
+    const handleCheckboxChange = () => {
+      setIsAgreed(prev => !prev);
+    };
+
     return (
       <div className="space-y-6">
         <h3 className="text-xl font-semibold text-white border-b border-gray-700 pb-2">
           Payment Information
         </h3>
         <p className="text-gray-300">The payment for the selected competition <strong>{formData.competitionName}</strong> is <strong>${selectedCompetitionPrice}</strong>.</p>
+        
+        <div className="text-gray-300">
+          <h4 className="font-semibold">Developers Day Competition Registration Policies</h4>
+          <h5 className="font-semibold">Privacy Policy</h5>
+          <p>All personal data collected during registration will be kept strictly confidential and will only be used for purposes related to Developers Day. We will not share, sell, or distribute your information to any third party.</p>
+          
+          <h5 className="font-semibold">Refund Policy</h5>
+          <p>Developers Day follows a strict no refund policy for competition registrations. However, if a team has an empty slot, they may add a teammate by contacting the Developers Day 25 PR team before the event.</p>
+          
+          <h5 className="font-semibold">Terms and Conditions</h5>
+          <ol className="list-decimal pl-5">
+            <li>Participants must adhere to all competition rules and guidelines provided before and during the event.</li>
+            <li>Any violation of the rules may result in immediate disqualification from the competition.</li>
+            <li>Collaboration between teams or external assistance is strictly prohibited and will lead to disqualification.</li>
+            <li>No edibles are allowed inside the competition venue.</li>
+            <li>The organizers reserve the right to adjust rules or competition parameters to maintain fairness and integrity.</li>
+            <li>The competition will begin at the scheduled time, and teams must arrive early for instructions and setup.</li>
+          </ol>
+        </div>
+
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            checked={isAgreed}
+            onChange={handleCheckboxChange}
+            className="mr-2"
+          />
+          <label className="text-gray-300">I have read and agree to the privacy policies.</label>
+        </div>
+
         <button
           type="button"
-          onClick={() => toast.success("Proceeding to payment...")}
+          onClick={() => {
+            if (isAgreed) {
+              toast.success("Proceeding to payment...");
+              // Add your payment processing logic here
+            } else {
+              toast.error("You must agree to the privacy policies to proceed.");
+            }
+          }}
           className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
         >
           Proceed to Payment
@@ -327,7 +362,7 @@ const RegistrationForm = () => {
 
   return (
     <div className="min-h-screen bg-transparent py-16 px-4 sm:px-6 lg:px-8">
-      <Toaster position="bottom-right z-10" richColors />
+      <Toaster position="bottom-right z-10" richColors className="custom-toast" />
       
       <div 
         ref={formRef}
@@ -358,18 +393,64 @@ const RegistrationForm = () => {
                     ))}
                   </select>
                 </div>
-                <CustomInput label="Brand Ambassador Code" value={formData.baId} onChange={handleInputChange} name="baId" required={false} />
-                <CustomInput label="Team Name" value={formData.teamName} onChange={handleInputChange} name="teamName" required={false} />
-                <CustomInput label="Institution" value={formData.institution} onChange={handleInputChange} name="institution" required={false} />
+                <CustomInput
+                  label="Brand Ambassador Code"
+                  name="baId"
+                  value={formData.baId}
+                  onChange={handleInputChange}
+                  placeholder="Enter BA ID"
+                />
+                <CustomInput
+                  label="Team Name"
+                  name="teamName"
+                  value={formData.teamName}
+                  onChange={handleInputChange}
+                  placeholder="Enter Team Name"
+                />
+                <CustomInput
+                  label="Institution"
+                  name="institution"
+                  value={formData.institution}
+                  onChange={handleInputChange}
+                  placeholder="Enter Institution"
+                />
               </div>
             )}
 
             {currentStep === 2 && (
               <div className="space-y-6">
-                <CustomInput label="Leader Name" value={formData.leaderName} onChange={handleInputChange} name="leaderName" required={false} />
-                <CustomInput label="Leader Email" value={formData.leaderEmail} onChange={handleInputChange} name="leaderEmail" type="email" required={false} />
-                <CustomInput label="Leader CNIC" value={formData.leaderCNIC} onChange={handleInputChange} name="leaderCNIC" required={false} />
-                <CustomInput label="Leader Contact" value={formData.leaderContact} onChange={handleInputChange} name="leaderContact" required={false} />
+                <CustomInput
+                  label="Leader Name"
+                  name="leaderName"
+                  value={formData.leaderName}
+                  onChange={handleInputChange}
+                  placeholder="Enter Leader Name"
+                />
+                <CustomInput
+                  label="Leader Email"
+                  name="leaderEmail"
+                  value={formData.leaderEmail}
+                  onChange={handleInputChange}
+                  onBlur={() => handleBlur('leaderEmail', formData.leaderEmail)}
+                  type="email"
+                  placeholder="Enter Leader Email"
+                />
+                <CustomInput
+                  label="Leader CNIC"
+                  name="leaderCNIC"
+                  value={formData.leaderCNIC}
+                  onChange={handleInputChange}
+                  onBlur={() => handleBlur('leaderCNIC', formData.leaderCNIC)}
+                  placeholder="Enter Leader CNIC"
+                />
+                <CustomInput
+                  label="Leader Contact"
+                  name="leaderContact"
+                  value={formData.leaderContact}
+                  onChange={handleInputChange}
+                  onBlur={() => handleBlur('leaderContact', formData.leaderContact)}
+                  placeholder="Enter Leader Contact"
+                />
               </div>
             )}
 
@@ -379,20 +460,70 @@ const RegistrationForm = () => {
                   <h3 className="text-xl font-semibold text-white border-b border-gray-700 pb-2">
                     Member 1 Information
                   </h3>
-                  <CustomInput label="Name" value={formData.m1Name} onChange={handleInputChange} name="m1Name" required={false} />
-                  <CustomInput label="Email" value={formData.m1Email} onChange={handleInputChange} name="m1Email" type="email" required={false} />
-                  <CustomInput label="CNIC" value={formData.m1CNIC} onChange={handleInputChange} name="m1CNIC" required={false} />
-                  <CustomInput label="Contact" value={formData.m1Contact} onChange={handleInputChange} name="m1Contact" required={false} />
+                  <CustomInput
+                    label="Name"
+                    name="m1Name"
+                    value={formData.m1Name}
+                    onChange={handleInputChange}
+                    placeholder="Enter Name"
+                  />
+                  <CustomInput
+                    label="Email"
+                    name="m1Email"
+                    value={formData.m1Email}
+                    onChange={handleInputChange}
+                    type="email"
+                    placeholder="Enter Email"
+                  />
+                  <CustomInput
+                    label="CNIC"
+                    name="m1CNIC"
+                    value={formData.m1CNIC}
+                    onChange={handleInputChange}
+                    placeholder="Enter CNIC"
+                  />
+                  <CustomInput
+                    label="Contact"
+                    name="m1Contact"
+                    value={formData.m1Contact}
+                    onChange={handleInputChange}
+                    placeholder="Enter Contact"
+                  />
                 </div>
 
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold text-white border-b border-gray-700 pb-2">
                     Member 2 Information
                   </h3>
-                  <CustomInput label="Name" value={formData.m2Name} onChange={handleInputChange} name="m2Name" required={false} />
-                  <CustomInput label="Email" value={formData.m2Email} onChange={handleInputChange} name="m2Email" type="email" required={false} />
-                  <CustomInput label="CNIC" value={formData.m2CNIC} onChange={handleInputChange} name="m2CNIC" required={false} />
-                  <CustomInput label="Contact" value={formData.m2Contact} onChange={handleInputChange} name="m2Contact" required={false} />
+                  <CustomInput
+                    label="Name"
+                    name="m2Name"
+                    value={formData.m2Name}
+                    onChange={handleInputChange}
+                    placeholder="Enter Name"
+                  />
+                  <CustomInput
+                    label="Email"
+                    name="m2Email"
+                    value={formData.m2Email}
+                    onChange={handleInputChange}
+                    type="email"
+                    placeholder="Enter Email"
+                  />
+                  <CustomInput
+                    label="CNIC"
+                    name="m2CNIC"
+                    value={formData.m2CNIC}
+                    onChange={handleInputChange}
+                    placeholder="Enter CNIC"
+                  />
+                  <CustomInput
+                    label="Contact"
+                    name="m2Contact"
+                    value={formData.m2Contact}
+                    onChange={handleInputChange}
+                    placeholder="Enter Contact"
+                  />
                 </div>
               </div>
             )}
