@@ -1,16 +1,18 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { toast, Toaster } from "sonner"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ChevronLeft, ChevronRight, Check } from "lucide-react"
+import fetchCompetitions from "../../data/data-comp" // Import the fetch function
 
 // Define the form validation schema
 const FormDataSchema = z.object({
   // Competition Details
+  competitionCategory: z.string().min(1, "Competition category is required"),
   competitionName: z.string().min(1, "Competition name is required"),
   instituteName: z.string().min(1, "Institute name is required"),
   teamName: z.string().min(1, "Team name is required"),
@@ -18,7 +20,9 @@ const FormDataSchema = z.object({
 
   // Leader Details
   leaderName: z.string().min(1, "Leader name is required"),
-  leaderEmail: z.string().email("Invalid email address"),
+  leaderEmail: z.string()
+    .email("Invalid email address")
+    .regex(/^(.*@gmail\.com|.*@nu\.edu\.pk)$/, "Email must be a valid Gmail or NU email address"),
   leaderCnic: z.string()
     .length(15, "CNIC must be exactly 15 characters")
     .regex(/^\d{5}-\d{7}-\d$/, "CNIC must be in the format 00000-0000000-0"),
@@ -27,7 +31,9 @@ const FormDataSchema = z.object({
 
   // Member 1 Details
   member1Name: z.string().min(1, "Member 1 name is required"),
-  member1Email: z.string().email("Invalid email address"),
+  member1Email: z.string()
+    .email("Invalid email address")
+    .regex(/^(.*@gmail\.com|.*@nu\.edu\.pk)$/, "Email must be a valid Gmail or NU email address"),
   member1Cnic: z.string()
     .length(15, "CNIC must be exactly 15 characters")
     .regex(/^\d{5}-\d{7}-\d$/, "CNIC must be in the format 00000-0000000-0"),
@@ -36,25 +42,26 @@ const FormDataSchema = z.object({
 
   // Member 2 Details
   member2Name: z.string().min(1, "Member 2 name is required"),
-  member2Email: z.string().email("Invalid email address"),
+  member2Email: z.string()
+    .email("Invalid email address")
+    .regex(/^(.*@gmail\.com|.*@nu\.edu\.pk)$/, "Email must be a valid Gmail or NU email address"),
   member2Cnic: z.string()
     .length(15, "CNIC must be exactly 15 characters")
     .regex(/^\d{5}-\d{7}-\d$/, "CNIC must be in the format 00000-0000000-0"),
   member2Phone: z.string()
     .regex(/^\+92\d{10}$/, "Phone number must be in the format +920000000000"),
+
+  // Payment Details
+  paymentScreenshots: z.array(z.string()).optional(), // Array of uploaded file names
+  entryFee: z.number().optional(), // Entry fee for the competition
 })
 
 // Define the form steps
 const steps = [
   {
-    id: "Step 0",
-    name: "Terms & Conditions",
-    fields: [],
-  },
-  {
     id: "Step 1",
     name: "Competition Details",
-    fields: ["competitionName", "instituteName", "teamName", "brandAmbassadorCode"],
+    fields: ["competitionCategory", "competitionName", "instituteName", "teamName", "brandAmbassadorCode"],
   },
   {
     id: "Step 2",
@@ -77,24 +84,24 @@ const steps = [
   },
   {
     id: "Step 4",
+    name: "Payment",
+    fields: ["paymentScreenshots", "entryFee"],
+  },
+  {
+    id: "Step 5",
     name: "Review & Submit",
     fields: [],
   },
-]
-
-// Sample competition options
-const competitionOptions = [
-  "Hackathon 2025",
-  "Code Challenge",
-  "Design Competition",
-  "Business Case Study",
-  "Robotics Challenge",
 ]
 
 export default function MultiStepForm() {
   const [previousStep, setPreviousStep] = useState(0)
   const [currentStep, setCurrentStep] = useState(0)
   const [formData, setFormData] = useState({})
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCompetition, setSelectedCompetition] = useState(""); // State for selected competition
+  const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
+  const [competitionOptions, setCompetitionOptions] = useState([]); // State for competition options
   const delta = currentStep - previousStep
 
   const {
@@ -111,41 +118,64 @@ export default function MultiStepForm() {
   // Watch all form values
   const watchedValues = watch()
 
+  // Fetch competitions on component mount
+  useEffect(() => {
+    const loadCompetitions = async () => {
+      const competitions = await fetchCompetitions();
+      setCompetitionOptions(competitions);
+    };
+
+    loadCompetitions();
+  }, []);
+
   // Process form submission
   const processForm = (data) => {
-    setFormData(data)
-    toast.success("Form submitted successfully!")
-    console.log(JSON.stringify(data, null, 2))
+    // Include uploaded files in the final data
+    const finalData = {
+      ...data,
+      paymentScreenshots: uploadedFiles, // Add uploaded files to the data
+    };
+    setFormData(finalData);
+    toast.success("Form submitted successfully!");
+    console.log(JSON.stringify(finalData, null, 2)); // Log the final data
   }
 
   // Handle next step navigation
   const next = async () => {
     // If we're on the review step, submit the form
     if (currentStep === steps.length - 1) {
-      handleSubmit(processForm)()
-      return
+      handleSubmit(processForm)();
+      return;
     }
 
-    const fields = steps[currentStep].fields
-    const output = await trigger(fields, { shouldFocus: true })
+    const fields = steps[currentStep].fields;
+    const output = await trigger(fields, { shouldFocus: true });
 
     if (!output) {
-      toast.error("Please fill all required fields correctly")
-      return
+      toast.error("Please fill all required fields correctly");
+      return;
     }
 
     // Update form data with current values
-    setFormData((prev) => ({ ...prev, ...watchedValues }))
+    setFormData((prev) => ({ ...prev, ...watchedValues }));
 
-    setPreviousStep(currentStep)
-    setCurrentStep((step) => step + 1)
+    // Set entry fee based on selected competition
+    if (currentStep === 0 && selectedCompetition) {
+      const competition = competitionOptions.find(comp => comp.title === selectedCompetition);
+      if (competition) {
+        setFormData(prev => ({ ...prev, entryFee: competition.entryFee }));
+      }
+    }
+
+    setPreviousStep(currentStep);
+    setCurrentStep((step) => step + 1);
   }
 
   // Handle previous step navigation
   const prev = () => {
     if (currentStep > 0) {
-      setPreviousStep(currentStep)
-      setCurrentStep((step) => step - 1)
+      setPreviousStep(currentStep);
+      setCurrentStep((step) => step - 1);
     }
   }
 
@@ -179,6 +209,18 @@ export default function MultiStepForm() {
     const cleaned = value.replace(/\D/g, "").slice(0, 12); // Limit to 12 digits (including +92)
     const formatted = cleaned.length > 2 ? `+92${cleaned.slice(2)}` : cleaned; // Format as +920000000000
     return formatted;
+  }
+
+  // Filter competition options based on selected category
+  const filteredCompetitions = selectedCategory
+    ? competitionOptions.filter(comp => comp.category === selectedCategory)
+    : [];
+
+  // Handle file upload
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    const fileNames = files.map(file => file.name);
+    setUploadedFiles(fileNames);
   }
 
   return (
@@ -222,52 +264,8 @@ export default function MultiStepForm() {
 
         {/* Form */}
         <form className="p-4 md:p-6" onSubmit={handleSubmit(processForm)}>
-          {/* Step 0: Terms & Conditions */}
-          {currentStep === 0 && (
-            <motion.div
-              initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="space-y-4"
-            >
-              <h2 className="text-xl font-semibold text-red-500 mb-4">Terms & Conditions</h2>
-              
-              <div className="bg-gray-800 p-6 rounded-lg space-y-4">
-                <div>
-                  <h3 className="text-lg font-medium text-red-400 mb-2">Payment Terms</h3>
-                  <p className="text-gray-300">
-                    The registration fee for the competition is PKR 2000 per team. This fee is non-refundable and must be paid to complete your registration.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium text-red-400 mb-2">Registration Rules</h3>
-                  <ul className="list-disc list-inside text-gray-300 space-y-2">
-                    <li>Each team must consist of exactly 3 members (1 leader + 2 members)</li>
-                    <li>All team members must be from the same institute</li>
-                    <li>Each participant can only be part of one team</li>
-                    <li>All provided information must be accurate and verifiable</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium text-red-400 mb-2">Important Notes</h3>
-                  <ul className="list-disc list-inside text-gray-300 space-y-2">
-                    <li>Registration will only be confirmed after successful payment</li>
-                    <li>Keep your registration details safe for future reference</li>
-                    <li>You will receive a confirmation email after successful registration</li>
-                  </ul>
-                </div>
-              </div>
-
-              <p className="text-sm text-gray-400 mt-4">
-                Please proceed to the next step to start filling out your registration details.
-              </p>
-            </motion.div>
-          )}
-
           {/* Step 1: Competition Details */}
-          {currentStep === 1 && (
+          {currentStep === 0 && (
             <motion.div
               initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -276,6 +274,30 @@ export default function MultiStepForm() {
             >
               <h2 className="text-xl font-semibold text-red-500 mb-4">Competition Details</h2>
 
+              {/* Competition Category Dropdown */}
+              <div className="mb-4">
+                <label htmlFor="competitionCategory" className="block text-sm font-medium text-gray-200 mb-1">
+                  Competition Category
+                </label>
+                <select
+                  id="competitionCategory"
+                  {...register("competitionCategory")}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  <option value="">Select Category</option>
+                  {[...new Set(competitionOptions.map(comp => comp.category))].map((category, index) => (
+                    <option key={`${category}-${index}`} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+                {errors.competitionCategory?.message && (
+                  <p className="mt-1 text-sm text-red-500">{errors.competitionCategory.message}</p>
+                )}
+              </div>
+
+              {/* Competition Name Dropdown */}
               <div className="mb-4">
                 <label htmlFor="competitionName" className="block text-sm font-medium text-gray-200 mb-1">
                   Competition Name
@@ -283,12 +305,13 @@ export default function MultiStepForm() {
                 <select
                   id="competitionName"
                   {...register("competitionName")}
+                  onChange={(e) => setSelectedCompetition(e.target.value)} // Set selected competition
                   className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   <option value="">Select Competition</option>
-                  {competitionOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  {filteredCompetitions.map((option, index) => (
+                    <option key={`${option.title}-${index}`} value={option.title}>
+                      {option.title}
                     </option>
                   ))}
                 </select>
@@ -309,7 +332,7 @@ export default function MultiStepForm() {
           )}
 
           {/* Step 2: Leader Information */}
-          {currentStep === 2 && (
+          {currentStep === 1 && (
             <motion.div
               initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -330,7 +353,7 @@ export default function MultiStepForm() {
           )}
 
           {/* Step 3: Team Members */}
-          {currentStep === 3 && (
+          {currentStep === 2 && (
             <motion.div
               initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -365,7 +388,98 @@ export default function MultiStepForm() {
             </motion.div>
           )}
 
-          {/* Step 4: Review & Submit */}
+          {/* Step 4: Payment */}
+          {currentStep === 3 && (
+            <motion.div
+              initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="space-y-6"
+            >
+              <h2 className="text-xl font-semibold text-red-500 mb-4">Payment</h2>
+
+              <div className="bg-gray-800 p-4 rounded-md">
+                <h3 className="text-lg font-medium text-red-400 mb-2">Payment Details</h3>
+                <p className="text-gray-400">Account Title: MUHAMMAD HASSAAN</p>
+                <p className="text-gray-400">IBAN: PK30MPBL9971727140101389</p>
+                <p className="text-gray-400">Account No: 6-99-71-29310-714-101389</p>
+                <p className="text-gray-400">Bank: Habib Metropolitan Bank Limited</p>
+                <p className="text-gray-400">Branch: IBB Baitul Mukarram Branch, Karachi</p>
+                <p className="text-gray-400">Entry Fee: PKR {watchedValues.entryFee || 0}</p>
+              </div>
+
+              <div className="group relative w-full">
+                <div className="relative overflow-hidden rounded-2xl bg-slate-950 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-500/10">
+                  <div className="relative p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">Upload Files</h3>
+                        <p className="text-sm text-slate-400">Drag & drop your files here</p>
+                      </div>
+                      <div className="rounded-lg bg-cyan-500/10 p-2">
+                        <svg className="h-6 w-6 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div className="group/dropzone mt-6">
+                      <div className="relative rounded-xl border-2 border-dashed border-slate-700 bg-slate-900/50 p-8 transition-colors group-hover/dropzone:border-cyan-500/50">
+                        <input
+                          type="file"
+                          className="absolute inset-0 z-50 h-full w-full cursor-pointer opacity-0"
+                          multiple=""
+                          onChange={handleFileChange} // Handle file change
+                        />
+                        <div className="space-y-6 text-center">
+                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-900">
+                            <svg className="h-10 w-10 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 13h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                          </div>
+
+                          <div className="space-y-2">
+                            <p className="text-base font-medium text-white">Drop your files here or browse</p>
+                            <p className="text-sm text-slate-400">Support files: PDF, DOC, DOCX, JPG, PNG</p>
+                            <p className="text-xs text-slate-400">Max file size: 10MB</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 space-y-4">
+                      {uploadedFiles.map((file, index) => (
+                        <div key={`${file}-${index}`} className="rounded-xl bg-slate-900/50 p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="rounded-lg bg-cyan-500/10 p-2">
+                                <svg className="h-6 w-6 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <p className="font-medium text-white">{file}</p>
+                                <p className="text-xs text-slate-400">File uploaded</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <button className="text-slate-400 transition-colors hover:text-white">
+                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Step 5: Review & Submit */}
           {currentStep === 4 && (
             <motion.div
               initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
@@ -378,6 +492,10 @@ export default function MultiStepForm() {
               <div className="bg-gray-800 p-4 rounded-md">
                 <h3 className="text-lg font-medium text-red-400 mb-2">Competition Details</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-400">Competition Category:</p>
+                    <p className="font-medium">{watchedValues.competitionCategory || "-"}</p>
+                  </div>
                   <div>
                     <p className="text-gray-400">Competition Name:</p>
                     <p className="font-medium">{watchedValues.competitionName || "-"}</p>
@@ -393,6 +511,10 @@ export default function MultiStepForm() {
                   <div>
                     <p className="text-gray-400">Brand Ambassador Code:</p>
                     <p className="font-medium">{watchedValues.brandAmbassadorCode || "Not provided"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Entry Fee:</p>
+                    <p className="font-medium">PKR {watchedValues.entryFee || 0}</p>
                   </div>
                 </div>
               </div>
