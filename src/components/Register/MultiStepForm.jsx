@@ -47,6 +47,11 @@ const FormDataSchema = z.object({
 // Define the form steps
 const steps = [
   {
+    id: "Step 0",
+    name: "Terms & Conditions",
+    fields: [],
+  },
+  {
     id: "Step 1",
     name: "Competition Details",
     fields: ["competitionName", "instituteName", "teamName", "brandAmbassadorCode"],
@@ -217,8 +222,52 @@ export default function MultiStepForm() {
 
         {/* Form */}
         <form className="p-4 md:p-6" onSubmit={handleSubmit(processForm)}>
-          {/* Step 1: Competition Details */}
+          {/* Step 0: Terms & Conditions */}
           {currentStep === 0 && (
+            <motion.div
+              initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="space-y-4"
+            >
+              <h2 className="text-xl font-semibold text-red-500 mb-4">Terms & Conditions</h2>
+              
+              <div className="bg-gray-800 p-6 rounded-lg space-y-4">
+                <div>
+                  <h3 className="text-lg font-medium text-red-400 mb-2">Payment Terms</h3>
+                  <p className="text-gray-300">
+                    The registration fee for the competition is PKR 2000 per team. This fee is non-refundable and must be paid to complete your registration.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium text-red-400 mb-2">Registration Rules</h3>
+                  <ul className="list-disc list-inside text-gray-300 space-y-2">
+                    <li>Each team must consist of exactly 3 members (1 leader + 2 members)</li>
+                    <li>All team members must be from the same institute</li>
+                    <li>Each participant can only be part of one team</li>
+                    <li>All provided information must be accurate and verifiable</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium text-red-400 mb-2">Important Notes</h3>
+                  <ul className="list-disc list-inside text-gray-300 space-y-2">
+                    <li>Registration will only be confirmed after successful payment</li>
+                    <li>Keep your registration details safe for future reference</li>
+                    <li>You will receive a confirmation email after successful registration</li>
+                  </ul>
+                </div>
+              </div>
+
+              <p className="text-sm text-gray-400 mt-4">
+                Please proceed to the next step to start filling out your registration details.
+              </p>
+            </motion.div>
+          )}
+
+          {/* Step 1: Competition Details */}
+          {currentStep === 1 && (
             <motion.div
               initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -260,7 +309,7 @@ export default function MultiStepForm() {
           )}
 
           {/* Step 2: Leader Information */}
-          {currentStep === 1 && (
+          {currentStep === 2 && (
             <motion.div
               initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -281,7 +330,7 @@ export default function MultiStepForm() {
           )}
 
           {/* Step 3: Team Members */}
-          {currentStep === 2 && (
+          {currentStep === 3 && (
             <motion.div
               initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -317,7 +366,7 @@ export default function MultiStepForm() {
           )}
 
           {/* Step 4: Review & Submit */}
-          {currentStep === 3 && (
+          {currentStep === 4 && (
             <motion.div
               initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
