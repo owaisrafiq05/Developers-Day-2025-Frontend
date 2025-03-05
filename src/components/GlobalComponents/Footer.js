@@ -7,8 +7,8 @@ import { FaLinkedin, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa"
 
 const menuItems = [
   { path: "/", label: "Home" },
-  { path: "/modules", label: "Modules" },
   { path: "/sponsors", label: "Sponsors" },
+  { path: "/modules", label: "Modules" },
   // { path: "/team", label: "Team" },
   { path: "/registration", label: "Registration" },
   { path: "/fyp-xtreme", label: "FYP Extreme" },
@@ -20,7 +20,7 @@ const socialLinks = [
   { icon: <FaLinkedin />, url: "https://www.linkedin.com/company/developersday/", label: "LinkedIn" },
   { icon: <FaFacebookF />, url: "https://web.facebook.com/DevelopersDay/", label: "Facebook" },
   { icon: <FaInstagram />, url: "https://www.instagram.com/developersday/", label: "Instagram" },
-  { icon: <FaGithub />, url: "https://github.com/owaisrafiq05/Developers-Day-2025-Frontend", label: "GitHub" },
+  // { icon: <FaGithub />, url: "https://github.com/owaisrafiq05/Developers-Day-2025-Frontend", label: "GitHub" },
 ]
 
 const developers = [
@@ -49,66 +49,10 @@ const developers = [
 export default function Footer() {
   const socialRefs = useRef([])
   const linkRefs = useRef([])
-
-  useEffect(() => {
-    // Hover animations for social icons
-    socialRefs.current.forEach((icon) => {
-      const iconAnim = gsap.timeline({ paused: true })
-      iconAnim.to(icon, {
-        scale: 1.3,
-        color: "#ef4444",
-        duration: 0.3,
-        ease: "power2.out",
-      })
-
-      icon.addEventListener("mouseenter", () => iconAnim.play())
-      icon.addEventListener("mouseleave", () => iconAnim.reverse())
-    })
-
-    // Hover animations for links
-    linkRefs.current.forEach((link) => {
-      const linkAnim = gsap.timeline({ paused: true })
-      linkAnim.to(link, {
-        x: 5,
-        color: "#ef4444",
-        duration: 0.2,
-        ease: "power1.out",
-      })
-
-      link.addEventListener("mouseenter", () => linkAnim.play())
-      link.addEventListener("mouseleave", () => linkAnim.reverse())
-    })
-
-    // Floating animation for logo
-    gsap.to(".footer-logo", {
-      y: -10,
-      duration: 2,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut",
-    })
-
-    // Cleanup
-    return () => {
-      socialRefs.current.forEach((icon) => {
-        if (icon) {
-          icon.removeEventListener("mouseenter", null)
-          icon.removeEventListener("mouseleave", null)
-        }
-      })
-      linkRefs.current.forEach((link) => {
-        if (link) {
-          link.removeEventListener("mouseenter", null)
-          link.removeEventListener("mouseleave", null)
-        }
-      })
-    }
-  }, [])
-
   return (
     <footer className="relative overflow-hidden w-full">
       {/* Static 3D Curved top boundary */}
-      <div className="relative h-32">
+      {/* <div className="relative h-32">
         <div
           className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-b from-black/80 to-black"
           style={{
@@ -136,7 +80,7 @@ export default function Footer() {
             zIndex: 8,
           }}
         />
-      </div>
+      </div> */}
 
       {/* Main footer content */}
       <div className="relative bg-gradient-to-b from-black to-gray-900 pt-16 pb-8 px-4 sm:px-12 md:px-20 m-auto w-full">
@@ -151,7 +95,7 @@ export default function Footer() {
                   alt="Developers Day Logo"
                   width={80}
                   height={80}
-                  className="rounded-full relative z-10"
+                  className="rounded-full relative z-5"
                 />
               </div>
               <span className="text-2xl font-bold text-white">Developers Day 2025</span>

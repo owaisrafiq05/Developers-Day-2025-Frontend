@@ -31,7 +31,7 @@ const Stats = () => {
         <motion.div
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
           <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
@@ -79,7 +79,7 @@ const Stats = () => {
         <motion.div
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.4, delay: 0.6 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
           <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
@@ -103,7 +103,7 @@ const Stats = () => {
         <motion.div
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.4, delay: 0.8 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
           <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">

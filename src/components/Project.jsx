@@ -9,23 +9,14 @@ import { ChevronDown } from "lucide-react"
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
 const images = [
-  { src: "/images/highlight-img-1.jpg", text: "Developer's Day 2023", category: "Competition" },
-  { src: "/images/highlight-img-2.jpg", text: "Developer's Day 2023", category: "Workshop" },
-  { src: "/images/highlight-img-3.jpg", text: "Developer's Day 2023", category: "Networking" },
-  { src: "/images/highlight-img-4.jpg", text: "Developer's Day 2023", category: "Hackathon" },
-  { src: "/images/highlight-img-5.jpg", text: "Developer's Day 2023", category: "Panel" },
-  { src: "/images/highlight-img-6.jpg", text: "Developer's Day 2023", category: "Awards" },
-  { src: "/images/highlight-img-7.jpg", text: "Developer's Day 2023", category: "Keynote" },
+  { src: "/images/highlight-img-1.jpg", category: "Competition" },
+  { src: "/images/highlight-img-2.jpg", category: "Workshop" },
+  { src: "/images/highlight-img-3.jpg", category: "Networking" },
+  { src: "/images/highlight-img-4.jpg", category: "Hackathon" },
+  { src: "/images/highlight-img-5.jpg", category: "Panel" },
+  { src: "/images/highlight-img-6.jpg", category: "Awards" },
+  { src: "/images/highlight-img-7.jpg", category: "Keynote" },
 ]
-
-// Replace the random particle generation with a stable version
-const particles = Array.from({ length: 15 }, (_, i) => ({
-  id: i,
-  top: `${(i * 6.5) % 100}%`,
-  left: `${(i * 8.3) % 100}%`,
-  duration: 5 + (i * 0.5),
-  delay: i * 0.3
-}));
 
 export default function EventHighlights() {
   const sectionRef = useRef(null)
@@ -120,14 +111,6 @@ export default function EventHighlights() {
     })
   }
 
-  const defaultTiltOptions = {
-    max: 15,
-    scale: 1.05,
-    speed: 1000,
-    glare: true,
-    "max-glare": 0.3,
-  }
-
   return (
     <section ref={sectionRef} className="relative w-full min-h-screen text-white overflow-hidden py-8 sm:py-16">
       {/* Cool animated gradient lines - adjust for mobile */}
@@ -137,22 +120,6 @@ export default function EventHighlights() {
         
         {/* Enhanced bottom glow - adjusted for mobile */}
         <div className="absolute bottom-0 right-0 w-[80%] sm:w-[60%] h-[40%] sm:h-[60%] bg-gradient-to-tl from-red-600/10 via-red-900/5 to-transparent rounded-full blur-[120px] transform rotate-12"></div>
-        
-        {/* Animated particles */}
-        <div className="absolute inset-0">
-          {particles.map((particle) => (
-            <div
-              key={particle.id}
-              className="absolute w-1 h-1 bg-red-500/30 rounded-full"
-              style={{
-                top: particle.top,
-                left: particle.left,
-                animation: `floatParticle ${particle.duration}s linear infinite`,
-                animationDelay: `${particle.delay}s`,
-              }}
-            ></div>
-          ))}
-        </div>
       </div>
 
       {/* Header - adjust text sizes for mobile */}
@@ -169,57 +136,29 @@ export default function EventHighlights() {
         </div>
       </div>
 
-      {/* Timeline */}
-      {/* <div ref={timelineRef} className="relative w-full max-w-5xl mx-auto mb-16 px-4">
-        <div className="timeline-line h-1 bg-gradient-to-r from-red-800 to-red-600 w-full"></div>
-        <div className="flex justify-between relative -mt-2">
-          {images.map((_, index) => (
-            <div key={index} className="timeline-dot relative">
-              <div className="w-4 h-4 bg-red-600 rounded-full"></div>
-              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400">
-                Day {index + 1}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div> */}
-
       {/* Grid Layout - use CSS for responsive behavior */}
       <div
         ref={gridRef}
         className="relative w-full max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
       >
         {images.map((item, index) => (
-          <Tilt
+          <div
             key={index}
-            options={defaultTiltOptions}
-            className="grid-item"
+            className="relative overflow-hidden rounded-lg h-[250px] sm:h-[300px] lg:h-[350px] bg-gray-900"
           >
-            <div
-              className="relative overflow-hidden rounded-lg cursor-pointer group h-[250px] sm:h-[300px] lg:h-[350px] bg-gray-900"
-            >
-              <img
-                src={item.src || `/placeholder.svg?height=350&width=500`}
-                alt={`Event highlight ${index + 1}`}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-70"></div>
+            <img
+              src={item.src || `/placeholder.svg?height=350&width=500`}
+              alt={`Event highlight ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
 
-              {/* Red overlay on hover */}
-              <div className="absolute inset-0 bg-red-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-              {/* Content */}
-              <div className="absolute bottom-0 left-0 w-full p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                <div className="inline-block px-3 py-1 bg-red-600 text-white text-xs rounded-full mb-3">
-                  {item.category}
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">{item.text}</h3>
+            {/* Content - Move category to top left */}
+            <div className="absolute top-0 left-0 w-full p-4">
+              <div className="inline-block px-3 py-1 bg-red-600 text-white text-xs rounded-full mb-3">
+                {item.category}
               </div>
-
-              {/* Animated border on hover */}
-              <div className="absolute inset-0 border-2 border-red-600/0 group-hover:border-red-600/100 transition-colors duration-300 rounded-lg"></div>
             </div>
-          </Tilt>
+          </div>
         ))}
       </div>
 

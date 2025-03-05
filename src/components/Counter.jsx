@@ -41,7 +41,7 @@ export default function Countdown() {
        <motion.div
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.2, delay: 0.5 }}>
+          transition={{ duration: 0.2, delay: 0.4 }}>
       <div className="text-center mb-6">
         <h2 className="text-3xl md:text-3xl font-semibold text-white relative">Registration Starts In...</h2>
       </div>
@@ -52,7 +52,7 @@ export default function Countdown() {
           key={unit.label}
           initial={{ opacity: 0, x: 0, scale: 0 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.4, delay: 1 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
           className="relative z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 flex flex-col justify-center items-center gap-1 text-center border-0"
         >
           <SpotlightCard className="absolute top-0 left-0 w-full h-full bg-gradient-to-br bg-transparent border-white transition duration-300 hover:shadow-lg  hover:shadow-red-500/50 group">

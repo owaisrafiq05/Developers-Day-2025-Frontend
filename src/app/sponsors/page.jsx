@@ -52,7 +52,7 @@ export default function SponsorShowcase() {
           transition={{ duration: 0.5 }}
           className="mt-8 flex justify-center"
         >
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSc8-_ooB3Yulbnc8qz_nXDuSJ0h9fMd19b5tziEl8UG6Nf_Ow/viewform">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSc8-_ooB3Yulbnc8qz_nXDuSJ0h9fMd19b5tziEl8UG6Nf_Ow/viewform" target="_blank" rel="noopener noreferrer">
             <button className="group flex items-center gap-2 rounded-full border border-red-600 px-6 py-3 text-red-600 transition-all hover:bg-red-600 hover:text-white">
               Become a Sponsor
             </button>
@@ -124,7 +124,7 @@ export default function SponsorShowcase() {
       <footer className="mt-2 text-center px-4 pb-8">
         <p className="text-gray-500">
           Interested in becoming a sponsor?{" "}
-          <a href="" className="text-red-600 hover:underline">
+          <a href="/contact-us" className="text-red-600 hover:underline">
             Contact us
           </a>{" "}
           for more information.

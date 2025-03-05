@@ -41,9 +41,9 @@ const page = () => {
           transition={{ duration: 0.4, delay: 1 }}
           className="relative max-w-[600px]"
         >
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nam, iure
-          eveniet? Deleniti maiores praesentium id soluta quae modi omnis
-          magnam, doloribus eius, consectetur quo dolores.
+          Something Big is on the Horizon!<br /><br />
+          Opportunities are about to take a whole new orbit—<strong>Job Orbit</strong> is coming soon!<br />Whether you're seeking your next career move, looking for game-changing insights, or simply curious about what's ahead, something exciting is brewing.<br /><br />
+          Stay tuned for more details.
         </motion.p>
       </motion.div>
     </div>
