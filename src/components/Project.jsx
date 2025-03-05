@@ -9,13 +9,12 @@ import { ChevronDown } from "lucide-react"
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
 const images = [
-  { src: "/images/highlight-img-1.jpg", category: "Competition" },
-  { src: "/images/highlight-img-2.jpg", category: "Workshop" },
-  { src: "/images/highlight-img-3.jpg", category: "Networking" },
-  { src: "/images/highlight-img-4.jpg", category: "Hackathon" },
-  { src: "/images/highlight-img-5.jpg", category: "Panel" },
-  { src: "/images/highlight-img-6.jpg", category: "Awards" },
-  { src: "/images/highlight-img-7.jpg", category: "Keynote" },
+  { src: "/images/highlight-img-7.jpg", category: "Team" },
+  { src: "/images/Keynote.jpg", category: "Keynote" },
+  { src: "/images/highlight-img-4.jpg", category: "Competition" },
+  { src: "/images/job_fair.jpg", category: "Job Fair" },
+  { src: "/images/highlight-img-2.jpg", category: "Awards" },
+  { src: "/images/highlight-img-6.jpg", category: "Socials" },
 ]
 
 export default function EventHighlights() {
