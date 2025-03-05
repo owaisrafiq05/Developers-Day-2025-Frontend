@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ChevronLeft, ChevronRight, Check } from "lucide-react"
 import fetchCompetitions from "../../data/data-comp" // Import the fetch function
+import axios from 'axios' // Import Axios at the top of your file
 
 // Define the form validation schema
 const FormDataSchema = z.object({
@@ -128,16 +129,64 @@ export default function MultiStepForm() {
     loadCompetitions();
   }, []);
 
+  // Handle file upload
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    setUploadedFiles(files); // Store the actual file objects
+  }
+
   // Process form submission
-  const processForm = (data) => {
-    // Include uploaded files in the final data
-    const finalData = {
-      ...data,
-      paymentScreenshots: uploadedFiles, // Add uploaded files to the data
-    };
-    setFormData(finalData);
-    toast.success("Form submitted successfully!");
-    console.log(JSON.stringify(finalData, null, 2)); // Log the final data
+  const processForm = async (data) => {
+    const formData = new FormData();
+    formData.append("Competition_Id", "e28e377f-ea92-47ff-bc8f-17be209b2906"); 
+    formData.append("Institute_Name", data.instituteName);
+    formData.append("Team_Name", data.teamName);
+    formData.append("L_Name", data.leaderName);
+    formData.append("L_Email", data.leaderEmail);
+    formData.append("L_Contact", data.leaderPhone.replace("+92", "0")); // Convert to local format
+    formData.append("L_CNIC", data.leaderCnic);
+    
+    // Append members
+    const members = [
+      {
+        Name: data.member1Name,
+        Email: data.member1Email,
+        Contact: data.member1Phone.replace("+92", "0"), // Convert to local format
+        CNIC: data.member1Cnic,
+      },
+      {
+        Name: data.member2Name,
+        Email: data.member2Email,
+        Contact: data.member2Phone.replace("+92", "0"), // Convert to local format
+        CNIC: data.member2Cnic,
+      },
+    ];
+    formData.append("Members", JSON.stringify(members)); // Append members as a JSON string
+
+    // Append the payment photo (assuming the first uploaded file is the payment photo)
+    if (uploadedFiles.length > 0) {
+      formData.append("Payment_Photo", uploadedFiles[0]); // Append the actual file
+    }
+
+    // Append brand ambassador code if available
+    formData.append("BA_Code", data.brandAmbassadorCode || ""); // Optional field
+
+    try {
+      const response = await axios.post("https://dev-day-backend.vercel.app/Team/Register", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
+        },
+      });
+
+      if (response.data.success) {
+        toast.success(response.data.message); // Show success message from the response
+      } else {
+        toast.error("Failed to submit the form. Please try again.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while submitting the form.");
+      console.error("Error:", error);
+    }
   }
 
   // Handle next step navigation
@@ -215,13 +264,6 @@ export default function MultiStepForm() {
   const filteredCompetitions = selectedCategory
     ? competitionOptions.filter(comp => comp.category === selectedCategory)
     : [];
-
-  // Handle file upload
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    const fileNames = files.map(file => file.name);
-    setUploadedFiles(fileNames);
-  }
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 md:p-8">
@@ -458,7 +500,7 @@ export default function MultiStepForm() {
                                 </svg>
                               </div>
                               <div>
-                                <p className="font-medium text-white">{file}</p>
+                                <p className="font-medium text-white">{file.name}</p>
                                 <p className="text-xs text-slate-400">File uploaded</p>
                               </div>
                             </div>

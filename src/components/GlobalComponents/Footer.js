@@ -8,12 +8,12 @@ import { FaLinkedin, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa"
 const menuItems = [
   { path: "/", label: "Home" },
   { path: "/modules", label: "Modules" },
+  { path: "/sponsors", label: "Sponsors" },
   // { path: "/team", label: "Team" },
-  { path: "/contact-us", label: "Contact Us" },
   { path: "/registration", label: "Registration" },
   { path: "/fyp-xtreme", label: "FYP Extreme" },
   // { path: "/job-orbit", label: "Job Orbit" },
-  { path: "/sponsors", label: "Sponsors" },
+  { path: "/contact-us", label: "Contact Us" },
 ]
 
 const socialLinks = [
