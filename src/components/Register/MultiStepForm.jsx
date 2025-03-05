@@ -138,7 +138,7 @@ export default function MultiStepForm() {
   // Process form submission
   const processForm = async (data) => {
     const formData = new FormData();
-    formData.append("Competition_Id", "e28e377f-ea92-47ff-bc8f-17be209b2906"); 
+    formData.append("Competition_Name", data.competitionName);
     formData.append("Institute_Name", data.instituteName);
     formData.append("Team_Name", data.teamName);
     formData.append("L_Name", data.leaderName);
