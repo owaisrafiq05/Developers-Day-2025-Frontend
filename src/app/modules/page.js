@@ -8,7 +8,7 @@ import Squares from "@/components/Squares/Squares";
 import ModuleCard from "@/components/Modules/ModuleCard";
 import ModuleHero from "@/components/Modules/ModuleHero";
 import ModuleModal from "@/components/Modules/ModuleModal";
-import dummyData from "@/data/data-comp"; // Import the dummy data
+import fetchCompetitions from "@/data/data-comp"; // Import the fetch function
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -26,13 +26,14 @@ export default function Module() {
     title: "",
     description: "",
     prize: "",
-    entryFee:"",
+    entryFee: "",
     minMaxTeamMembers: "",
-    category:""
+    category: ""
   });
+  const [competitions, setCompetitions] = useState([]); // State to hold fetched competitions
 
-// Update openModal function
-const openModal = (moduleData) => {
+  // Update openModal function
+  const openModal = (moduleData) => {
     setModalData(moduleData);
     setIsModalOpen(true);
   };
@@ -41,6 +42,15 @@ const openModal = (moduleData) => {
   const closeModal = () => {
     setIsModalOpen(false); // Close the modal
   };
+
+  useEffect(() => {
+    const loadCompetitions = async () => {
+      const competitionsData = await fetchCompetitions();
+      setCompetitions(competitionsData); // Set the fetched competitions
+    };
+
+    loadCompetitions();
+  }, []);
 
   useEffect(() => {
     console.log("isModalOpen has changed:", isModalOpen);
@@ -72,14 +82,14 @@ const openModal = (moduleData) => {
   }, []);
 
   // Filtered modules based on search query
-  const filteredData = dummyData.filter(
+  const filteredData = competitions.filter(
     (module) =>
       module.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       module.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Get unique categories
-  const categories = [...new Set(dummyData.map((module) => module.category))];
+  const categories = [...new Set(competitions.map((module) => module.category))];
 
   // Filtered categories based on search query
   const filteredCategories = [
@@ -93,7 +103,7 @@ const openModal = (moduleData) => {
     <div>
       <ModuleHero />
       <section ref={sectionRef} className="relative overflow-hidden bg-white">
-      <Squares
+        <Squares
           speed={0.5}
           squareSize={40}
           direction="diagonal" // up, down, left, right, diagonal
@@ -176,7 +186,9 @@ const openModal = (moduleData) => {
                           title={module.title}
                           description={module.description}
                           prize={module.prize}
+                          entryFee={module.entryFee}
                           minMaxTeamMembers={module.minMaxTeamMembers}
+                          category={module.category}
                           openModal={() => openModal(module)} // Pass the entire module object
                         />
                       </div>
