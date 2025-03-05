@@ -5,14 +5,20 @@ const fetchCompetitions = async () => {
 
     if (data.success) {
       // Map the API response to the desired format
-      const competitions = data.competitions.map(comp => ({
-        title: comp.Competition_Name,
-        description: comp.Description,
-        prize: comp.Prize,
-        entryFee: comp.Entry_Fee.toString(), // Convert to string to match previous format
-        category: comp.Competition_Type,
-        minMaxTeamMembers: `${comp.Min_Participants}-${comp.Max_Participants}`,
-      }));
+      const competitions = data.competitions.map(comp => {
+        const minParticipants = comp.Min_Participants;
+        const maxParticipants = comp.Max_Participants;
+        
+        return {
+          title: comp.Competition_Name,
+          description: comp.Description,
+          prize: comp.Prize,
+          entryFee: comp.Entry_Fee.toString(), // Convert to string to match previous format
+          category: comp.Competition_Type,
+          minParticipants, // Store min participants
+          maxParticipants, // Store max participants
+        };
+      });
 
       return competitions;
     } else {

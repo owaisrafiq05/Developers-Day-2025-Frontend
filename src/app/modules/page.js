@@ -27,7 +27,8 @@ export default function Module() {
     description: "",
     prize: "",
     entryFee: "",
-    minMaxTeamMembers: "",
+    minParticipants: "",
+    maxParticipants: "",
     category: ""
   });
   const [competitions, setCompetitions] = useState([]); // State to hold fetched competitions
@@ -187,7 +188,8 @@ export default function Module() {
                           description={module.description}
                           prize={module.prize}
                           entryFee={module.entryFee}
-                          minMaxTeamMembers={module.minMaxTeamMembers}
+                          minParticipants={module.minParticipants}
+                          maxParticipants={module.maxParticipants}
                           category={module.category}
                           openModal={() => openModal(module)} // Pass the entire module object
                         />

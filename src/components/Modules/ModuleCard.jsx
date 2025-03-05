@@ -16,7 +16,8 @@ export default function ModuleCard({
   prize,
   category,
   entryFee,
-  minMaxTeamMembers,
+  minParticipants,
+  maxParticipants,
   openModal,
 }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -81,9 +82,11 @@ export default function ModuleCard({
                 transition={{ duration: 0.2 }}
               >
                 <span className="text-sm md:text-base text-zinc-400">
-                  Max. Members:
+                  Team Size:
                 </span>
-                <span className="text-lg md:text-xl">{minMaxTeamMembers}</span>
+                <span className="text-lg md:text-xl">
+                  {minParticipants} - {maxParticipants}
+                </span>
               </motion.div>
               <motion.div
                 className="flex items-center space-x-2 text-red-500 font-bold"
@@ -116,7 +119,8 @@ export default function ModuleCard({
                     prize,
                     entryFee,
                     category,
-                    minMaxTeamMembers
+                    minParticipants,
+                    maxParticipants
                   })}
                 >
                   More Info

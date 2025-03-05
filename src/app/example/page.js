@@ -25,7 +25,8 @@ const ParentComponent = () => {
         title="Competition Title"
         description="This is a description of the competition."
         prize="5000"
-        minMaxTeamMembers="1-5"
+        minParticipants={1}
+        maxParticipants={5}
         openModal={openModal} // Pass openModal function to the ModuleCard
       />
       

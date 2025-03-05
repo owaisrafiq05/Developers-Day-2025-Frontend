@@ -12,7 +12,8 @@ const ModuleModal = ({
     prize, 
     entryFee,
     category,
-    minMaxTeamMembers 
+    minParticipants,
+    maxParticipants
 }) => {
     const [isClosing, setIsClosing] = useState(false); // Local state to control exit animation
 
@@ -79,7 +80,12 @@ const ModuleModal = ({
                                 <FaUsers className="mr-1" /> {/* Team Requirements Icon */}
                                 Team Requirements
                             </span>
-                            <div className="text-white text-sm">Max Team Size: {minMaxTeamMembers}</div> {/* Correct usage */}
+                            <div className="text-white text-sm">
+                                Min Team Size: {minParticipants}
+                            </div>
+                            <div className="text-white text-sm">
+                                Max Team Size: {maxParticipants}
+                            </div>
                         </div>
                         <div className="mt-4">
                             <div className="text-[#d32f2f] text-sm font-medium mb-2 flex items-center">
