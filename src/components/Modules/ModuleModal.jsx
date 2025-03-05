@@ -62,14 +62,16 @@ const ModuleModal = ({
                                     <FaDollarSign className="mr-1" /> {/* Entry Fee Icon */}
                                     Entry Fee
                                 </div>
-                                <div className="text-white font-medium text-lg">Rs.{entryFee}</div> {/* Correct usage */}
+                                <div className="text-white font-medium text-lg">Rs. {entryFee}</div> {/* Correct usage */}
                             </div>
                             <div className="bg-[#333] p-4 rounded-lg w-1/2">
                                 <div className="text-[#d32f2f] text-xs flex items-center">
                                     <FaTrophy className="mr-1" /> {/* Prize Pool Icon */}
                                     Prize Pool
                                 </div>
-                                <div className="text-white font-medium text-lg">{prize}</div> {/* Correct usage */}
+                                <div className="text-white font-medium text-lg">
+                                    {prize === 0 ? "To Be Decided" : `Rs. ${prize}`}
+                                </div> {/* Correct usage */}
                             </div>
                         </div>
                         <div className="bg-[#333] rounded-lg p-4 mt-4">
