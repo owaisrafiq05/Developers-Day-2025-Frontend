@@ -178,7 +178,7 @@ export default function Footer() {
             <p className="text-center text-gray-500 w-full sm:w-auto">
               © {new Date().getFullYear()} Developers Day. All rights reserved.
             </p>
-            <div className="text-center w-full sm:w-auto">
+            <div className="text-center w-full sm:w-auto flex flex-row mt-4 md:mt-0">
               <Link
                 href="/Privacy Policy.pdf"
                 target="_blank"
