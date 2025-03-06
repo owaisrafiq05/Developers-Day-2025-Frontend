@@ -22,8 +22,11 @@ const FormDataSchema = z.object({
   // Leader Details
   leaderName: z.string().min(1, "Leader name is required"),
   leaderEmail: z.string()
-    .email("Invalid email address")
-    .regex(/^(.*@gmail\.com|.*@nu\.edu\.pk)$/, "Email must be a valid Gmail or NU email address"),
+    .min(1, "Email is required")
+    .email("Invalid email format. Please use a valid email address (e.g., example@domain.com)")
+    .refine(val => val.includes('@') && val.includes('.'), {
+      message: "Email must contain '@' and '.' characters"
+    }),
   leaderCnic: z.string()
     .length(15, "CNIC must be exactly 15 characters")
     .regex(/^\d{5}-\d{7}-\d$/, "CNIC must be in the format 00000-0000000-0"),
@@ -33,8 +36,11 @@ const FormDataSchema = z.object({
   // Member 1 Details
   member1Name: z.string().min(1, "Member 1 name is required"),
   member1Email: z.string()
-    .email("Invalid email address")
-    .regex(/^(.*@gmail\.com|.*@nu\.edu\.pk)$/, "Email must be a valid Gmail or NU email address"),
+    .min(1, "Email is required")
+    .email("Invalid email format. Please use a valid email address (e.g., example@domain.com)")
+    .refine(val => val.includes('@') && val.includes('.'), {
+      message: "Email must contain '@' and '.' characters"
+    }),
   member1Cnic: z.string()
     .length(15, "CNIC must be exactly 15 characters")
     .regex(/^\d{5}-\d{7}-\d$/, "CNIC must be in the format 00000-0000000-0"),
@@ -44,8 +50,7 @@ const FormDataSchema = z.object({
   // Member 2 Details
   member2Name: z.string().min(1, "Member 2 name is required"),
   member2Email: z.string()
-    .email("Invalid email address")
-    .regex(/^(.*@gmail\.com|.*@nu\.edu\.pk)$/, "Email must be a valid Gmail or NU email address"),
+    .email("Invalid email address"),
   member2Cnic: z.string()
     .length(15, "CNIC must be exactly 15 characters")
     .regex(/^\d{5}-\d{7}-\d$/, "CNIC must be in the format 00000-0000000-0"),
@@ -85,13 +90,13 @@ const steps = [
   },
   {
     id: "Step 4",
-    name: "Payment",
-    fields: ["paymentScreenshots", "entryFee"],
+    name: "Review & Submit",
+    fields: [],
   },
   {
     id: "Step 5",
-    name: "Review & Submit",
-    fields: [],
+    name: "Payment",
+    fields: ["paymentScreenshots", "entryFee"],
   },
 ]
 
@@ -103,6 +108,7 @@ export default function MultiStepForm() {
   const [selectedCompetition, setSelectedCompetition] = useState(""); // State for selected competition
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
   const [competitionOptions, setCompetitionOptions] = useState([]); // State for competition options
+  const [entryFeeAmount, setEntryFeeAmount] = useState(0); // State to track entry fee amount
   const delta = currentStep - previousStep
 
   const {
@@ -110,10 +116,17 @@ export default function MultiStepForm() {
     handleSubmit,
     watch,
     trigger,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(FormDataSchema),
-    defaultValues: formData,
+    defaultValues: {
+      ...formData,
+      leaderPhone: formData.leaderPhone || "+92",
+      member1Phone: formData.member1Phone || "+92",
+      member2Phone: formData.member2Phone || "+92",
+      entryFee: formData.entryFee || 0,
+    },
   })
 
   // Watch all form values
@@ -128,6 +141,19 @@ export default function MultiStepForm() {
 
     loadCompetitions();
   }, []);
+
+  // Update entry fee when selected competition changes
+  useEffect(() => {
+    if (selectedCompetition) {
+      const competition = competitionOptions.find(comp => comp.title === selectedCompetition);
+      if (competition) {
+        const fee = parseFloat(competition.entryFee);
+        setFormData(prev => ({ ...prev, entryFee: fee }));
+        setValue('entryFee', fee); // Update the form value directly
+        setEntryFeeAmount(fee); // Update the entry fee amount state
+      }
+    }
+  }, [selectedCompetition, competitionOptions, setValue]);
 
   // Handle file upload
   const handleFileChange = (event) => {
@@ -179,12 +205,26 @@ export default function MultiStepForm() {
       });
 
       if (response.data.success) {
-        toast.success(response.data.message); // Show success message from the response
+        // Show success message with green notification
+        toast.success(response.data.message || "Registration successful!");
       } else {
-        toast.error("Failed to submit the form. Please try again.");
+        // Show error message with red notification
+        toast.error(response.data.message || "Failed to submit the form. Please try again.");
       }
     } catch (error) {
-      toast.error("An error occurred while submitting the form.");
+      // Handle different types of errors
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        const errorMessage = error.response.data.message || "Server error. Please try again.";
+        toast.error(errorMessage);
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error("No response from server. Please check your internet connection.");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error("An error occurred while submitting the form: " + error.message);
+      }
       console.error("Error:", error);
     }
   }
@@ -201,7 +241,29 @@ export default function MultiStepForm() {
     const output = await trigger(fields, { shouldFocus: true });
 
     if (!output) {
-      toast.error("Please fill all required fields correctly");
+      // Get specific error messages for the current step's fields
+      const currentErrors = fields.reduce((acc, field) => {
+        if (errors[field]) {
+          acc.push(`${field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${errors[field].message}`);
+        }
+        return acc;
+      }, []);
+      
+      if (currentErrors.length > 0) {
+        // Show specific error messages
+        toast.error(
+          <div>
+            <p>Please fix the following errors:</p>
+            <ul className="list-disc pl-4 mt-1">
+              {currentErrors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        );
+      } else {
+        toast.error("Please fill all required fields correctly");
+      }
       return;
     }
 
@@ -209,10 +271,13 @@ export default function MultiStepForm() {
     setFormData((prev) => ({ ...prev, ...watchedValues }));
 
     // Set entry fee based on selected competition
-    if (currentStep === 0 && selectedCompetition) {
-      const competition = competitionOptions.find(comp => comp.title === selectedCompetition);
+    if (currentStep === 0 && watchedValues.competitionName) {
+      const competition = competitionOptions.find(comp => comp.title === watchedValues.competitionName);
       if (competition) {
-        setFormData(prev => ({ ...prev, entryFee: competition.entryFee }));
+        const fee = parseFloat(competition.entryFee);
+        setFormData(prev => ({ ...prev, entryFee: fee }));
+        setValue('entryFee', fee); // Update the form value directly
+        setEntryFeeAmount(fee); // Update the entry fee amount state
       }
     }
 
@@ -228,24 +293,6 @@ export default function MultiStepForm() {
     }
   }
 
-  // Render input field with label and error message
-  const renderField = (name, label, type = "text", placeholder = "", onChange) => (
-    <div className="mb-4">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-200 mb-1">
-        {label}
-      </label>
-      <input
-        type={type}
-        id={name}
-        {...register(name)}
-        onChange={onChange}
-        placeholder={placeholder}
-        className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-      />
-      {errors[name]?.message && <p className="mt-1 text-sm text-red-500">{errors[name].message}</p>}
-    </div>
-  )
-
   // Function to format CNIC input
   const formatCnic = (value) => {
     const cleaned = value.replace(/\D/g, "").slice(0, 13); // Limit to 13 digits
@@ -255,9 +302,91 @@ export default function MultiStepForm() {
 
   // Function to format phone number input
   const formatPhone = (value) => {
-    const cleaned = value.replace(/\D/g, "").slice(0, 12); // Limit to 12 digits (including +92)
-    const formatted = cleaned.length > 2 ? `+92${cleaned.slice(2)}` : cleaned; // Format as +920000000000
+    // If the value doesn't start with +92, add it
+    if (!value.startsWith('+92')) {
+      // Remove any non-digit characters
+      const digits = value.replace(/\D/g, "");
+      // Add +92 prefix
+      value = `+92${digits}`;
+    }
+    
+    // Clean the value (remove non-digits) and limit to 12 digits total
+    const cleaned = value.replace(/\D/g, "").slice(0, 12);
+    
+    // Format as +92XXXXXXXXXX
+    const formatted = `+92${cleaned.slice(2)}`;
+    
     return formatted;
+  }
+
+  // Function to normalize email input
+  const normalizeEmail = (value) => {
+    // Trim whitespace and convert to lowercase
+    return value.trim().toLowerCase();
+  }
+
+  // Validate email format
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  }
+
+  // Render input field with label and error message
+  const renderField = (name, label, type = "text", placeholder = "", onChange) => {
+    // Check if this is a phone field
+    const isPhoneField = name.toLowerCase().includes('phone');
+    // Check if this is an email field
+    const isEmailField = name.toLowerCase().includes('email');
+    
+    return (
+      <div className="mb-4">
+        <label htmlFor={name} className="block text-sm font-medium text-gray-200 mb-1">
+          {label}
+        </label>
+        <input
+          type={type}
+          id={name}
+          {...register(name)}
+          onChange={(e) => {
+            // Apply special formatting for phone fields
+            if (isPhoneField && onChange) {
+              onChange(e);
+            }
+            // Apply normalization for email fields
+            else if (isEmailField) {
+              const normalizedValue = normalizeEmail(e.target.value);
+              e.target.value = normalizedValue;
+              
+              // Provide immediate feedback on email format
+              if (normalizedValue && !validateEmail(normalizedValue)) {
+                e.target.classList.add('border-red-500');
+                e.target.classList.add('focus:ring-red-500');
+              } else {
+                e.target.classList.remove('border-red-500');
+                e.target.classList.add('focus:ring-blue-500');
+              }
+            }
+            // Call the original onChange if provided
+            else if (onChange) {
+              onChange(e);
+            }
+          }}
+          placeholder={isPhoneField ? "+92XXXXXXXXXX" : isEmailField ? "example@domain.com" : placeholder}
+          onFocus={(e) => {
+            // If this is a phone field and it's empty, add +92
+            if (isPhoneField && !e.target.value) {
+              e.target.value = "+92";
+            }
+          }}
+          className={`w-full px-3 py-2 bg-gray-900 border rounded-md text-white focus:outline-none focus:ring-2 ${
+            errors[name] ? "border-red-500 focus:ring-red-500" : "border-gray-700 focus:ring-blue-500"
+          }`}
+        />
+        {errors[name]?.message && (
+          <p className="mt-1 text-sm text-red-500">{errors[name].message}</p>
+        )}
+      </div>
+    );
   }
 
   // Filter competition options based on selected category
@@ -267,7 +396,27 @@ export default function MultiStepForm() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 md:p-8">
-      <Toaster position="bottom-left" theme="dark" />
+      <Toaster 
+        position="bottom-left" 
+        theme="dark"
+        toastOptions={{
+          success: {
+            style: {
+              background: 'rgba(34, 197, 94, 0.9)',
+              color: 'white',
+              border: '1px solid rgb(22, 163, 74)',
+            },
+            icon: <Check className="w-5 h-5" />,
+          },
+          error: {
+            style: {
+              background: 'rgba(239, 68, 68, 0.9)',
+              color: 'white',
+              border: '1px solid rgb(220, 38, 38)',
+            },
+          },
+        }}
+      />
 
       <div className="w-full max-w-4xl bg-gray-900 rounded-lg shadow-xl overflow-hidden">
         {/* Header with red accent */}
@@ -347,7 +496,18 @@ export default function MultiStepForm() {
                 <select
                   id="competitionName"
                   {...register("competitionName")}
-                  onChange={(e) => setSelectedCompetition(e.target.value)} // Set selected competition
+                  onChange={(e) => {
+                    setSelectedCompetition(e.target.value);
+                    // Set entry fee when competition changes
+                    const competition = competitionOptions.find(comp => comp.title === e.target.value);
+                    if (competition) {
+                      // Update the form data with the entry fee
+                      const fee = parseFloat(competition.entryFee);
+                      setFormData(prev => ({ ...prev, entryFee: fee }));
+                      setValue('entryFee', fee); // Update the form value directly
+                      setEntryFeeAmount(fee); // Update the entry fee amount state
+                    }
+                  }}
                   className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   <option value="">Select Competition</option>
@@ -361,6 +521,18 @@ export default function MultiStepForm() {
                   <p className="mt-1 text-sm text-red-500">{errors.competitionName.message}</p>
                 )}
               </div>
+
+              {/* Display Entry Fee when competition is selected */}
+              {selectedCompetition && (
+                <div className="mb-4 p-3 bg-red-900/30 border border-red-500 rounded-md animate-pulse">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-200">Entry Fee:</span>
+                    <span className="text-lg font-bold text-red-400">
+                      PKR {parseFloat(competitionOptions.find(comp => comp.title === selectedCompetition)?.entryFee || 0)}
+                    </span>
+                  </div>
+                </div>
+              )}
 
               {renderField("instituteName", "Institute Name", "text", "Enter your institute name")}
               {renderField("teamName", "Team Name", "text", "Enter your team name")}
@@ -430,99 +602,8 @@ export default function MultiStepForm() {
             </motion.div>
           )}
 
-          {/* Step 4: Payment */}
+          {/* Step 4: Review & Submit */}
           {currentStep === 3 && (
-            <motion.div
-              initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="space-y-6"
-            >
-              <h2 className="text-xl font-semibold text-red-500 mb-4">Payment</h2>
-
-              <div className="bg-gray-800 p-4 rounded-md">
-                <h3 className="text-lg font-medium text-red-400 mb-2">Payment Details</h3>
-                <p className="text-gray-400">Account Title: MUHAMMAD HASSAAN</p>
-                <p className="text-gray-400">IBAN: PK30MPBL9971727140101389</p>
-                <p className="text-gray-400">Account No: 6-99-71-29310-714-101389</p>
-                <p className="text-gray-400">Bank: Habib Metropolitan Bank Limited</p>
-                <p className="text-gray-400">Branch: IBB Baitul Mukarram Branch, Karachi</p>
-                <p className="text-gray-400">Entry Fee: PKR {watchedValues.entryFee || 0}</p>
-              </div>
-
-              <div className="group relative w-full">
-                <div className="relative overflow-hidden rounded-2xl bg-slate-950 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-500/10">
-                  <div className="relative p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-lg font-semibold text-white">Upload Files</h3>
-                        <p className="text-sm text-slate-400">Drag & drop your files here</p>
-                      </div>
-                      <div className="rounded-lg bg-cyan-500/10 p-2">
-                        <svg className="h-6 w-6 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
-                      </div>
-                    </div>
-
-                    <div className="group/dropzone mt-6">
-                      <div className="relative rounded-xl border-2 border-dashed border-slate-700 bg-slate-900/50 p-8 transition-colors group-hover/dropzone:border-cyan-500/50">
-                        <input
-                          type="file"
-                          className="absolute inset-0 z-50 h-full w-full cursor-pointer opacity-0"
-                          multiple=""
-                          onChange={handleFileChange} // Handle file change
-                        />
-                        <div className="space-y-6 text-center">
-                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-900">
-                            <svg className="h-10 w-10 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 13h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                          </div>
-
-                          <div className="space-y-2">
-                            <p className="text-base font-medium text-white">Drop your files here or browse</p>
-                            <p className="text-sm text-slate-400">Support files: PDF, DOC, DOCX, JPG, PNG</p>
-                            <p className="text-xs text-slate-400">Max file size: 10MB</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-6 space-y-4">
-                      {uploadedFiles.map((file, index) => (
-                        <div key={`${file}-${index}`} className="rounded-xl bg-slate-900/50 p-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className="rounded-lg bg-cyan-500/10 p-2">
-                                <svg className="h-6 w-6 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                              </div>
-                              <div>
-                                <p className="font-medium text-white">{file.name}</p>
-                                <p className="text-xs text-slate-400">File uploaded</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <button className="text-slate-400 transition-colors hover:text-white">
-                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Step 5: Review & Submit */}
-          {currentStep === 4 && (
             <motion.div
               initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -554,9 +635,15 @@ export default function MultiStepForm() {
                     <p className="text-gray-400">Brand Ambassador Code:</p>
                     <p className="font-medium">{watchedValues.brandAmbassadorCode || "Not provided"}</p>
                   </div>
-                  <div>
-                    <p className="text-gray-400">Entry Fee:</p>
-                    <p className="font-medium">PKR {watchedValues.entryFee || 0}</p>
+                </div>
+                
+                {/* Highlighted Entry Fee in Review */}
+                <div className="mt-4 p-3 bg-red-900/30 border border-red-500 rounded-md">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-white">Entry Fee:</span>
+                    <span className="text-xl font-bold text-red-400">
+                      PKR {parseFloat(watchedValues.entryFee || formData.entryFee || entryFeeAmount || 0)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -632,6 +719,113 @@ export default function MultiStepForm() {
               </div>
             </motion.div>
           )}
+
+          {/* Step 5: Payment */}
+          {currentStep === 4 && (
+            <motion.div
+              initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="space-y-6"
+            >
+              <h2 className="text-xl font-semibold text-red-500 mb-4">Payment</h2>
+
+              {/* Hidden input to ensure entryFee is registered with the form */}
+              <input 
+                type="hidden" 
+                {...register("entryFee")} 
+                value={parseFloat(watchedValues.entryFee || formData.entryFee || entryFeeAmount || 0)} 
+              />
+              
+              <div className="bg-gray-800 p-4 rounded-md">
+                <h3 className="text-lg font-medium text-red-400 mb-2">Payment Details</h3>
+                <p className="text-gray-400">Account Title: MUHAMMAD HASSAAN</p>
+                <p className="text-gray-400">IBAN: PK30MPBL9971727140101389</p>
+                <p className="text-gray-400">Account No: 6-99-71-29310-714-101389</p>
+                <p className="text-gray-400">Bank: Habib Metropolitan Bank Limited</p>
+                <p className="text-gray-400">Branch: IBB Baitul Mukarram Branch, Karachi</p>
+                
+                {/* Highlighted Entry Fee */}
+                <div className="mt-4 p-3 bg-red-900/30 border border-red-500 rounded-md">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-white">Entry Fee:</span>
+                    <span className="text-xl font-bold text-red-400">
+                      PKR {parseFloat(watchedValues.entryFee || formData.entryFee || entryFeeAmount || 0)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="group relative w-full">
+                <div className="relative overflow-hidden rounded-2xl bg-slate-950 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-500/10">
+                  <div className="relative p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">Upload Files</h3>
+                        <p className="text-sm text-slate-400">Drag & drop your files here</p>
+                      </div>
+                      <div className="rounded-lg bg-cyan-500/10 p-2">
+                        <svg className="h-6 w-6 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div className="group/dropzone mt-6">
+                      <div className="relative rounded-xl border-2 border-dashed border-slate-700 bg-slate-900/50 p-8 transition-colors group-hover/dropzone:border-cyan-500/50">
+                        <input
+                          type="file"
+                          className="absolute inset-0 z-50 h-full w-full cursor-pointer opacity-0"
+                          multiple=""
+                          onChange={handleFileChange} // Handle file change
+                        />
+                        <div className="space-y-6 text-center">
+                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-900">
+                            <svg className="h-10 w-10 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 13h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                          </div>
+
+                          <div className="space-y-2">
+                            <p className="text-base font-medium text-white">Drop your files here or browse</p>
+                            <p className="text-sm text-slate-400">Support files: PDF, DOC, DOCX, JPG, PNG</p>
+                            <p className="text-xs text-slate-400">Max file size: 10MB</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 space-y-4">
+                      {uploadedFiles.map((file, index) => (
+                        <div key={`${file}-${index}`} className="rounded-xl bg-slate-900/50 p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="rounded-lg bg-cyan-500/10 p-2">
+                                <svg className="h-6 w-6 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <p className="font-medium text-white">{file.name}</p>
+                                <p className="text-xs text-slate-400">File uploaded</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <button className="text-slate-400 transition-colors hover:text-white">
+                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </form>
 
         {/* Navigation */}
@@ -660,7 +854,12 @@ export default function MultiStepForm() {
             }`}
           >
             {currentStep === steps.length - 1 ? (
-              "Proceed to Payment"
+              "Register"
+            ) : currentStep === 3 ? (
+              <>
+                Proceed to Payment
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </>
             ) : (
               <>
                 Next
