@@ -174,12 +174,42 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="mt-16 pt-8 border-t border-gray-800/50">
-          <div className="container mx-auto">
-            <p className="text-center text-gray-500">
+          <div className="flex justify-between items-center mx-auto flex-wrap">
+            <p className="text-center text-gray-500 w-full sm:w-auto">
               © {new Date().getFullYear()} Developers Day. All rights reserved.
             </p>
+            <div className="text-center w-full sm:w-auto">
+              <Link
+                href="/Privacy Policy.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 transition-all duration-300 hover:text-red-500 mx-2 block sm:inline"
+              >
+                Privacy Policy
+              </Link>
+              |
+              <Link
+                href="/TnCs.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 transition-all duration-300 hover:text-red-500 mx-2 block sm:inline"
+              >
+                Terms and Conditions
+              </Link>
+              |
+              <Link
+                href="/Refund Policy.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 transition-all duration-300 hover:text-red-500 mx-2 block sm:inline"
+              >
+                Refund Policy
+              </Link>
+            </div>
           </div>
         </div>
+
+
       </div>
     </footer>
   )
