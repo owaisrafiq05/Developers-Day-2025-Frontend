@@ -6,12 +6,11 @@ import { toast, Toaster } from "sonner"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ChevronLeft, ChevronRight, Check } from "lucide-react"
+import { ChevronLeft, ChevronRight, Check, Plus, Trash2 } from "lucide-react"
 import fetchCompetitions from "../../data/data-comp" // Import the fetch function
-import axios from 'axios' // Import Axios at the top of your file
 
-// Define the form validation schema
-const FormDataSchema = z.object({
+// Define the base form validation schema
+const baseFormSchema = {
   // Competition Details
   competitionCategory: z.string().min(1, "Competition category is required"),
   competitionName: z.string().min(1, "Competition name is required"),
@@ -33,34 +32,49 @@ const FormDataSchema = z.object({
   leaderPhone: z.string()
     .regex(/^\+92\d{10}$/, "Phone number must be in the format +920000000000"),
 
-  // Member 1 Details
-  member1Name: z.string().min(1, "Member 1 name is required"),
-  member1Email: z.string()
-    .min(1, "Email is required")
-    .email("Invalid email format. Please use a valid email address (e.g., example@domain.com)")
-    .refine(val => val.includes('@') && val.includes('.'), {
-      message: "Email must contain '@' and '.' characters"
-    }),
-  member1Cnic: z.string()
-    .length(15, "CNIC must be exactly 15 characters")
-    .regex(/^\d{5}-\d{7}-\d$/, "CNIC must be in the format 00000-0000000-0"),
-  member1Phone: z.string()
-    .regex(/^\+92\d{10}$/, "Phone number must be in the format +920000000000"),
-
-  // Member 2 Details
-  member2Name: z.string().min(1, "Member 2 name is required"),
-  member2Email: z.string()
-    .email("Invalid email address"),
-  member2Cnic: z.string()
-    .length(15, "CNIC must be exactly 15 characters")
-    .regex(/^\d{5}-\d{7}-\d$/, "CNIC must be in the format 00000-0000000-0"),
-  member2Phone: z.string()
-    .regex(/^\+92\d{10}$/, "Phone number must be in the format +920000000000"),
-
   // Payment Details
   paymentScreenshots: z.array(z.string()).optional(), // Array of uploaded file names
   entryFee: z.number().optional(), // Entry fee for the competition
-})
+};
+
+// Create a member schema factory function
+const createMemberSchema = (index, isRequired = true) => {
+  const nameField = isRequired 
+    ? z.string().min(1, `Member ${index} name is required`)
+    : z.string().optional();
+  
+  const emailField = isRequired
+    ? z.string()
+        .min(1, "Email is required")
+        .email("Invalid email format")
+        .refine(val => val.includes('@') && val.includes('.'), {
+          message: "Email must contain '@' and '.' characters"
+        })
+    : z.string().email("Invalid email format").optional();
+  
+  const cnicField = isRequired
+    ? z.string()
+        .length(15, "CNIC must be exactly 15 characters")
+        .regex(/^\d{5}-\d{7}-\d$/, "CNIC must be in the format 00000-0000000-0")
+    : z.string()
+        .length(15, "CNIC must be exactly 15 characters")
+        .regex(/^\d{5}-\d{7}-\d$/, "CNIC must be in the format 00000-0000000-0")
+        .optional();
+  
+  const phoneField = isRequired
+    ? z.string().regex(/^\+92\d{10}$/, "Phone number must be in the format +920000000000")
+    : z.string().regex(/^\+92\d{10}$/, "Phone number must be in the format +920000000000").optional();
+  
+  return {
+    [`member${index}Name`]: nameField,
+    [`member${index}Email`]: emailField,
+    [`member${index}Cnic`]: cnicField,
+    [`member${index}Phone`]: phoneField,
+  };
+};
+
+// Initial form schema
+const FormDataSchema = z.object(baseFormSchema).passthrough();
 
 // Define the form steps
 const steps = [
@@ -77,16 +91,7 @@ const steps = [
   {
     id: "Step 3",
     name: "Team Members",
-    fields: [
-      "member1Name",
-      "member1Email",
-      "member1Cnic",
-      "member1Phone",
-      "member2Name",
-      "member2Email",
-      "member2Cnic",
-      "member2Phone",
-    ],
+    fields: [], // Will be populated dynamically based on team size
   },
   {
     id: "Step 4",
@@ -109,7 +114,26 @@ export default function MultiStepForm() {
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
   const [competitionOptions, setCompetitionOptions] = useState([]); // State for competition options
   const [entryFeeAmount, setEntryFeeAmount] = useState(0); // State to track entry fee amount
+  const [teamMembers, setTeamMembers] = useState(1); // Start with 1 member by default
+  const [minTeamSize, setMinTeamSize] = useState(1); // Minimum team size
+  const [maxTeamSize, setMaxTeamSize] = useState(3); // Maximum team size
+  const [validationSchema, setValidationSchema] = useState(FormDataSchema); // Dynamic validation schema
   const delta = currentStep - previousStep
+
+  // Update validation schema when team members change
+  useEffect(() => {
+    let schema = { ...baseFormSchema };
+    
+    // Add validation for each team member
+    for (let i = 1; i <= maxTeamSize; i++) {
+      // Required fields for minimum team size, optional for additional members
+      const isRequired = i <= minTeamSize;
+      const memberSchema = createMemberSchema(i, isRequired);
+      schema = { ...schema, ...memberSchema };
+    }
+    
+    setValidationSchema(z.object(schema).passthrough());
+  }, [minTeamSize, maxTeamSize, teamMembers]);
 
   const {
     register,
@@ -119,18 +143,40 @@ export default function MultiStepForm() {
     setValue,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(FormDataSchema),
+    resolver: zodResolver(validationSchema),
     defaultValues: {
       ...formData,
       leaderPhone: formData.leaderPhone || "+92",
-      member1Phone: formData.member1Phone || "+92",
-      member2Phone: formData.member2Phone || "+92",
       entryFee: formData.entryFee || 0,
     },
+    mode: "onChange", // Validate on change
   })
 
   // Watch all form values
   const watchedValues = watch()
+
+  // Initialize phone numbers with +92 prefix for all team members
+  useEffect(() => {
+    // Set default phone number prefix for all team members
+    for (let i = 1; i <= maxTeamSize; i++) {
+      const phoneField = `member${i}Phone`;
+      if (!watchedValues[phoneField]) {
+        setValue(phoneField, "+92");
+      }
+    }
+  }, [maxTeamSize, setValue, watchedValues]);
+
+  // Update team members fields in steps array
+  useEffect(() => {
+    const memberFields = [];
+    for (let i = 1; i <= teamMembers; i++) {
+      memberFields.push(`member${i}Name`);
+      memberFields.push(`member${i}Email`);
+      memberFields.push(`member${i}Cnic`);
+      memberFields.push(`member${i}Phone`);
+    }
+    steps[2].fields = memberFields;
+  }, [teamMembers]);
 
   // Fetch competitions on component mount
   useEffect(() => {
@@ -142,7 +188,7 @@ export default function MultiStepForm() {
     loadCompetitions();
   }, []);
 
-  // Update entry fee when selected competition changes
+  // Update entry fee and team size limits when selected competition changes
   useEffect(() => {
     if (selectedCompetition) {
       const competition = competitionOptions.find(comp => comp.title === selectedCompetition);
@@ -151,81 +197,118 @@ export default function MultiStepForm() {
         setFormData(prev => ({ ...prev, entryFee: fee }));
         setValue('entryFee', fee); // Update the form value directly
         setEntryFeeAmount(fee); // Update the entry fee amount state
+        
+        // Set team size limits based on competition
+        if (competition.minParticipants) {
+          setMinTeamSize(competition.minParticipants);
+          // Initialize with minimum required members
+          if (teamMembers < competition.minParticipants) {
+            setTeamMembers(competition.minParticipants);
+          }
+        }
+        
+        if (competition.maxParticipants) {
+          setMaxTeamSize(competition.maxParticipants);
+        }
       }
     }
   }, [selectedCompetition, competitionOptions, setValue]);
 
   // Handle file upload
   const handleFileChange = (event) => {
+    console.log("File change event:", event.target.files);
     const files = Array.from(event.target.files);
     setUploadedFiles(files); // Store the actual file objects
+    console.log("Uploaded files:", files);
   }
 
   // Process form submission
   const processForm = async (data) => {
-    const formData = new FormData();
-    formData.append("Competition_Name", data.competitionName);
-    formData.append("Institute_Name", data.instituteName);
-    formData.append("Team_Name", data.teamName);
-    formData.append("L_Name", data.leaderName);
-    formData.append("L_Email", data.leaderEmail);
-    formData.append("L_Contact", data.leaderPhone.replace("+92", "0")); // Convert to local format
-    formData.append("L_CNIC", data.leaderCnic);
-    
-    // Append members
-    const members = [
-      {
-        Name: data.member1Name,
-        Email: data.member1Email,
-        Contact: data.member1Phone.replace("+92", "0"), // Convert to local format
-        CNIC: data.member1Cnic,
-      },
-      {
-        Name: data.member2Name,
-        Email: data.member2Email,
-        Contact: data.member2Phone.replace("+92", "0"), // Convert to local format
-        CNIC: data.member2Cnic,
-      },
-    ];
-    formData.append("Members", JSON.stringify(members)); // Append members as a JSON string
-
-    // Append the payment photo (assuming the first uploaded file is the payment photo)
-    if (uploadedFiles.length > 0) {
-      formData.append("Payment_Photo", uploadedFiles[0]); // Append the actual file
-    }
-
-    // Append brand ambassador code if available
-    formData.append("BA_Code", data.brandAmbassadorCode || ""); // Optional field
-
     try {
-      const response = await axios.post("https://dev-day-backend.vercel.app/Team/Register", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
-        },
-      });
+      console.log("processForm called with data:", data);
+      
+      // Validate that we have at least the minimum number of team members
+      if (teamMembers < minTeamSize) {
+        toast.error(`This competition requires at least ${minTeamSize} team members.`);
+        return;
+      }
 
-      if (response.data.success) {
-        // Show success message with green notification
-        toast.success(response.data.message || "Registration successful!");
+      // Validate that payment screenshot is uploaded
+      if (uploadedFiles.length === 0) {
+        toast.error("Please upload a payment screenshot");
+        return;
+      }
+
+      // Create a new FormData instance
+      const formData = new FormData();
+      
+      // Add all form fields
+      formData.append("Competition_Name", data.competitionName);
+      formData.append("Institute_Name", data.instituteName);
+      formData.append("Team_Name", data.teamName);
+      formData.append("L_Name", data.leaderName);
+      formData.append("L_Email", data.leaderEmail);
+      formData.append("L_Contact", data.leaderPhone.replace("+92", "0")); // Convert to local format
+      formData.append("L_CNIC", data.leaderCnic);
+      
+      // Append members dynamically
+      const members = [];
+      for (let i = 1; i <= teamMembers; i++) {
+        if (data[`member${i}Name`]) {
+          members.push({
+            Name: data[`member${i}Name`],
+            Email: data[`member${i}Email`],
+            Contact: data[`member${i}Phone`]?.replace("+92", "0") || "", // Convert to local format
+            CNIC: data[`member${i}Cnic`] || "",
+          });
+        }
+      }
+      
+      // Convert members array to JSON string and append
+      const membersJson = JSON.stringify(members);
+      console.log("Members JSON:", membersJson);
+      formData.append("Members", membersJson);
+
+      // Append the payment photo
+      if (uploadedFiles[0]) {
+        console.log("Appending file:", uploadedFiles[0].name, uploadedFiles[0].type, uploadedFiles[0].size);
+        formData.append("Payment_Photo", uploadedFiles[0]);
+      }
+
+      // Append brand ambassador code if available
+      if (data.brandAmbassadorCode) {
+        formData.append("BA_Code", data.brandAmbassadorCode);
+      }
+
+      // Log the FormData contents for debugging
+      console.log("FormData contents:");
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value instanceof File ? `File: ${value.name}` : value}`);
+      }
+
+      console.log("Sending API request...");
+      
+      // Use fetch API instead of axios
+      const response = await fetch('https://dev-day-backend.vercel.app/Team/Register', {
+        method: 'POST',
+        body: formData,
+        // No need to set Content-Type header, fetch will set it automatically with the boundary
+      });
+      
+      console.log("API Response status:", response.status);
+      
+      const responseData = await response.json().catch(() => null);
+      console.log("API Response data:", responseData);
+      
+      if (response.ok) {
+        toast.success("Registration successful!");
+        // Reset form or redirect to success page
       } else {
-        // Show error message with red notification
-        toast.error(response.data.message || "Failed to submit the form. Please try again.");
+        toast.error(`Registration failed: ${responseData?.message || "Unknown error"}`);
       }
     } catch (error) {
-      // Handle different types of errors
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        const errorMessage = error.response.data.message || "Server error. Please try again.";
-        toast.error(errorMessage);
-      } else if (error.request) {
-        // The request was made but no response was received
-        toast.error("No response from server. Please check your internet connection.");
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        toast.error("An error occurred while submitting the form: " + error.message);
-      }
-      console.error("Error:", error);
+      console.error("API Error:", error);
+      toast.error("An error occurred while submitting the form: " + error.message);
     }
   }
 
@@ -233,38 +316,65 @@ export default function MultiStepForm() {
   const next = async () => {
     // If we're on the review step, submit the form
     if (currentStep === steps.length - 1) {
-      handleSubmit(processForm)();
+      console.log("Submitting form from next function");
+      await handleSubmit(processForm)();
       return;
     }
 
+    // Get the fields for the current step
     const fields = steps[currentStep].fields;
-    const output = await trigger(fields, { shouldFocus: true });
 
-    if (!output) {
-      // Get specific error messages for the current step's fields
-      const currentErrors = fields.reduce((acc, field) => {
-        if (errors[field]) {
-          acc.push(`${field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${errors[field].message}`);
+    // If we're on the team members step, validate all member fields
+    if (currentStep === 2) {
+      // Create an array of fields to validate based on current team members
+      const memberFields = [];
+      for (let i = 1; i <= teamMembers; i++) {
+        // Only validate required fields (up to minTeamSize)
+        if (i <= minTeamSize) {
+          memberFields.push(`member${i}Name`);
+          memberFields.push(`member${i}Email`);
+          memberFields.push(`member${i}Cnic`);
+          memberFields.push(`member${i}Phone`);
         }
-        return acc;
-      }, []);
-      
-      if (currentErrors.length > 0) {
-        // Show specific error messages
-        toast.error(
-          <div>
-            <p>Please fix the following errors:</p>
-            <ul className="list-disc pl-4 mt-1">
-              {currentErrors.map((error, index) => (
-                <li key={index}>{error}</li>
-              ))}
-            </ul>
-          </div>
-        );
-      } else {
-        toast.error("Please fill all required fields correctly");
       }
-      return;
+      
+      // Validate all required member fields
+      const output = await trigger(memberFields, { shouldFocus: true });
+      if (!output) {
+        toast.error(`Please fill in all required team member information`);
+        return;
+      }
+    } 
+    // For other steps, validate the fields defined in the step
+    else if (fields.length) {
+      const output = await trigger(fields, { shouldFocus: true });
+      
+      if (!output) {
+        // Get specific error messages for the current step's fields
+        const currentErrors = fields.reduce((acc, field) => {
+          if (errors[field]) {
+            acc.push(`${field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${errors[field].message}`);
+          }
+          return acc;
+        }, []);
+        
+        if (currentErrors.length > 0) {
+          // Show specific error messages
+          toast.error(
+            <div>
+              <p>Please fix the following errors:</p>
+              <ul className="list-disc pl-4 mt-1">
+                {currentErrors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          );
+        } else {
+          toast.error("Please fill all required fields correctly");
+        }
+        return;
+      }
     }
 
     // Update form data with current values
@@ -283,7 +393,7 @@ export default function MultiStepForm() {
 
     setPreviousStep(currentStep);
     setCurrentStep((step) => step + 1);
-  }
+  };
 
   // Handle previous step navigation
   const prev = () => {
@@ -291,7 +401,7 @@ export default function MultiStepForm() {
       setPreviousStep(currentStep);
       setCurrentStep((step) => step - 1);
     }
-  }
+  };
 
   // Function to format CNIC input
   const formatCnic = (value) => {
@@ -394,6 +504,53 @@ export default function MultiStepForm() {
     ? competitionOptions.filter(comp => comp.category === selectedCategory)
     : [];
 
+  // Add a team member
+  const addTeamMember = () => {
+    if (teamMembers < maxTeamSize) {
+      setTeamMembers(prev => prev + 1);
+    } else {
+      toast.error(`Maximum team size is ${maxTeamSize} members`);
+    }
+  };
+
+  // Remove a team member
+  const removeTeamMember = (index) => {
+    if (teamMembers > minTeamSize) {
+      setTeamMembers(prev => prev - 1);
+    } else {
+      toast.error(`Minimum team size is ${minTeamSize} members`);
+    }
+  };
+
+  // Generate member fields dynamically
+  const renderMemberFields = (index) => {
+    return (
+      <div key={`member-${index}`} className="mb-6 p-4 bg-gray-800 rounded-md">
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="text-lg font-medium text-gray-200">Member {index}</h3>
+          {index > minTeamSize && (
+            <button
+              type="button"
+              onClick={() => removeTeamMember(index)}
+              className="p-1 text-red-400 hover:text-red-300 focus:outline-none"
+              aria-label="Remove member"
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
+          )}
+        </div>
+        {renderField(`member${index}Name`, "Full Name", "text", "Enter member's full name")}
+        {renderField(`member${index}Email`, "Email Address", "email", "Enter member's email")}
+        {renderField(`member${index}Cnic`, "CNIC Number", "text", "Enter member's CNIC", (e) => {
+          e.target.value = formatCnic(e.target.value);
+        })}
+        {renderField(`member${index}Phone`, "Phone Number", "tel", "Enter member's phone number", (e) => {
+          e.target.value = formatPhone(e.target.value);
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 md:p-8">
       <Toaster 
@@ -454,7 +611,16 @@ export default function MultiStepForm() {
         </nav>
 
         {/* Form */}
-        <form className="p-4 md:p-6" onSubmit={handleSubmit(processForm)}>
+        <form 
+          className="p-4 md:p-6" 
+          onSubmit={(e) => {
+            e.preventDefault(); // Prevent default form submission
+            console.log("Form submit event triggered");
+            const formValues = watch();
+            processForm(formValues);
+          }}
+          noValidate
+        >
           {/* Step 1: Competition Details */}
           {currentStep === 0 && (
             <motion.div
@@ -477,11 +643,18 @@ export default function MultiStepForm() {
                   className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   <option value="">Select Category</option>
-                  {[...new Set(competitionOptions.map(comp => comp.category))].map((category, index) => (
-                    <option key={`${category}-${index}`} value={category}>
-                      {category}
-                    </option>
-                  ))}
+                  {[...new Set(competitionOptions.map(comp => comp.category))].map((category, index) => {
+                    // Map specific values to their display names
+                    const displayName = category === "EE" ? "Electrical Engineering Competitions" :
+                                        category === "CS" ? "Computer Science Competitions" :
+                                        category === "GC" ? "General Competitions" :
+                                        category; // Default to the original category if no match
+                    return (
+                      <option key={`${category}-${index}`} value={category}>
+                        {displayName}
+                      </option>
+                    );
+                  })}
                 </select>
                 {errors.competitionCategory?.message && (
                   <p className="mt-1 text-sm text-red-500">{errors.competitionCategory.message}</p>
@@ -574,31 +747,35 @@ export default function MultiStepForm() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="space-y-4"
             >
-              <h2 className="text-xl font-semibold text-red-500 mb-4">Team Members Information</h2>
-
-              <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-200 mb-3">Member 1</h3>
-                {renderField("member1Name", "Full Name", "text", "Enter member's full name")}
-                {renderField("member1Email", "Email Address", "email", "Enter member's email")}
-                {renderField("member1Cnic", "CNIC Number", "text", "Enter member's CNIC", (e) => {
-                  e.target.value = formatCnic(e.target.value);
-                })}
-                {renderField("member1Phone", "Phone Number", "tel", "Enter member's phone number", (e) => {
-                  e.target.value = formatPhone(e.target.value);
-                })}
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold text-red-500">Team Members Information</h2>
+                <div className="text-sm text-gray-400">
+                  {teamMembers}/{maxTeamSize} members
+                </div>
+              </div>
+              
+              {/* Competition team size requirements */}
+              <div className="p-3 bg-gray-800 rounded-md mb-4">
+                <p className="text-sm text-gray-300">
+                  This competition requires a minimum of <span className="font-bold text-red-400">{minTeamSize}</span> and 
+                  a maximum of <span className="font-bold text-red-400">{maxTeamSize}</span> team members.
+                </p>
               </div>
 
-              <div>
-                <h3 className="text-lg font-medium text-gray-200 mb-3">Member 2</h3>
-                {renderField("member2Name", "Full Name", "text", "Enter member's full name")}
-                {renderField("member2Email", "Email Address", "email", "Enter member's email")}
-                {renderField("member2Cnic", "CNIC Number", "text", "Enter member's CNIC", (e) => {
-                  e.target.value = formatCnic(e.target.value);
-                })}
-                {renderField("member2Phone", "Phone Number", "tel", "Enter member's phone number", (e) => {
-                  e.target.value = formatPhone(e.target.value);
-                })}
-              </div>
+              {/* Render dynamic member fields */}
+              {Array.from({ length: teamMembers }, (_, i) => renderMemberFields(i + 1))}
+
+              {/* Add member button */}
+              {teamMembers < maxTeamSize && (
+                <button
+                  type="button"
+                  onClick={addTeamMember}
+                  className="w-full py-2 px-4 mt-4 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-md flex items-center justify-center transition-colors"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Team Member
+                </button>
+              )}
             </motion.div>
           )}
 
@@ -673,45 +850,33 @@ export default function MultiStepForm() {
               <div className="bg-gray-800 p-4 rounded-md">
                 <h3 className="text-lg font-medium text-red-400 mb-2">Team Members</h3>
 
-                <h4 className="text-white font-medium mt-3 mb-1">Member 1</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
-                  <div>
-                    <p className="text-gray-400">Name:</p>
-                    <p className="font-medium">{watchedValues.member1Name || "-"}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400">Email:</p>
-                    <p className="font-medium">{watchedValues.member1Email || "-"}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400">CNIC:</p>
-                    <p className="font-medium">{watchedValues.member1Cnic || "-"}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400">Phone:</p>
-                    <p className="font-medium">{watchedValues.member1Phone || "-"}</p>
-                  </div>
-                </div>
-
-                <h4 className="text-white font-medium mt-3 mb-1">Member 2</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-400">Name:</p>
-                    <p className="font-medium">{watchedValues.member2Name || "-"}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400">Email:</p>
-                    <p className="font-medium">{watchedValues.member2Email || "-"}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400">CNIC:</p>
-                    <p className="font-medium">{watchedValues.member2Cnic || "-"}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400">Phone:</p>
-                    <p className="font-medium">{watchedValues.member2Phone || "-"}</p>
-                  </div>
-                </div>
+                {/* Dynamically render team members in review */}
+                {Array.from({ length: teamMembers }, (_, i) => {
+                  const index = i + 1;
+                  return (
+                    <div key={`review-member-${index}`}>
+                      <h4 className="text-white font-medium mt-3 mb-1">Member {index}</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                        <div>
+                          <p className="text-gray-400">Name:</p>
+                          <p className="font-medium">{watchedValues[`member${index}Name`] || "-"}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400">Email:</p>
+                          <p className="font-medium">{watchedValues[`member${index}Email`] || "-"}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400">CNIC:</p>
+                          <p className="font-medium">{watchedValues[`member${index}Cnic`] || "-"}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400">Phone:</p>
+                          <p className="font-medium">{watchedValues[`member${index}Phone`] || "-"}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="text-sm text-gray-400">
@@ -797,7 +962,7 @@ export default function MultiStepForm() {
 
                     <div className="mt-6 space-y-4">
                       {uploadedFiles.map((file, index) => (
-                        <div key={`${file}-${index}`} className="rounded-xl bg-slate-900/50 p-4">
+                        <div key={`${file.name}-${index}`} className="rounded-xl bg-slate-900/50 p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                               <div className="rounded-lg bg-cyan-500/10 p-2">
@@ -826,50 +991,60 @@ export default function MultiStepForm() {
               </div>
             </motion.div>
           )}
-        </form>
+          
+          {/* Navigation */}
+          <div className="p-4 md:p-6 border-t border-gray-800 flex justify-between">
+            <button
+              type="button"
+              onClick={prev}
+              disabled={currentStep === 0}
+              className={`px-4 py-2 rounded-md flex items-center ${
+                currentStep === 0
+                  ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                  : "bg-gray-800 text-white hover:bg-gray-700"
+              }`}
+            >
+              <ChevronLeft className="w-5 h-5 mr-1" />
+              Back
+            </button>
 
-        {/* Navigation */}
-        <div className="p-4 md:p-6 border-t border-gray-800 flex justify-between">
-          <button
-            type="button"
-            onClick={prev}
-            disabled={currentStep === 0}
-            className={`px-4 py-2 rounded-md flex items-center ${
-              currentStep === 0
-                ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                : "bg-gray-800 text-white hover:bg-gray-700"
-            }`}
-          >
-            <ChevronLeft className="w-5 h-5 mr-1" />
-            Back
-          </button>
-
-          <button
-            type="button"
-            onClick={next}
-            className={`px-4 py-2 rounded-md flex items-center ${
-              currentStep === steps.length - 1
-                ? "bg-red-600 text-white hover:bg-red-700"
-                : "bg-red-500 text-white hover:bg-red-600"
-            }`}
-          >
             {currentStep === steps.length - 1 ? (
-              "Register"
-            ) : currentStep === 3 ? (
-              <>
-                Proceed to Payment
-                <ChevronRight className="w-5 h-5 ml-1" />
-              </>
+              // Submit button for the final step
+              <button
+                type="button"
+                onClick={(e) => {
+                  console.log("Submit button clicked directly");
+                  // Manually trigger form submission with the current form data
+                  const formValues = watch();
+                  processForm(formValues);
+                }}
+                className="px-4 py-2 rounded-md flex items-center bg-red-600 text-white hover:bg-red-700"
+              >
+                Register
+              </button>
             ) : (
-              <>
-                Next
-                <ChevronRight className="w-5 h-5 ml-1" />
-              </>
+              // Next button for all other steps
+              <button
+                type="button"
+                onClick={next}
+                className="px-4 py-2 rounded-md flex items-center bg-red-500 text-white hover:bg-red-600"
+              >
+                {currentStep === 3 ? (
+                  <>
+                    Proceed to Payment
+                    <ChevronRight className="w-5 h-5 ml-1" />
+                  </>
+                ) : (
+                  <>
+                    Next
+                    <ChevronRight className="w-5 h-5 ml-1" />
+                  </>
+                )}
+              </button>
             )}
-          </button>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   )
 }
-
