@@ -18,7 +18,7 @@ export default function Home() {
           hoverFillColor="#222"
         />
         <Hero />  
-        <div className="relative z-10 mb-20 mt-72">
+        <div className="relative z-10 mb-20 mt-20 md:mt-32 lg:mt-40">
           <Countdown />
         </div>
         <WhatIsDD />
