@@ -11,7 +11,6 @@ import fetchCompetitions from "../../data/data-comp" // Import the fetch functio
 
 // Define the base form validation schema
 const baseFormSchema = {
-  // Competition Details
   competitionCategory: z.string().min(1, "Competition category is required"),
   competitionName: z.string().min(1, "Competition name is required"),
   instituteName: z.string().min(1, "Institute name is required"),
