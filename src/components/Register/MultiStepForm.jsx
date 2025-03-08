@@ -226,7 +226,7 @@ export default function MultiStepForm() {
       console.log("processForm called with data:", data);
       
       // Validate that we have at least the minimum number of team members
-      if (teamMembers < minTeamSize) {
+      if (teamMembers + 1 < minTeamSize) {
         toast.error(`This competition requires at least ${minTeamSize} team members.`);
         return;
       }
@@ -300,7 +300,8 @@ export default function MultiStepForm() {
       
       if (response.ok) {
         toast.success("Registration successful!");
-        // Reset form or redirect to success page
+        // Redirect to success page
+        window.location.href = "/registration/success";
       } else {
         toast.error(`Registration failed: ${responseData?.message || "Unknown error"}`);
       }
