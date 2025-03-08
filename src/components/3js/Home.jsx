@@ -34,19 +34,21 @@ const PageHeader = () => {
           </GradientTag>
 
           <Light
-            className="h-[500px] w-[180px] rotate-45  z-10"
+            className="h-[500px] w-[180px] rotate-45 z-10"
             color="#ff6666"
             blurRadius={400}
           />
 
-          <div className="text-4xl md:text-6xl lg:text-8xl mt-10 ml-10 leading-snug font-bold text-white 
+          <div className="text-4xl md:text-6xl lg:text-8xl mt-10 mb-5 ml-10 leading-snug font-bold text-white 
             [text-shadow:_0_0_30px_rgb(255_255_255_/_50%)]">
             Developers Day{" "}
             <span className="text-[#ff3333] sm:inline 
               [text-shadow:_0_0_30px_rgb(255_51, 51, 40%)]">
               2025
             </span>
+            
           </div>
+          <span className="text-xl  lg-text-4xl ml-10 ">17th April 2025 at FAST NUCES, Karachi</span>
         </div>
       </div>
 
@@ -54,10 +56,6 @@ const PageHeader = () => {
     </>
   );
 };
-
-
-
-
 
 
 export default PageHeader;
