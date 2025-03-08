@@ -1,16 +1,12 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { motion } from "framer-motion";
 import { toast, Toaster } from "sonner";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, ChevronRight, Check, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import SpotlightCard from "../SpotlightCard/SpotlightCard";
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Define the base form validation schema
 const baseFormSchema = {
@@ -152,10 +148,6 @@ const Registration = () => {
   };
 
   useEffect(() => {
-    const isLargeScreen = window.innerWidth >= 768; // Adjust breakpoint as needed
-  
-    if (!isLargeScreen) return; // Skip animations on small screens
-  
     // Section Fade-in Animation
     gsap.fromTo(
       formRef.current,
@@ -165,13 +157,9 @@ const Registration = () => {
         y: 0,
         duration: 1.5,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: formRef.current,
-          start: "top 80%",
-        },
       }
     );
-  
+
     // Fields Animation - Sequential Appearance
     fieldsRef.current.forEach((field, index) => {
       gsap.fromTo(
@@ -183,15 +171,10 @@ const Registration = () => {
           duration: 0.8,
           ease: "power3.out",
           delay: index * 0.15, // Stagger effect
-          scrollTrigger: {
-            trigger: field,
-            start: "top 90%",
-          },
         }
       );
     });
   }, [teamSize]);
-  
 
   return (
     <div className="min-h-screen text-white flex flex-col items-center justify-center p-4 md:p-8">
@@ -222,7 +205,7 @@ const Registration = () => {
         </nav>
 
         {/* Form */}
-        <form className="p-4 md:p-6" onSubmit={handleSubmit(processForm)} noValidate>
+        <form ref={formRef} className="p-4 md:p-6" onSubmit={handleSubmit(processForm)} noValidate>
           {/* Step 1: Project Details */}
           {currentStep === 0 && (
             <div className="space-y-4">
