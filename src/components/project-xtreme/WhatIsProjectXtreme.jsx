@@ -18,7 +18,7 @@ const fadeInLeft = {
   }),
 };
 
-const WhatIsProjectExtreme = () => {
+const WhatIsProjectXtreme = () => {
   return (
     <section className="text-white py-5 px-4 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto">
@@ -120,4 +120,4 @@ const WhatIsProjectExtreme = () => {
   );
 };
 
-export default WhatIsProjectExtreme;
+export default WhatIsProjectXtreme;

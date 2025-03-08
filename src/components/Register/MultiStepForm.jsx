@@ -114,7 +114,7 @@ export default function MultiStepForm() {
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
   const [competitionOptions, setCompetitionOptions] = useState([]); // State for competition options
   const [entryFeeAmount, setEntryFeeAmount] = useState(0); // State to track entry fee amount
-  const [teamMembers, setTeamMembers] = useState(1); // Start with 1 member by default
+  const [teamMembers, setTeamMembers] = useState(0); // Start with 0 member by default
   const [minTeamSize, setMinTeamSize] = useState(1); // Minimum team size
   const [maxTeamSize, setMaxTeamSize] = useState(3); // Maximum team size
   const [validationSchema, setValidationSchema] = useState(FormDataSchema); // Dynamic validation schema
@@ -202,9 +202,7 @@ export default function MultiStepForm() {
         if (competition.minParticipants) {
           setMinTeamSize(competition.minParticipants);
           // Initialize with minimum required members
-          if (teamMembers < competition.minParticipants) {
-            setTeamMembers(competition.minParticipants);
-          }
+          setTeamMembers(competition.minParticipants - 1); // Update to set the correct number of team members
         }
         
         if (competition.maxParticipants) {
@@ -506,7 +504,7 @@ export default function MultiStepForm() {
 
   // Add a team member
   const addTeamMember = () => {
-    if (teamMembers < maxTeamSize) {
+    if (teamMembers < maxTeamSize - 1) { // Adjust max size to account for leader
       setTeamMembers(prev => prev + 1);
     } else {
       toast.error(`Maximum team size is ${maxTeamSize} members`);
@@ -515,7 +513,7 @@ export default function MultiStepForm() {
 
   // Remove a team member
   const removeTeamMember = (index) => {
-    if (teamMembers > minTeamSize) {
+    if (teamMembers > minTeamSize - 1) { // Adjust min size to account for leader
       setTeamMembers(prev => prev - 1);
     } else {
       toast.error(`Minimum team size is ${minTeamSize} members`);
@@ -527,8 +525,8 @@ export default function MultiStepForm() {
     return (
       <div key={`member-${index}`} className="mb-6 p-4 bg-gray-800 rounded-md">
         <div className="flex justify-between items-center mb-3">
-          <h3 className="text-lg font-medium text-gray-200">Member {index}</h3>
-          {index > minTeamSize && (
+          <h3 className="text-lg font-medium text-gray-200">Member {index+1}</h3>
+          {index+1 > minTeamSize && (
             <button
               type="button"
               onClick={() => removeTeamMember(index)}
@@ -726,7 +724,7 @@ export default function MultiStepForm() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="space-y-4"
             >
-              <h2 className="text-xl font-semibold text-red-500 mb-4">Team Leader Information</h2>
+              <h2 className="text-xl font-semibold text-red-500 mb-4">Team Leader Information (Member 1)</h2>
 
               {renderField("leaderName", "Full Name", "text", "Enter leader's full name")}
               {renderField("leaderEmail", "Email Address", "email", "Enter leader's email")}
@@ -750,7 +748,7 @@ export default function MultiStepForm() {
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-red-500">Team Members Information</h2>
                 <div className="text-sm text-gray-400">
-                  {teamMembers}/{maxTeamSize} members
+                  {teamMembers + 1}/{maxTeamSize} members
                 </div>
               </div>
               
@@ -766,7 +764,7 @@ export default function MultiStepForm() {
               {Array.from({ length: teamMembers }, (_, i) => renderMemberFields(i + 1))}
 
               {/* Add member button */}
-              {teamMembers < maxTeamSize && (
+              {teamMembers < maxTeamSize - 1 && (
                 <button
                   type="button"
                   onClick={addTeamMember}
@@ -855,7 +853,7 @@ export default function MultiStepForm() {
                   const index = i + 1;
                   return (
                     <div key={`review-member-${index}`}>
-                      <h4 className="text-white font-medium mt-3 mb-1">Member {index}</h4>
+                      <h4 className="text-white font-medium mt-3 mb-1">Member {index+1}</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
                         <div>
                           <p className="text-gray-400">Name:</p>

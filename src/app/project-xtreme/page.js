@@ -2,8 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/project-xtreme/Header";
-import WhatIsProjectExtreme from "@/components/project-xtreme/WhatIsProjectXtreme";
-import Participation from "@/components/project-xtreme/Participation";
+import WhatIsProjectXtreme from "@/components/project-xtreme/WhatIsProjectXtreme";
 import Registration from "@/components/project-xtreme/Registeration";
 import SpotlightCard from "@/components/SpotlightCard/SpotlightCard";
 import Rules from "@/components/project-xtreme/Rules";
@@ -46,18 +45,7 @@ const ProjectXtreme = () => {
           variants={fadeInOut}
           viewport={{ once: false, amount: 0.2 }} // Controls when animation triggers
         >
-          <WhatIsProjectExtreme />
-        </motion.section>
-
-        <motion.section
-          className="container mx-auto space-y-20 py-10 mt-20"
-          initial="hidden"
-          whileInView="visible"
-          exit="exit"
-          variants={fadeInOut}
-          viewport={{ once: false, amount: 0.2 }}
-        >
-          <Participation />
+          <WhatIsProjectXtreme />
         </motion.section>
 
         <motion.section
