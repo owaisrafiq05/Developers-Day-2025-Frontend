@@ -20,11 +20,8 @@ const ProjectXtreme = () => {
   return (
     <div className=" text-white min-h-screen flex flex-col">
       <Squares
-        speed={0.5}
         squareSize={40}
-        direction="diagonal" // up, down, left, right, diagonal
         borderColor="#000"
-        hoverFillColor="#222"
       />
       {/* Header Section */}
       <header className="w-full border-b border-gray-700 py-8">

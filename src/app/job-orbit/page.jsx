@@ -5,11 +5,8 @@ const page = () => {
   return (
     <div className="pt-[100px] h-full">
       <Squares
-        speed={0.5}
         squareSize={40}
-        direction="diagonal" // up, down, left, right, diagonal
         borderColor="#000"
-        hoverFillColor="#222"
       />
       <motion.div
         // initial={{ opacity: 0, y: -40, scale: 0 }}

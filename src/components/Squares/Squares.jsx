@@ -2,8 +2,6 @@
 import { useRef, useEffect } from "react";
 
 const Squares = ({
-  direction = "right",
-  speed = 1,
   borderColor = "#999",
   squareSize = 40,
 }) => {
@@ -62,21 +60,8 @@ const Squares = ({
 
     drawGrid();
 
-    const handleMouseMove = () => {
-      // Removing mouse event listeners since hover is no longer required
-    };
-
-    const handleMouseLeave = () => {
-      // Removing mouse event listeners since hover is no longer required
-    };
-
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mouseleave", handleMouseLeave);
-
     return () => {
       window.removeEventListener("resize", resizeCanvas);
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [borderColor, squareSize]);
 
