@@ -41,7 +41,7 @@ const PageHeader = () => {
 
           <div className="text-4xl md:text-6xl lg:text-8xl mt-10 md:mb-5 ml-10 leading-snug font-bold text-white 
             [text-shadow:_0_0_30px_rgb(255_255_255_/_50%)]">
-            e.ocean's Developers Day{" "}
+            e.ocean Developers Day{" "}
             <span className="text-[#ff3333] sm:inline 
               [text-shadow:_0_0_30px_rgb(255_51, 51, 40%)]">
               2025
