@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Squares from "@/components/Squares/Squares";
 import { motion } from "framer-motion";
 
 export default function SponsorShowcase() {
@@ -27,7 +28,8 @@ export default function SponsorShowcase() {
     <main className="mx-auto" style={{
       backgroundImage: 'linear-gradient(to bottom right, black, #131313)',
     }}>
-      <header className="flex flex-col z-10 px-4 mb-16 w-full text-center pt-[140px] pb-[80px] bg-gradient-to-br from-[#1c1c1c] to-[#310101] rounded-b-3xl">
+      
+      <header className="flex relative flex-col z-10 px-4 mb-16 w-full text-center pt-[140px] pb-[80px] bg-gradient-to-br from-[#1c1c1c] to-[#310101] rounded-b-3xl">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -61,6 +63,10 @@ export default function SponsorShowcase() {
       </header>
 
       <div className="container m-auto">
+      <Squares
+                squareSize={40}
+                borderColor="#000"
+              />
         {/* Title Sponsor Section */}
         <section className="mb-20 z-30 relative px-4">
           <div className="mb-8 flex items-center">
