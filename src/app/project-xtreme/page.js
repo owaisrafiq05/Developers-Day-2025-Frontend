@@ -3,6 +3,7 @@ import React from "react";
 import Header from "@/components/project-xtreme/Header";
 import WhatIsProjectXtreme from "@/components/project-xtreme/WhatIsProjectXtreme";
 import Registration from "@/components/project-xtreme/Registeration";
+import SpotlightCard from "@/components/SpotlightCard/SpotlightCard";
 import Rules from "@/components/project-xtreme/Rules";
 import Squares from "@/components/Squares/Squares";
 import { FaTrophy } from "react-icons/fa";
@@ -18,6 +19,11 @@ const ProjectXtreme = () => {
         </div>
       </header>
 
+
+      <SpotlightCard
+        spotlightColor="rgba(129, 0, 0, 0.2)"
+        className="rounded-xl p-6 md:p-8 bg-transparent border-0"
+      >
       {/* Main Content Section */}
       <section className="container mx-auto space-y-20 py-10 mt-20">
         <WhatIsProjectXtreme />
@@ -46,6 +52,7 @@ const ProjectXtreme = () => {
           <Registration />
         </div>
       </section>
+      </SpotlightCard>
     </div>
   );
 };
