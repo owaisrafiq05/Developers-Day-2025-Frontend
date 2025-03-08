@@ -18,7 +18,7 @@ const fadeInLeft = {
   }),
 };
 
-const WhatIsFYP = () => {
+const WhatIsProjectExtreme = () => {
   return (
     <section className="text-white py-5 px-4 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto">
@@ -32,7 +32,7 @@ const WhatIsFYP = () => {
         >
           <h1 className="text-3xl md:text-5xl font-extrabold flex items-center gap-3">
             <FaBolt className="text-red-500 h-8 w-8 animate-pulse" />
-            What is Final Year Xtreme?
+            What is Project Xtreme?
           </h1>
         </motion.div>
 
@@ -50,7 +50,7 @@ const WhatIsFYP = () => {
               className=" rounded-xl  p-6 md:p-8 bg-transparent border-0"
             >
               <p className="text-lg leading-relaxed">
-                Final Year Xtreme is the ultimate competition for final-year
+                Project Xtreme is the ultimate competition for 
                 students to showcase their innovative projects and technical
                 skills. This platform brings together the brightest minds from
                 universities across the country to compete, collaborate, and
@@ -59,7 +59,7 @@ const WhatIsFYP = () => {
               <p className="text-lg leading-relaxed">
                 Whether you've developed a revolutionary app, designed an
                 innovative system, or created a unique solution to a real-world
-                problem, Final Year Xtreme is your chance to gain recognition,
+                problem, Project Xtreme is your chance to gain recognition,
                 receive expert feedback, and potentially win amazing prizes.
               </p>
             </SpotlightCard>
@@ -79,7 +79,7 @@ const WhatIsFYP = () => {
               </h2>
               <ul className="space-y-4">
                 {[
-                  "Showcase your final year project to industry experts",
+                  "Showcase your project to industry experts",
                   "Network with tech leaders and potential employers",
                   "Win prizes and recognition for your innovation",
                   "Get valuable feedback to improve your project",
@@ -120,4 +120,4 @@ const WhatIsFYP = () => {
   );
 };
 
-export default WhatIsFYP;
+export default WhatIsProjectExtreme;

@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import Header from "@/components/fyp-xtreme/Header";
-import WhatIsFYP from "@/components/fyp-xtreme/WhatIsFYP";
-import Participation from "@/components/fyp-xtreme/Participation";
-import Registration from "@/components/fyp-xtreme/Registeration";
+import Header from "@/components/project-xtreme/Header";
+import WhatIsProjectExtreme from "@/components/project-xtreme/WhatIsProjectXtreme";
+import Participation from "@/components/project-xtreme/Participation";
+import Registration from "@/components/project-xtreme/Registeration";
 import SpotlightCard from "@/components/SpotlightCard/SpotlightCard";
-import Rules from "@/components/fyp-xtreme/Rules";
+import Rules from "@/components/project-xtreme/Rules";
 import Squares from "@/components/Squares/Squares";
 
 // Fade In/Out Animation Variants
@@ -16,7 +16,7 @@ const fadeInOut = {
   exit: { opacity: 0, y: -50, transition: { duration: 0.5, ease: "easeIn" } },
 };
 
-const FinalYearXtreme = () => {
+const ProjectXtreme = () => {
   return (
     <div className=" text-white min-h-screen flex flex-col">
       <Squares
@@ -46,7 +46,7 @@ const FinalYearXtreme = () => {
           variants={fadeInOut}
           viewport={{ once: false, amount: 0.2 }} // Controls when animation triggers
         >
-          <WhatIsFYP />
+          <WhatIsProjectExtreme />
         </motion.section>
 
         <motion.section
@@ -92,4 +92,4 @@ const FinalYearXtreme = () => {
   );
 };
 
-export default FinalYearXtreme;
+export default ProjectXtreme;

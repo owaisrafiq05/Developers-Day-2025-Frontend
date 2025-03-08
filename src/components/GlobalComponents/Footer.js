@@ -11,7 +11,7 @@ const menuItems = [
   { path: "/modules", label: "Modules" },
   // { path: "/team", label: "Team" },
   { path: "/registration", label: "Registration" },
-  { path: "/fyp-xtreme", label: "FYP Extreme" },
+  { path: "/project-xtreme", label: "Project Xtreme" },
   // { path: "/job-orbit", label: "Job Orbit" },
   { path: "/contact-us", label: "Contact Us" },
 ]

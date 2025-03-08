@@ -176,7 +176,7 @@ const Hero = () => {
                 className="inline-block bg-black/60 backdrop-blur-sm border-l-4 border-red-600 mb-4 sm:mb-6"
               >
                 <h1 ref={titleRef} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white px-2 py-1 sm:px-4">
-                  FYP <span ref={highlightRef} className="text-red-600">Xtreme</span>
+                  Project <span ref={highlightRef} className="text-red-600">Xtreme</span>
                 </h1>
               </div>
               
@@ -184,7 +184,7 @@ const Hero = () => {
                 ref={subtitleRef} 
                 className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-8"
               >
-                Unleash your potential in the ultimate final year project competition
+                  Unleash your potential in the ultimate project competition
               </p>
             </div>
           </div>

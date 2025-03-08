@@ -50,7 +50,7 @@ const Participation = () => {
               </h2>
               <ul className="space-y-3">
                 {[
-                  "Open to all final-year students from recognized universities",
+                  "Open to all students from recognized universities",
                   "Teams can consist of up to four members",
                   "Projects from any field of technology are welcome",
                   "Industry experts will evaluate submissions",
@@ -86,7 +86,7 @@ const Participation = () => {
               className=" rounded-xl  p-6 md:p-8 bg-transparent border-0"
             >
               <p className="text-lg leading-relaxed">
-                Final Year Xtreme is open to all final-year students eager to
+                Project Xtreme is open to all students eager to
                 present their innovative projects. Whether you're working solo
                 or as part of a team, this competition is designed to showcase
                 your technical skills and creativity.
