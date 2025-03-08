@@ -32,6 +32,7 @@ export default function Module() {
     category: ""
   });
   const [competitions, setCompetitions] = useState([]); // State to hold fetched competitions
+  const [isCompetitionsFetched, setIsCompetitionsFetched] = useState(false);
 
   // Update openModal function
   const openModal = (moduleData) => {
@@ -48,6 +49,7 @@ export default function Module() {
     const loadCompetitions = async () => {
       const competitionsData = await fetchCompetitions();
       setCompetitions(competitionsData); // Set the fetched competitions
+      setIsCompetitionsFetched(true); // Set to true after fetching
     };
 
     loadCompetitions();
@@ -109,7 +111,7 @@ export default function Module() {
           squareSize={40}
           direction="diagonal" // up, down, left, right, diagonal
           borderColor="#000"
-          hoverFillColor="#222"
+          key={isCompetitionsFetched ? 'fetched' : 'loading'} // Trigger re-render
         />
         <div className="container mx-auto px-3 md:px-16 py-16">
 
