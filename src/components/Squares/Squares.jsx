@@ -20,6 +20,7 @@ const Squares = ({
       canvas.height = canvas.offsetHeight;
       numSquaresX.current = Math.ceil(canvas.width / squareSize) + 1;
       numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
+      drawGrid();
     };
 
     window.addEventListener("resize", resizeCanvas);
