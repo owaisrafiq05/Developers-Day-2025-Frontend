@@ -31,6 +31,7 @@ export default function Module() {
     rulebook: "",
   })
   const [competitions, setCompetitions] = useState({}) // State to hold fetched competitions
+  const [isCompetitionsFetched, setisCompetitionsFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true)
 
   // Update openModal function
@@ -49,7 +50,8 @@ export default function Module() {
       setIsLoading(true)
       try {
         const competitionsData = await fetchCompetitions()
-        setCompetitions(competitionsData) // Set the fetched competitions
+        setCompetitions(competitionsData); // Set the fetched competitions
+        setisCompetitionsFetched(true);
       } catch (error) {
         console.error("Error loading competitions:", error)
       } finally {
@@ -119,7 +121,8 @@ export default function Module() {
     <div>
       <ModuleHero />
       <section ref={sectionRef} className="relative overflow-hidden bg-white">
-        <Squares squareSize={40} borderColor="#000" />
+        <Squares squareSize={40} borderColor="#000"
+        key={isCompetitionsFetched ? 'fetched' : 'loading'}  />
         <div className="container mx-auto px-3 md:px-16 py-16">
           {/* Search Bar */}
           <motion.div
