@@ -245,7 +245,7 @@ const Registration = () => {
               className="space-y-4"
             >
               <h2 className="text-xl font-semibold text-red-500 mb-4">Upload Document</h2>
-              <input
+          <input
                 type="file"
                 accept=".pdf,.doc,.docx"
                 className="p-3 bg-gray-800 rounded-lg border border-gray-700 focus:border-red-600 hover:border-red-600 outline-none w-full"

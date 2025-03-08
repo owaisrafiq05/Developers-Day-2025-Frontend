@@ -18,6 +18,7 @@ export default function ModuleCard({
   entryFee,
   minParticipants,
   maxParticipants,
+  rulebook,
   openModal,
 }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -94,8 +95,6 @@ export default function ModuleCard({
                 transition={{ duration: 0.2 }}
               >
                 <span className="text-lg md:text-xl">Entry Fee: {entryFee}</span>
-                <span className="text-sm md:text-base text-zinc-400">
-                </span>
               </motion.div>
             </CardBody>
             <Divider />
@@ -105,12 +104,17 @@ export default function ModuleCard({
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
-                <Button
-                  variant="bordered"
-                  className="border-red-800 text-white text-sm md:text-base hover:bg-red-900 rounded-[12px] h-10 md:h-12"
-                >
-                  Rulebook
-                </Button>
+                {/* Get Rulebook Button */}
+                {rulebook && (
+                  <a
+                    href={rulebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-red-600 hover:bg-red-700 text-white text-sm md:text-base rounded-[12px] h-10 md:h-12 flex items-center justify-center"
+                  >
+                    Get Rulebook
+                  </a>
+                )}
                 <Button
                   className="bg-red-700 hover:bg-red-800 text-white text-sm md:text-base rounded-[12px] h-10 md:h-12"
                   onClick={() => openModal({
