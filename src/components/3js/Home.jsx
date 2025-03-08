@@ -39,7 +39,7 @@ const PageHeader = () => {
             blurRadius={400}
           />
 
-          <div className="text-4xl md:text-6xl lg:text-8xl mt-10 mb-5 ml-10 leading-snug font-bold text-white 
+          <div className="text-4xl md:text-6xl lg:text-8xl mt-10 md:mb-5 ml-10 leading-snug font-bold text-white 
             [text-shadow:_0_0_30px_rgb(255_255_255_/_50%)]">
             e.ocean's Developers Day{" "}
             <span className="text-[#ff3333] sm:inline 
@@ -48,7 +48,9 @@ const PageHeader = () => {
             </span>
             
           </div>
-          <span className="text-xl  lg-text-4xl ml-10 ">17th April 2025 at FAST NUCES, Karachi</span>
+          <div className="ml-10">
+            <span className="text-xl lg-text-3xl md:ml-2">17th April 2025 at FAST NUCES, Karachi</span>
+          </div>
         </div>
       </div>
 

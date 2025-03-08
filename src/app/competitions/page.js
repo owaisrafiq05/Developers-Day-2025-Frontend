@@ -111,7 +111,7 @@ export default function Module() {
           squareSize={40}
           direction="diagonal" // up, down, left, right, diagonal
           borderColor="#000"
-          key={isCompetitionsFetched ? 'fetched' : 'loading'} // Trigger re-render
+          key={isCompetitionsFetched ? 'fetched' : 'loading'} 
         />
         <div className="container mx-auto px-3 md:px-16 py-16">
 
