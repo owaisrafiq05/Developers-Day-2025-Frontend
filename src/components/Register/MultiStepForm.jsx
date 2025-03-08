@@ -1023,9 +1023,9 @@ export default function MultiStepForm() {
               </button>
             ) : (
               // Next button for all other steps
-              <button
-                type="button"
-                onClick={next}
+          <button
+            type="button"
+            onClick={next}
                 className="px-4 py-2 rounded-md flex items-center bg-red-500 text-white hover:bg-red-600"
               >
                 {currentStep === 3 ? (
