@@ -203,6 +203,7 @@ const Squares = ({
           ctx.strokeRect(squareX, squareY, squareSize, squareSize);
         }
       }
+<<<<<<< HEAD
       
       const gradient = ctx.createRadialGradient(
         canvas.width / 2,
@@ -217,6 +218,8 @@ const Squares = ({
 
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+=======
+>>>>>>> 8d4e92013b3ff96e8a5a718298a17a9021691376
     };
 
     drawGrid();

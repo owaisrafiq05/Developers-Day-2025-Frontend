@@ -102,7 +102,7 @@ const Loader = () => {
         <div ref={contentRef} className="loader-content">
           <div ref={logoRef} className="dev-logo">
             <Image
-              src="/logo2.png"
+              src="/logo3.png"
               alt="Developers Day Logo"
               width={400}
               height={400}
