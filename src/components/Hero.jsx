@@ -30,7 +30,7 @@ const Hero = () => {
           fov: 45,
           near: 0.1,
           far: 1000,
-          position: [27.216, -0.079, 5.026],
+          position: [27.216, -0.060, 5.026],
         }}
       >
         <Experience />
