@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { motion } from "framer-motion";
 import { toast, Toaster } from "sonner";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -147,35 +147,6 @@ const Registration = () => {
     );
   };
 
-  useEffect(() => {
-    // Section Fade-in Animation
-    gsap.fromTo(
-      formRef.current,
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1.5,
-        ease: "power3.out",
-      }
-    );
-
-    // Fields Animation - Sequential Appearance
-    fieldsRef.current.forEach((field, index) => {
-      gsap.fromTo(
-        field,
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-          delay: index * 0.15, // Stagger effect
-        }
-      );
-    });
-  }, [teamSize]);
-
   return (
     <div className="min-h-screen text-white flex flex-col items-center justify-center p-4 md:p-8">
       <Toaster position="bottom-left" theme="dark" />
@@ -208,28 +179,43 @@ const Registration = () => {
         <form ref={formRef} className="p-4 md:p-6" onSubmit={handleSubmit(processForm)} noValidate>
           {/* Step 1: Project Details */}
           {currentStep === 0 && (
-            <div className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-4"
+            >
               <h2 className="text-xl font-semibold text-red-500 mb-4">Project Details</h2>
               {renderField("projectTitle", "Project Title", "text", "Enter your project title")}
               {renderField("instituteName", "Institute Name", "text", "Enter your institute name")}
               {renderField("brandAmbassadorCode", "Brand Ambassador Code (Optional)", "text", "Enter code if available")}
-            </div>
+            </motion.div>
           )}
 
           {/* Step 2: Team Leader Information */}
           {currentStep === 1 && (
-            <div className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-4"
+            >
               <h2 className="text-xl font-semibold text-red-500 mb-4">Team Leader Information</h2>
               {renderField("leaderName", "Full Name", "text", "Enter leader's full name")}
               {renderField("leaderEmail", "Email Address", "email", "Enter leader's email")}
               {renderField("leaderCnic", "CNIC Number", "text", "Enter leader's CNIC")}
               {renderField("leaderPhone", "Phone Number", "tel", "Enter leader's phone number")}
-            </div>
+            </motion.div>
           )}
 
           {/* Step 3: Team Members */}
           {currentStep === 2 && (
-            <div className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-4"
+            >
               <h2 className="text-xl font-semibold text-red-500 mb-4">Team Members Information</h2>
               {teamMembers.map((_, index) => (
                 <div key={index} className="bg-gray-800 p-4 rounded-lg">
@@ -247,12 +233,17 @@ const Registration = () => {
               >
                 Add Team Member
               </button>
-            </div>
+            </motion.div>
           )}
 
           {/* Step 4: Upload Document */}
           {currentStep === 3 && (
-            <div className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-4"
+            >
               <h2 className="text-xl font-semibold text-red-500 mb-4">Upload Document</h2>
               <input
                 type="file"
@@ -261,12 +252,17 @@ const Registration = () => {
                 required
               />
               <p className="text-sm text-gray-400">Document must include project title and abstract. Name of the file must be the project title.</p>
-            </div>
+            </motion.div>
           )}
 
           {/* Step 5: Review & Submit */}
           {currentStep === 4 && (
-            <div className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
               <h2 className="text-xl font-semibold text-red-500 mb-4">Review Your Information</h2>
               {/* Display all collected information for review */}
               <div className="bg-gray-800 p-4 rounded-md">
@@ -294,7 +290,7 @@ const Registration = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Navigation */}

@@ -27,7 +27,7 @@ export default function Experience() {
     
   //  const gui = new GUI({ width: 340 })
     const debugObject = {
-        clearColor: '#00000000' // Making it fully transparent
+        clearColor: '#000000' // Set to a valid hex color without alpha
     }
     
     // Set initial clear color

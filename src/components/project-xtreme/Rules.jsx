@@ -54,7 +54,7 @@ const Rules = () => {
 
   return (
     <section className="text-white py-6 px-4 sm:px-6 md:px-8 lg:px-12">
-      <div className="bg-transparent text-white flex flex-col max-w-7xl mx-auto">
+      <div className="bg-transparent text-white flex flex-col max-w-7xl mx-auto relative z-10">
         
         {/* Title */}
         <div ref={titleRef} className="pb-4 mb-6 sm:mb-8">
