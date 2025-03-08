@@ -47,7 +47,7 @@ export default function Menu() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-18 md:h-20">
             <Link href="/" className="flex items-center mt-5 mb-5">
-              <Image src="/logo4.png" alt="Logo" width={180} height={90} className="rounded-full my-2" />
+              <Image src="/logo.png" alt="Logo" width={90} height={90} className="rounded-full" />
               <span className="text-3xl font-bold text-white hidden sm:block">Developers Day 2025</span>
             </Link>
             <motion.button
