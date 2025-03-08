@@ -142,6 +142,7 @@ const Registration = () => {
           className={`w-full px-3 py-2 bg-gray-900 border rounded-md text-white focus:outline-none focus:ring-2 ${
             errors[name] ? "border-red-500 focus:ring-red-500" : "border-gray-700 focus:ring-blue-500"
           }`}
+          style={{ transition: 'border-color 0.2s ease, box-shadow 0.2s ease' }}
         />
         {errors[name]?.message && (
           <p className="mt-1 text-sm text-red-500">{errors[name].message}</p>
@@ -224,43 +225,28 @@ const Registration = () => {
         <form className="p-4 md:p-6" onSubmit={handleSubmit(processForm)} noValidate>
           {/* Step 1: Project Details */}
           {currentStep === 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-4"
-            >
+            <div className="space-y-4">
               <h2 className="text-xl font-semibold text-red-500 mb-4">Project Details</h2>
               {renderField("projectTitle", "Project Title", "text", "Enter your project title")}
               {renderField("instituteName", "Institute Name", "text", "Enter your institute name")}
               {renderField("brandAmbassadorCode", "Brand Ambassador Code (Optional)", "text", "Enter code if available")}
-            </motion.div>
+            </div>
           )}
 
           {/* Step 2: Team Leader Information */}
           {currentStep === 1 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-4"
-            >
+            <div className="space-y-4">
               <h2 className="text-xl font-semibold text-red-500 mb-4">Team Leader Information</h2>
               {renderField("leaderName", "Full Name", "text", "Enter leader's full name")}
               {renderField("leaderEmail", "Email Address", "email", "Enter leader's email")}
               {renderField("leaderCnic", "CNIC Number", "text", "Enter leader's CNIC")}
               {renderField("leaderPhone", "Phone Number", "tel", "Enter leader's phone number")}
-            </motion.div>
+            </div>
           )}
 
           {/* Step 3: Team Members */}
           {currentStep === 2 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-4"
-            >
+            <div className="space-y-4">
               <h2 className="text-xl font-semibold text-red-500 mb-4">Team Members Information</h2>
               {teamMembers.map((_, index) => (
                 <div key={index} className="bg-gray-800 p-4 rounded-lg">
@@ -278,17 +264,12 @@ const Registration = () => {
               >
                 Add Team Member
               </button>
-            </motion.div>
+            </div>
           )}
 
           {/* Step 4: Upload Document */}
           {currentStep === 3 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-4"
-            >
+            <div className="space-y-4">
               <h2 className="text-xl font-semibold text-red-500 mb-4">Upload Document</h2>
               <input
                 type="file"
@@ -297,17 +278,12 @@ const Registration = () => {
                 required
               />
               <p className="text-sm text-gray-400">Document must include project title and abstract. Name of the file must be the project title.</p>
-            </motion.div>
+            </div>
           )}
 
           {/* Step 5: Review & Submit */}
           {currentStep === 4 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-6"
-            >
+            <div className="space-y-6">
               <h2 className="text-xl font-semibold text-red-500 mb-4">Review Your Information</h2>
               {/* Display all collected information for review */}
               <div className="bg-gray-800 p-4 rounded-md">
@@ -335,7 +311,7 @@ const Registration = () => {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Navigation */}
