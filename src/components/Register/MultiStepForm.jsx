@@ -351,7 +351,7 @@ export default function MultiStepForm() {
     else if (fields.length) {
         const output = await trigger(fields, { shouldFocus: true });
 
-        if (!output) {
+    if (!output) {
             // Get specific error messages for the current step's fields
             const currentErrors = fields.reduce((acc, field) => {
                 if (errors[field]) {
@@ -437,14 +437,14 @@ export default function MultiStepForm() {
     const isEmailField = name.toLowerCase().includes('email');
     
     return (
-      <div className="mb-4">
-        <label htmlFor={name} className="block text-sm font-medium text-gray-200 mb-1">
-          {label}
-        </label>
-        <input
-          type={type}
-          id={name}
-          {...register(name)}
+    <div className="mb-4">
+      <label htmlFor={name} className="block text-sm font-medium text-gray-200 mb-1">
+        {label}
+      </label>
+      <input
+        type={type}
+        id={name}
+        {...register(name)}
           onChange={(e) => {
             // Apply special formatting for phone fields
             if (isPhoneField && onChange) {
@@ -541,7 +541,7 @@ export default function MultiStepForm() {
         {renderField(`member${index}Phone`, "Phone Number", "tel", "Enter member's phone number", (e) => {
           e.target.value = formatPhone(e.target.value);
         })}
-      </div>
+    </div>
     );
   };
 
@@ -752,7 +752,7 @@ export default function MultiStepForm() {
                   {teamMembers + 1}/{maxTeamSize} members
                 </div>
               </div>
-              
+
               {/* Competition team size requirements */}
               <div className="p-3 bg-gray-800 rounded-md mb-4">
                 <p className="text-sm text-gray-300">
@@ -855,25 +855,25 @@ export default function MultiStepForm() {
                   return (
                     <div key={`review-member-${index}`}>
                       <h4 className="text-white font-medium mt-3 mb-1">Member {index+1}</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
-                        <div>
-                          <p className="text-gray-400">Name:</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                  <div>
+                    <p className="text-gray-400">Name:</p>
                           <p className="font-medium">{watchedValues[`member${index}Name`] || "-"}</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-400">Email:</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Email:</p>
                           <p className="font-medium">{watchedValues[`member${index}Email`] || "-"}</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-400">CNIC:</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">CNIC:</p>
                           <p className="font-medium">{watchedValues[`member${index}Cnic`] || "-"}</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-400">Phone:</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Phone:</p>
                           <p className="font-medium">{watchedValues[`member${index}Phone`] || "-"}</p>
-                        </div>
-                      </div>
-                    </div>
+                  </div>
+                </div>
+                  </div>
                   );
                 })}
               </div>
@@ -990,22 +990,22 @@ export default function MultiStepForm() {
               </div>
             </motion.div>
           )}
-          
-          {/* Navigation */}
-          <div className="p-4 md:p-6 border-t border-gray-800 flex justify-between">
-            <button
-              type="button"
-              onClick={prev}
-              disabled={currentStep === 0}
-              className={`px-4 py-2 rounded-md flex items-center ${
-                currentStep === 0
-                  ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                  : "bg-gray-800 text-white hover:bg-gray-700"
-              }`}
-            >
-              <ChevronLeft className="w-5 h-5 mr-1" />
-              Back
-            </button>
+
+        {/* Navigation */}
+        <div className="p-4 md:p-6 border-t border-gray-800 flex justify-between">
+          <button
+            type="button"
+            onClick={prev}
+            disabled={currentStep === 0}
+            className={`px-4 py-2 rounded-md flex items-center ${
+              currentStep === 0
+                ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                : "bg-gray-800 text-white hover:bg-gray-700"
+            }`}
+          >
+            <ChevronLeft className="w-5 h-5 mr-1" />
+            Back
+          </button>
 
             {currentStep === steps.length - 1 ? (
               // Submit button for the final step
@@ -1033,15 +1033,15 @@ export default function MultiStepForm() {
                     Proceed to Payment
                     <ChevronRight className="w-5 h-5 ml-1" />
                   </>
-                ) : (
-                  <>
-                    Next
-                    <ChevronRight className="w-5 h-5 ml-1" />
-                  </>
-                )}
-              </button>
+            ) : (
+              <>
+                Next
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </>
             )}
-          </div>
+          </button>
+            )}
+        </div>
         </form>
       </div>
     </div>

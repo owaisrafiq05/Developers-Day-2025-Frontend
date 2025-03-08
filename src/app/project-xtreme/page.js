@@ -87,7 +87,7 @@ const ProjectXtreme = () => {
           viewport={{ once: false, amount: 0.2 }}
         >
           <div className="container mx-auto">
-            {/* <Registration /> */}
+            <Registration />
             <h2 className="text-center text-3xl font-bold text-red-600 bg-gray-800 p-4 rounded-lg shadow-lg">
               Registrations will be live soon!
             </h2>
