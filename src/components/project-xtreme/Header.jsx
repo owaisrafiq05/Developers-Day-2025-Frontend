@@ -74,7 +74,7 @@ const Hero = () => {
         ease: "power2.out"
       }, "-=0.5")
       .to(titleWrapper, {
-        width: "auto",
+        width: isMobile ? "auto" : "min-content",
         padding: isMobile ? "0.5rem 1rem" : "0.75rem 2rem",
         duration: 1.2,
         ease: "power3.inOut"
