@@ -312,11 +312,14 @@ export default function MultiStepForm() {
 
   // Handle next step navigation
   const next = async () => {
+    // Update form data with current values
+    setFormData((prev) => ({ ...prev, ...watchedValues }));
+
     // If we're on the review step, submit the form
     if (currentStep === steps.length - 1) {
-      console.log("Submitting form from next function");
-      await handleSubmit(processForm)();
-      return;
+        console.log("Submitting form from next function");
+        await handleSubmit(processForm)();
+        return;
     }
 
     // Get the fields for the current step
@@ -324,74 +327,60 @@ export default function MultiStepForm() {
 
     // If we're on the team members step, validate all member fields
     if (currentStep === 2) {
-      // Create an array of fields to validate based on current team members
-      const memberFields = [];
-      for (let i = 1; i <= teamMembers; i++) {
-        // Only validate required fields (up to minTeamSize)
-        if (i <= minTeamSize) {
-          memberFields.push(`member${i}Name`);
-          memberFields.push(`member${i}Email`);
-          memberFields.push(`member${i}Cnic`);
-          memberFields.push(`member${i}Phone`);
+        // Create an array of fields to validate based on current team members
+        const memberFields = [];
+        for (let i = 1; i <= teamMembers; i++) {
+            // Only validate required fields (up to minTeamSize)
+            if (i <= minTeamSize) {
+                memberFields.push(`member${i}Name`);
+                memberFields.push(`member${i}Email`);
+                memberFields.push(`member${i}Cnic`);
+                memberFields.push(`member${i}Phone`);
+            }
         }
-      }
-      
-      // Validate all required member fields
-      const output = await trigger(memberFields, { shouldFocus: true });
-      if (!output) {
-        toast.error(`Please fill in all required team member information`);
-        return;
-      }
+
+        // Validate all required member fields
+        const output = await trigger(memberFields, { shouldFocus: true });
+        if (!output) {
+            toast.error(`Please fill in all required team member information`);
+            return;
+        }
     } 
     // For other steps, validate the fields defined in the step
     else if (fields.length) {
-      const output = await trigger(fields, { shouldFocus: true });
-      
-      if (!output) {
-        // Get specific error messages for the current step's fields
-        const currentErrors = fields.reduce((acc, field) => {
-          if (errors[field]) {
-            acc.push(`${field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${errors[field].message}`);
-          }
-          return acc;
-        }, []);
-        
-        if (currentErrors.length > 0) {
-          // Show specific error messages
-          toast.error(
-            <div>
-              <p>Please fix the following errors:</p>
-              <ul className="list-disc pl-4 mt-1">
-                {currentErrors.map((error, index) => (
-                  <li key={index}>{error}</li>
-                ))}
-              </ul>
-            </div>
-          );
-        } else {
-          toast.error("Please fill all required fields correctly");
+        const output = await trigger(fields, { shouldFocus: true });
+
+        if (!output) {
+            // Get specific error messages for the current step's fields
+            const currentErrors = fields.reduce((acc, field) => {
+                if (errors[field]) {
+                    acc.push(`${field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${errors[field].message}`);
+                }
+                return acc;
+            }, []);
+
+            if (currentErrors.length > 0) {
+                // Show specific error messages
+                toast.error(
+                    <div>
+                        <p>Please fix the following errors:</p>
+                        <ul className="list-disc pl-4 mt-1">
+                            {currentErrors.map((error, index) => (
+                                <li key={index}>{error}</li>
+                            ))}
+                        </ul>
+                    </div>
+                );
+            } else {
+                toast.error("Please fill all required fields correctly");
+            }
+            return;
         }
-        return;
-      }
-    }
-
-    // Update form data with current values
-    setFormData((prev) => ({ ...prev, ...watchedValues }));
-
-    // Set entry fee based on selected competition
-    if (currentStep === 0 && watchedValues.competitionName) {
-      const competition = competitionOptions.find(comp => comp.title === watchedValues.competitionName);
-      if (competition) {
-        const fee = parseFloat(competition.entryFee);
-        setFormData(prev => ({ ...prev, entryFee: fee }));
-        setValue('entryFee', fee); // Update the form value directly
-        setEntryFeeAmount(fee); // Update the entry fee amount state
-      }
     }
 
     setPreviousStep(currentStep);
     setCurrentStep((step) => step + 1);
-  };
+};
 
   // Handle previous step navigation
   const prev = () => {
@@ -465,6 +454,12 @@ export default function MultiStepForm() {
               const normalizedValue = normalizeEmail(e.target.value);
               e.target.value = normalizedValue;
               
+              // Log the normalized value
+              console.log("Normalized email value:", normalizedValue);
+
+              // Update React Hook Form's internal state with the normalized value
+              register(name).onChange(e);
+
               // Provide immediate feedback on email format
               if (normalizedValue && !validateEmail(normalizedValue)) {
                 e.target.classList.add('border-red-500');
@@ -548,6 +543,11 @@ export default function MultiStepForm() {
       </div>
     );
   };
+
+  // Add this log to see the watched values
+  useEffect(() => {
+    console.log("Watched values:", watchedValues);
+  }, [watchedValues]);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 md:p-8">
