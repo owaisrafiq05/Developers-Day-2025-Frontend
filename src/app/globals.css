@@ -263,11 +263,21 @@ html:not(.no-scrollbar)::-webkit-scrollbar-thumb::after {
   mix-blend-mode: screen;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  z-index: 999999 !important ;
+  z-index: 999999 !important;
   backdrop-filter: blur(1px);
   background-color: #0000005e;
   transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
-  cursor: none !important; /* Let's hide the default cursor so it looks way better */
+  cursor: none !important; /* Hide the default cursor */
+}
+
+/* Hide the flare cursor on tablet and mobile devices */
+@media screen and (max-width: 1024px) { /* Adjust the max-width as needed for your design */
+  .flare {
+    width: 0;
+    height: 0;
+    transition: width 0.2s ease-in-out, height 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    opacity: 0; /* Ensure it's not visible */
+  }
 }
 
 /* We need to remove this custom cursor in mobile devices */
@@ -275,11 +285,11 @@ html:not(.no-scrollbar)::-webkit-scrollbar-thumb::after {
   .flare {
     width: 0;
     height: 0;
-    transition: width 0.2s ease-in-out, height 0.2s ease-in-out,
-      opacity 0.2s ease-in-out;
+    transition: width 0.2s ease-in-out, height 0.2s ease-in-out, opacity 0.2s ease-in-out;
   }
 }
+
 .flare.pointer {
-  opacity: 0 !important;
+  opacity: 1; /* Ensure it is visible when the pointer class is added */
   transition: width 0.2s ease-in-out, height 0.2s ease-in-out, opacity 0.2s ease-in-out;
 }
