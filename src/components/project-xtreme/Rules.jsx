@@ -1,8 +1,8 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef } from "react";
 import { FaScroll } from "react-icons/fa";
 import SpotlightCard from "../SpotlightCard/SpotlightCard";
+import gsap from "gsap";
 
 const rules = [
   { 
@@ -27,29 +27,42 @@ const rules = [
   },
 ];
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
-
 const Rules = () => {
+  const titleRef = useRef(null);
+  const rulesRef = useRef([]);
+
+  useEffect(() => {
+    // GSAP Animation for title
+    gsap.from(titleRef.current, {
+      opacity: 0,
+      y: 30,
+      duration: 0.5,
+      ease: "easeOut",
+    });
+
+    // GSAP Animation for rules
+    rulesRef.current.forEach((rule, index) => {
+      gsap.from(rule, {
+        opacity: 0,
+        y: 20,
+        duration: 0.5,
+        ease: "easeOut",
+        delay: index * 0.1, // Stagger effect
+      });
+    });
+  }, []);
+
   return (
     <section className="text-white py-6 px-4 sm:px-6 md:px-8 lg:px-12">
       <div className="bg-transparent text-white flex flex-col max-w-7xl mx-auto">
         
         {/* Title */}
-        <motion.div
-          className="pb-4 mb-6 sm:mb-8"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeInUp}
-        >
+        <div ref={titleRef} className="pb-4 mb-6 sm:mb-8">
           <h1 className="text-3xl md:text-5xl font-extrabold flex items-center gap-3">
             <FaScroll className="text-red-500 h-6 w-6 sm:h-8 sm:w-8 animate-pulse" />
             Competition Rules
           </h1>
-        </motion.div>
+        </div>
 
         {/* Spotlight Card */}
         <SpotlightCard className="bg-transparent">
@@ -58,19 +71,16 @@ const Rules = () => {
           {/* Rules List */}
           <div className="space-y-4 sm:space-y-6">
             {rules.map((rule, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: false, amount: 0.2 }}
-                variants={fadeInUp}
+                ref={(el) => (rulesRef.current[index] = el)} // Store reference for GSAP animation
                 className="text-base sm:text-lg"
               >
                 <div className="text-red-500 font-bold text-xl mb-1">
                   {index + 1}. {rule.title}
                 </div>
                 <div dangerouslySetInnerHTML={{ __html: rule.description }} />
-              </motion.div>
+              </div>
             ))}
           </div>
         </SpotlightCard>
