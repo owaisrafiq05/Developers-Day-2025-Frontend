@@ -5,15 +5,26 @@ import { FaScroll } from "react-icons/fa";
 import SpotlightCard from "../SpotlightCard/SpotlightCard";
 
 const rules = [
-  { title: "Project Originality", description: "All submitted projects must be original work developed primarily by the team members. Any use of third-party components, libraries, or frameworks must be properly cited." },
-  { title: "Submission Deadline", description: "All project submissions must be completed by the specified deadline. Late submissions will not be accepted under any circumstances." },
-  { title: "Team Composition", description: "Teams must consist of 1-5 members, all from the same university. Each participant can only be part of one team." },
-  { title: "Documentation", description: "Complete documentation as specified in the submission guidelines must be provided. This includes abstract, problem statement, methodology, results, and conclusion." },
-  { title: "Working Prototype", description: "A functional prototype or working model of the project must be available for demonstration during the evaluation phase." },
-  { title: "Intellectual Property", description: "Participants retain the intellectual property rights to their projects, but grant the organizers the right to publicize and display their work for promotional purposes." },
-  { title: "Ethical Considerations", description: "Projects must adhere to ethical standards and not promote harmful, illegal, or unethical activities." },
-  { title: "Judging Criteria", description: "Projects will be evaluated based on innovation, technical complexity, practical application, presentation quality, and adherence to submission guidelines." },
-  { title: "Disqualification", description: "The organizers reserve the right to disqualify any team found violating the competition rules or engaging in unethical behavior." },
+  { 
+    title: "Project Requirements", 
+    description: "<ul class='list-disc pl-5 mt-2'><li>The idea must be unique.</li><li>If selected for the onsite round, teams must present some tangible results, a platform, or a working project.</li></ul>" 
+  },
+  { 
+    title: "Team Formation", 
+    description: "<ul class='list-disc pl-5 mt-2'><li>A team can have a minimum of 3 and maximum of 4 members.</li></ul>" 
+  },
+  { 
+    title: "Competition Structure", 
+    description: "<ul class='list-disc pl-5 mt-2'><li>Round 1: Teams must submit an abstract of their project.</li><li>Evaluation Criteria: Projects will be judged by a jury based on:<ul class='list-disc pl-5 mt-1'><li>Problem Complexity</li><li>Creativity</li><li>Innovation</li></ul></li><li>Selection for Onsite Round: Only 40 projects will qualify for the onsite round.</li></ul>" 
+  },
+  { 
+    title: "Onsite Round", 
+    description: "<ul class='list-disc pl-5 mt-2'><li>Selected teams will be provided a designated space to present their project.</li><li>A jury of industry experts will evaluate the projects.</li></ul>" 
+  },
+  { 
+    title: "Participation Fee", 
+    description: "<ul class='list-disc pl-5 mt-2'><li>Teams selected for the onsite round must pay a fee of <b>4000 PKR</b>.</li></ul>" 
+  },
 ];
 
 const fadeInUp = {
@@ -55,10 +66,10 @@ const Rules = () => {
                 variants={fadeInUp}
                 className="text-base sm:text-lg"
               >
-                <span className="text-red-500 font-bold">
-                  {index + 1}. {rule.title}:
-                </span>{" "}
-                {rule.description}
+                <div className="text-red-500 font-bold text-xl mb-1">
+                  {index + 1}. {rule.title}
+                </div>
+                <div dangerouslySetInnerHTML={{ __html: rule.description }} />
               </motion.div>
             ))}
           </div>
