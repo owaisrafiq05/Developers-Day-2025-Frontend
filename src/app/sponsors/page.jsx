@@ -10,6 +10,18 @@ export default function SponsorShowcase() {
       name: "Title Sponsor",
       logo: "/sample-sponsor.png",
     },
+    cotitle: Array.from({ length: 4 }, (_, i) => ({
+      id: `Co-title-${i + 1}`,
+      name: `Co Title Sponsor ${i + 1}`,
+    })),
+    platinum: Array.from({ length: 4 }, (_, i) => ({
+      id: `Platinum-${i + 1}`,
+      name: `Platinum Sponsor ${i + 1}`,
+    })),
+    diamond: Array.from({ length: 4 }, (_, i) => ({
+      id: `Diamond-${i + 1}`,
+      name: `Diamond Sponsor ${i + 1}`,
+    })),
     gold: Array.from({ length: 4 }, (_, i) => ({
       id: `gold-${i + 1}`,
       name: `Gold Sponsor ${i + 1}`,
@@ -18,11 +30,14 @@ export default function SponsorShowcase() {
       id: `silver-${i + 1}`,
       name: `Silver Sponsor ${i + 1}`,
     })),
-    bronze: Array.from({ length: 4 }, (_, i) => ({
-      id: `bronze-${i + 1}`,
-      name: `Bronze Sponsor ${i + 1}`,
-    })),
   };
+
+  const recruitmentPartners = Array.from({ length: 4 }, (_, i) => ({
+    id: `Recruitment Partners-${i + 1}`,
+    name: `Recruitment Partners Sponsor ${i + 1}`,
+  }));
+
+  
 
   return (
     <main className="mx-auto" style={{
@@ -98,7 +113,8 @@ export default function SponsorShowcase() {
             <div className="mb-8 flex items-center">
               <div className="h-px flex-1 bg-gray-800"></div>
               <h2 className="mx-4 text-2xl font-bold text-red-600">
-                {tier.toUpperCase()} SPONSORS
+                {/* {tier.toUpperCase()}  */}
+                {tier === "recruitmentpartners" && " RECRUITMENT PARTNERS" || tier === "cotitle" && "CO TITLE" || tier.toUpperCase() } SPONSORS
               </h2>
               <div className="h-px flex-1 bg-gray-800"></div>
             </div>
@@ -124,6 +140,36 @@ export default function SponsorShowcase() {
             </div>
           </section>
         ))}
+        <section key="recruitmentpartners" className="mb-20 z-30 relative px-4">
+          <div className="mb-8 flex items-center">
+            <div className="h-px flex-1 bg-gray-800"></div>
+            <h2 className="mx-4 text-2xl font-bold text-red-600">
+              RECRUITMENT PARTNERS
+            </h2>
+            <div className="h-px flex-1 bg-gray-800"></div>
+          </div>
+          <div className="place-items-center align-content-center grid grid-cols-2 gap-2 sm:gap-4 items-center justify-center content-center sm:grid-cols-4 lg:grid-cols-4">
+            {recruitmentPartners.map((partner) => (
+              <div
+                key={partner.id}
+                className="rounded-t-md rounded-bl-md rounded-br-3xl flex flex-col items-center justify-center bg-[#74111188] p-4 md:p-8 transition-transform hover:scale-105"
+              >
+                {partner.logo ? (
+                  <Image
+                    src={partner.logo}
+                    alt={partner.name}
+                    width={240}
+                    height={120}
+                    className="h-auto w-full object-contain"
+                  />
+                ) : (
+                  <p className="text-white">To Be Announced</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
 
       </div>
 
