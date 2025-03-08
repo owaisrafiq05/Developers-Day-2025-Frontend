@@ -3,51 +3,24 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 
-// Custom hook to detect mobile devices
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    // Function to check if device is mobile
-    const checkMobile = () => {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera
-      const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-      const isMobileDevice = mobileRegex.test(userAgent)
-      const isSmallScreen = window.innerWidth < 768
-
-      setIsMobile(isMobileDevice || isSmallScreen)
-    }
-
-    // Check on initial load
-    checkMobile()
-
-    // Check on resize
-    window.addEventListener("resize", checkMobile)
-
-    return () => {
-      window.removeEventListener("resize", checkMobile)
-    }
-  }, [])
-
-  return isMobile
-}
-
 function FlareCursor() {
-  // Check if on mobile device
-  const isMobile = useIsMobile()
-
-  // States
+  // State to track the current cursor position
   const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [velocity, setVelocity] = useState({ x: 0, y: 0 })
-  const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 })
-  const [isPointer, setIsPointer] = useState(false)
-  const [isClicked, setIsClicked] = useState(false)
-  const [trail, setTrail] = useState(Array(12).fill({ x: 0, y: 0 }))
 
-  // Don't render on mobile
-  if (isMobile) {
-    return null
-  }
+  // State to track mouse velocity for dynamic effects
+  const [velocity, setVelocity] = useState({ x: 0, y: 0 })
+
+  // State to track previous position for calculating velocity
+  const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 })
+
+  // State to track whether the cursor is over a clickable element
+  const [isPointer, setIsPointer] = useState(false)
+
+  // State to track if the mouse is clicked
+  const [isClicked, setIsClicked] = useState(false)
+
+  // State for the trail positions
+  const [trail, setTrail] = useState(Array(12).fill({ x: 0, y: 0 }))
 
   // Mouse move handler with velocity calculation
   const handleMouseMove = (e) => {
@@ -91,12 +64,10 @@ function FlareCursor() {
       window.removeEventListener("mousedown", handleMouseDown)
       window.removeEventListener("mouseup", handleMouseUp)
 
-      // Restore the default cursor only if we changed it
-      if (!isMobile) {
-        document.body.style.cursor = "auto"
-      }
+      // Restore the default cursor
+      document.body.style.cursor = "auto"
     }
-  }, [prevPosition, isMobile])
+  }, [prevPosition])
 
   // Calculate speed for dynamic effects
   const speed = Math.sqrt(velocity.x ** 2 + velocity.y ** 2)
