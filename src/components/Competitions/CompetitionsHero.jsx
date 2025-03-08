@@ -111,7 +111,7 @@ const ModuleHero = () => {
       ref={sectionRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 sm:py-0"
       style={{
-        backgroundImage: "url('/images/modules/hero2.webp')",
+        backgroundImage: "url('/images/competitions/hero2.webp')",
         backgroundSize: "cover",
         backgroundPosition: "50% 50%",
         backgroundAttachment: isMobile ? "scroll" : "fixed"
@@ -139,7 +139,7 @@ const ModuleHero = () => {
               className="inline-block bg-black/60 backdrop-blur-sm border-l-4 border-red-600 mb-4 sm:mb-6"
             >
               <h1 ref={titleRef} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white px-2 py-1 sm:px-4">
-                Our <span ref={highlightRef} className="text-red-600">Modules</span>
+                Our <span ref={highlightRef} className="text-red-600">Competitions</span>
               </h1>
             </div>
             
@@ -147,7 +147,7 @@ const ModuleHero = () => {
               ref={subtitleRef} 
               className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-8 max-w-xl mx-auto"
             >
-              Explore our comprehensive range of tech modules designed to challenge and inspire.
+              Explore our comprehensive range of tech competitions designed to challenge and inspire.
             </p>
           </div>
         </div>

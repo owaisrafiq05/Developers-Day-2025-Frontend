@@ -20,7 +20,7 @@ import SpotlightCard from "../SpotlightCard/SpotlightCard";
 const menuItems = [
   { path: "/", label: "Home", icon: <FaHome className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
   { path: "/sponsors", label: "Sponsors", icon: <FaHandshake className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
-  { path: "/modules", label: "Modules", icon: <FaBoxOpen className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
+  { path: "/competitions", label: "Competitions", icon: <FaBoxOpen className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
   { path: "/registration", label: "Registration", icon: <FaClipboardList className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
   // { path: "/job-orbit", label: "Job Orbit", icon: <FaBriefcase className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },
   { path: "/project-xtreme", label: "Project Xtreme", icon: <FaProjectDiagram className="text-red-700 text-3xl md:text-4xl lg:text-4xl xl:text-4xl" /> },

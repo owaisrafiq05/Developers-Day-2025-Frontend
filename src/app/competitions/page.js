@@ -5,9 +5,9 @@ import { motion, useInView } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Squares from "@/components/Squares/Squares";
-import ModuleCard from "@/components/Modules/ModuleCard";
-import ModuleHero from "@/components/Modules/ModuleHero";
-import ModuleModal from "@/components/Modules/ModuleModal";
+import ModuleCard from "@/components/Competitions/CompetitionsCard";
+import ModuleHero from "@/components/Competitions/CompetitionsHero";
+import ModuleModal from "@/components/Competitions/CompetitionsModal";
 import fetchCompetitions from "@/data/data-comp"; // Import the fetch function
 
 if (typeof window !== "undefined") {
@@ -82,7 +82,7 @@ export default function Module() {
     return () => ctx.revert();
   }, []);
 
-  // Filtered modules based on search query
+  // Filtered competitions based on search query
   const filteredData = competitions.filter(
     (module) =>
       module.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -166,7 +166,7 @@ export default function Module() {
 
           {/* Sections for Each Category */}
           {categoriesToShow.map((category, categoryIndex) => {
-            const modulesInCategory = filteredData.filter(
+            const competitionsInCategory = filteredData.filter(
               (module) => module.category === category
             );
 
@@ -176,8 +176,8 @@ export default function Module() {
                   {category}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                  {modulesInCategory.length > 0 ? (
-                    modulesInCategory.map((module, index) => (
+                  {competitionsInCategory.length > 0 ? (
+                    competitionsInCategory.map((module, index) => (
                       <div
                         key={index}
                         ref={(el) => (cardsRef.current[index] = el)}

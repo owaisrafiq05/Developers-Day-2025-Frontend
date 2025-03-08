@@ -8,7 +8,7 @@ import { FaLinkedin, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa"
 const menuItems = [
   { path: "/", label: "Home" },
   { path: "/sponsors", label: "Sponsors" },
-  { path: "/modules", label: "Modules" },
+  { path: "/competitions", label: "Competitions" },
   // { path: "/team", label: "Team" },
   { path: "/registration", label: "Registration" },
   { path: "/project-xtreme", label: "Project Xtreme" },

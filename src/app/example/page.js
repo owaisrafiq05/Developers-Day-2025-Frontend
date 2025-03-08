@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from "react";
-import ModuleCard from "../../components/Modules/ModuleCard.jsx"; // import the ModuleCard component
-import ModuleModal from "../../components/Modules/ModuleModal"; // import the modal component
+import ModuleCard from "../../components/Competitions/CompetitionsCard.jsx"; // import the ModuleCard component
+import ModuleModal from "../../components/Competitions/CompetitionsModal.jsx"; // import the modal component
 
 const ParentComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility

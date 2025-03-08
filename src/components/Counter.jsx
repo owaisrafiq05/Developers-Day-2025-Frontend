@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import SpotlightCard from "./SpotlightCard/SpotlightCard";
 
 export default function Countdown() {
-  const targetDate = new Date("2025-04-13T00:00:00");
+  const targetDate = new Date(2025, 3, 17, 8, 0, 0);
 
   const [timeUnits, setTimeUnits] = useState([
     { value: 0, label: "DAYS" },
@@ -42,8 +42,11 @@ export default function Countdown() {
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.2, delay: 0.4 }}>
       <div className="text-center mb-6">
-        <h2 className="text-3xl md:text-3xl font-semibold text-white relative">Registration Ends In...</h2>
+        <h2 className="text-3xl md:text-3xl font-semibold text-white relative">Event Countdown</h2>
       </div>
+      {/* <div className="text-center mb-6">
+        <h2 className="text-3xl md:text-3xl font-semibold text-white relative">Registration Starts In...</h2>
+      </div> */}
       </motion.div>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">
         {timeUnits.map((unit) => (
