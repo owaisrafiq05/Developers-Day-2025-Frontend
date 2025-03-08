@@ -164,7 +164,7 @@ const ModuleHero = () => {
                   <FaTrophy className="text-white text-2xl md:text-3xl mr-1" />
                   <span className="text-xl md:text-2xl font-bold text-white mr-1">Prize pool Upto</span>
                   <span className="text-2xl md:text-4xl font-extrabold text-white">
-                    PKR. 1.8 Million
+                    PKR. 1 Million
                   </span>
                 </div>
               </div>
