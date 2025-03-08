@@ -3,7 +3,6 @@ import "./globals.css";
 import Menu from "../components/GlobalComponents/Menu.js";
 import Loader from "../components/GlobalComponents/Loader";
 import Footer from "@/components/GlobalComponents/Footer";
-import FlareCursor from "@/components/GlobalComponents/FlareCursor.js";
 
 const inter = Inter({ subsets: ["latin"] });
 const lexend = Lexend({
@@ -23,7 +22,6 @@ export default function RootLayout({ children }) {
       <body className={`${lexend.className} bg-black relative`}>
          <Loader /> 
          <Menu />
-         <FlareCursor/>
         <main className="relative z-10 min-h-screen">{children}</main>
         <Footer/>
       </body>
