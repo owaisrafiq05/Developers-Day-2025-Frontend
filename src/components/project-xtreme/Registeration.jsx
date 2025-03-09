@@ -12,6 +12,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 // Define the base form validation schema
 const baseFormSchema = {
   projectTitle: z.string().min(1, "Project title is required"),
+  teamName: z.string().min(1, "Team name is required"),
   instituteName: z.string().min(1, "Institute name is required"),
   brandAmbassadorCode: z.string().optional(),
 
@@ -43,7 +44,7 @@ const baseFormSchema = {
 
 // Define the form steps
 const steps = [
-  { id: "Step 1", name: "Project Details", fields: ["projectTitle", "instituteName", "brandAmbassadorCode"] },
+  { id: "Step 1", name: "Project Details", fields: ["projectTitle", "teamName", "instituteName", "brandAmbassadorCode"] },
   { id: "Step 2", name: "Team Leader Information", fields: ["leaderName", "leaderEmail", "leaderCnic", "leaderPhone"] },
   { id: "Step 3", name: "Team Members", fields: [] }, // Will be populated dynamically based on team size
   { id: "Step 4", name: "Upload Document", fields: ["projectDocument"] },
@@ -90,12 +91,8 @@ const Registration = () => {
 
   // Handle file upload
   const handleFileChange = (event) => {
-    console.log("File change event:", event.target.files);
     const files = Array.from(event.target.files);
     setUploadedFiles(files); // Store the actual file objects
-    console.log("Uploaded files:", files);
-    
-    // Set the file in the form data
     if (files.length > 0) {
       setValue("projectDocument", files[0]);
     }
@@ -108,7 +105,6 @@ const Registration = () => {
 
     // If we're on the review step, submit the form
     if (currentStep === steps.length - 1) {
-      console.log("Submitting form from next function");
       await handleSubmit(processForm)();
       return;
     }
@@ -119,7 +115,6 @@ const Registration = () => {
     // Validate fields for the current step
     const output = await trigger(fields, { shouldFocus: true });
     if (!output) {
-      // Get specific error messages for the current step's fields
       const currentErrors = fields.reduce((acc, field) => {
         if (errors[field]) {
           acc.push(`${field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${errors[field].message}`);
@@ -128,7 +123,6 @@ const Registration = () => {
       }, []);
 
       if (currentErrors.length > 0) {
-        // Show specific error messages
         toast.error(
           <div>
             <p>Please fix the following errors:</p>
@@ -160,15 +154,13 @@ const Registration = () => {
   // Process form submission
   const processForm = async (data) => {
     try {
-      console.log("Form submitted with data:", data);
-      
       // Validate that we have at least the minimum number of team members
       if (teamMembers.length < minTeamSize - 1) {
         toast.error(`This project requires at least ${minTeamSize} team members (including leader).`);
         return;
       }
       
-      // Validate that payment screenshot is uploaded
+      // Validate that a project document is uploaded
       if (uploadedFiles.length === 0) {
         toast.error("Please upload a project document");
         return;
@@ -180,12 +172,53 @@ const Registration = () => {
         return;
       }
 
-      // Here you would typically send the data to your backend
-      // For now, we'll just show a success message
-      toast.success("Registration successful!");
+      // Create a new FormData instance
+      const formData = new FormData();
       
-      // You could redirect to a success page here
-      // window.location.href = "/registration/success";
+      // Add all form fields
+      formData.append("Team_Name", data.teamName);
+      formData.append("Project_Name", data.projectTitle);
+      formData.append("L_Name", data.leaderName);
+      formData.append("L_Email", data.leaderEmail);
+      formData.append("L_Contact", data.leaderPhone.replace("+92", "0")); // Convert to local format
+      formData.append("L_CNIC", data.leaderCnic);
+      
+      // Append members dynamically
+      const members = teamMembers.map(member => ({
+        Name: member.name,
+        Email: member.email,
+        Contact: member.phone.replace("+92", "0"), // Convert to local format
+        CNIC: member.cnic,
+      }));
+      
+      // Convert members array to JSON string and append
+      formData.append("Members", JSON.stringify(members));
+
+      // Append brand ambassador code if available
+      if (data.brandAmbassadorCode) {
+        formData.append("BA_Code", data.brandAmbassadorCode);
+      }
+
+      // Append the project document
+      if (uploadedFiles[0]) {
+        formData.append("projectDocument", uploadedFiles[0]);
+      }
+
+      // Send the API request
+      const response = await fetch('https://dev-day-backend.vercel.app/Project/Register', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      const responseData = await response.json();
+      
+      if (response.ok) {
+        toast.success("Registration successful!");
+        // Redirect to success page
+        window.location.href = "/registration/success";
+      } else {
+        toast.error(`Registration failed: ${responseData?.message || "Unknown error"}`);
+      }
     } catch (error) {
       console.error("API Error:", error);
       toast.error("An error occurred while submitting the form: " + error.message);
@@ -374,6 +407,7 @@ const Registration = () => {
             >
               <h2 className="text-xl font-semibold text-red-500 mb-4">Project Details</h2>
               {renderField("projectTitle", "Project Title", "text", "Enter your project title")}
+              {renderField("teamName", "Team Name", "text", "Enter your team name")}
               {renderField("instituteName", "Institute Name", "text", "Enter your institute name")}
               {renderField("brandAmbassadorCode", "Brand Ambassador Code (Optional)", "text", "Enter code if available")}
             </motion.div>
@@ -565,6 +599,10 @@ const Registration = () => {
                   <div>
                     <p className="text-gray-400">Project Title:</p>
                     <p className="font-medium">{watchedValues.projectTitle || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Team Name:</p>
+                    <p className="font-medium">{watchedValues.teamName || "-"}</p>
                   </div>
                   <div>
                     <p className="text-gray-400">Institute Name:</p>
