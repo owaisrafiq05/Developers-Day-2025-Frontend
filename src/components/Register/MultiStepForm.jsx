@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ChevronLeft, ChevronRight, Check, Plus, Trash2 } from "lucide-react"
 import fetchCompetitions from "../../data/data-comp.js" // Import the fetch function
+import ReCAPTCHA from "react-google-recaptcha" 
 
 // Define the base form validation schema
 const baseFormSchema = {
@@ -118,6 +119,7 @@ export default function MultiStepForm() {
   const [maxTeamSize, setMaxTeamSize] = useState(3); // Maximum team size
   const [validationSchema, setValidationSchema] = useState(FormDataSchema); // Dynamic validation schema
   const delta = currentStep - previousStep
+  const [captchaValue, setCaptchaValue] = useState(null); // State for CAPTCHA value
 
   // Update validation schema when team members change
   useEffect(() => {
@@ -248,6 +250,12 @@ export default function MultiStepForm() {
         return;
       }
 
+      // Validate CAPTCHA
+      if (!captchaValue) {
+        toast.error("Please complete the CAPTCHA.");
+        return;
+      }
+
       // Create a new FormData instance
       const formData = new FormData();
       
@@ -330,7 +338,7 @@ export default function MultiStepForm() {
     // If we're on the review step, submit the form
     if (currentStep === steps.length - 1) {
         console.log("Submitting form from next function");
-        await handleSubmit(processForm)();
+        await handleSubmit(processForm)();33443
         return;
     }
 
@@ -946,6 +954,17 @@ export default function MultiStepForm() {
                     </span>
                   </div>
                 </div>
+              </div>
+
+              {/* reCAPTCHA Component */}
+              <div className="mb-4">
+                <ReCAPTCHA
+                  sitekey="6LdUIdUqAAAAAM84Ki3WS2ARudCLK4Bf2QnI1qWi"
+                  onChange={(value) => setCaptchaValue(value)} // Set the CAPTCHA value
+                />
+                {!captchaValue && (
+                  <p className="mt-1 text-sm text-red-500">Please complete the CAPTCHA.</p>
+                )}
               </div>
 
               <div className="group relative w-full">
