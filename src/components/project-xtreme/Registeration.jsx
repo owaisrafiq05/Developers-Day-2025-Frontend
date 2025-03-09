@@ -164,15 +164,15 @@ const Registration = () => {
       }
 
       // Validate CAPTCHA
-      // if (!captchaValue) {
-      //   toast.error("Please complete the CAPTCHA.");
-      //   return;
-      // }
+      if (!captchaValue) {
+        toast.error("Please complete the CAPTCHA.");
+        return;
+      }
 
       // Create a new FormData instance
       const formData = new FormData();
       
-      // Add all form fields
+      // Add all form fields directly to FormData
       formData.append("Team_Name", data.teamName);
       formData.append("Institution_Name", data.instituteName);
       formData.append("Project_Name", data.projectTitle);
@@ -189,7 +189,9 @@ const Registration = () => {
         CNIC: member.cnic,
       }));
       
-      // Convert members array to JSON string and append
+      console.log("Members to be submitted:", members);
+      
+      // Append members as a JSON string
       formData.append("Members", JSON.stringify(members));
 
       // Append brand ambassador code if available
@@ -669,7 +671,7 @@ const Registration = () => {
               </div>
 
               {/* reCAPTCHA Component */}
-              {/* <div className="mb-4">
+              <div className="mb-4">
                 <ReCAPTCHA
                   sitekey="6LdUIdUqAAAAAM84Ki3WS2ARudCLK4Bf2QnI1qWi" // Replace with your reCAPTCHA site key
                   onChange={(value) => setCaptchaValue(value)} // Set the CAPTCHA value
@@ -677,7 +679,7 @@ const Registration = () => {
                 {!captchaValue && (
                   <p className="mt-1 text-sm text-red-500">Please complete the CAPTCHA.</p>
                 )}
-              </div> */}
+              </div>
             </motion.div>
           )}
 
