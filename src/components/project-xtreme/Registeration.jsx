@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft, ChevronRight, Check, Trash2, Plus } from "lucide-react";
 import SpotlightCard from "../SpotlightCard/SpotlightCard";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // Define the base form validation schema
 const baseFormSchema = {
@@ -61,6 +62,7 @@ const Registration = () => {
   const [validationSchema, setValidationSchema] = useState(z.object(baseFormSchema).passthrough());
   const minTeamSize = 3;
   const maxTeamSize = 4;
+  const [captchaValue, setCaptchaValue] = useState(null); // State for CAPTCHA value
 
   const {
     register,
@@ -169,6 +171,12 @@ const Registration = () => {
       // Validate that payment screenshot is uploaded
       if (uploadedFiles.length === 0) {
         toast.error("Please upload a project document");
+        return;
+      }
+
+      // Validate CAPTCHA
+      if (!captchaValue) {
+        toast.error("Please complete the CAPTCHA.");
         return;
       }
 
@@ -627,6 +635,17 @@ const Registration = () => {
                   </div>
                 ) : (
                   <p className="text-yellow-500 text-sm">No document uploaded yet</p>
+                )}
+              </div>
+
+              {/* reCAPTCHA Component */}
+              <div className="mb-4">
+                <ReCAPTCHA
+                  sitekey="6LdUIdUqAAAAAM84Ki3WS2ARudCLK4Bf2QnI1qWi" // Replace with your reCAPTCHA site key
+                  onChange={(value) => setCaptchaValue(value)} // Set the CAPTCHA value
+                />
+                {!captchaValue && (
+                  <p className="mt-1 text-sm text-red-500">Please complete the CAPTCHA.</p>
                 )}
               </div>
             </motion.div>
