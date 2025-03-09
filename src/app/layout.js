@@ -20,10 +20,20 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${lexend.className} bg-black relative`}>
-         <Loader /> 
-         <Menu />
+        <Loader />
+        <Menu />
         <main className="relative z-10 min-h-screen">{children}</main>
-        <Footer/>
+        <Footer />
+        
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-GL22NFFC4C"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-GL22NFFC4C');
+          `
+        }} />
       </body>
     </html>
   );
