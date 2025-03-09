@@ -32,7 +32,7 @@ const developers = [
   {
     name: "Arham Alvi",
     role: "Co-Head of Frontend Team",
-    linkedin: "https://linkedin.com/in/samrivera",
+    linkedin: "https://www.linkedin.com/in/arham-alvi-62068b1bb/",
   },
   {
     name: "Abdullah Farooqui",
