@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { toast, Toaster } from "sonner";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft, ChevronRight, Check, Trash2, Plus } from "lucide-react";
 import SpotlightCard from "../SpotlightCard/SpotlightCard";
@@ -55,10 +55,6 @@ const Registration = () => {
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
-  const [teamMembers, setTeamMembers] = useState([
-    { name: "", email: "", cnic: "", phone: "" }, 
-    { name: "", email: "", cnic: "", phone: "" }
-  ]); 
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
   const [validationSchema, setValidationSchema] = useState(z.object(baseFormSchema).passthrough());
   const minTeamSize = 3;
@@ -81,13 +77,14 @@ const Registration = () => {
     mode: "onChange", // Validate on change
   });
 
+  // Use useFieldArray to manage team members dynamically
+  const { fields, append, remove } = useFieldArray({
+    control: useForm().control,
+    name: "teamMembers", // Name of the field array
+  });
+
   const watchedValues = watch();
   const delta = currentStep - previousStep;
-
-  // Update team members fields in steps array
-  useEffect(() => {
-    steps[2].fields = teamMembers.map((_, index) => `teamMembers[${index}]`);
-  }, [teamMembers]);
 
   // Handle file upload
   const handleFileChange = (event) => {
@@ -155,7 +152,7 @@ const Registration = () => {
   const processForm = async (data) => {
     try {
       // Validate that we have at least the minimum number of team members
-      if (teamMembers.length < minTeamSize - 1) {
+      if (data.teamMembers.length < minTeamSize) {
         toast.error(`This project requires at least ${minTeamSize} team members (including leader).`);
         return;
       }
@@ -167,16 +164,18 @@ const Registration = () => {
       }
 
       // Validate CAPTCHA
-      if (!captchaValue) {
-        toast.error("Please complete the CAPTCHA.");
-        return;
-      }
+      // if (!captchaValue) {
+      //   toast.error("Please complete the CAPTCHA.");
+      //   return;
+      // }
 
       // Create a new FormData instance
       const formData = new FormData();
       
       // Add all form fields
       formData.append("Team_Name", data.teamName);
+      formData.append("Institution_Name", data.instituteName);
+      formData.append("BA_Code","BA123");
       formData.append("Project_Name", data.projectTitle);
       formData.append("L_Name", data.leaderName);
       formData.append("L_Email", data.leaderEmail);
@@ -184,7 +183,7 @@ const Registration = () => {
       formData.append("L_CNIC", data.leaderCnic);
       
       // Append members dynamically
-      const members = teamMembers.map(member => ({
+      const members = data.teamMembers.map(member => ({
         Name: member.name,
         Email: member.email,
         Contact: member.phone.replace("+92", "0"), // Convert to local format
@@ -201,7 +200,7 @@ const Registration = () => {
 
       // Append the project document
       if (uploadedFiles[0]) {
-        formData.append("projectDocument", uploadedFiles[0]);
+        formData.append("Project_Report", uploadedFiles[0]);
       }
 
       // Send the API request
@@ -327,9 +326,8 @@ const Registration = () => {
 
   // Add a team member
   const addTeamMember = () => {
-    // Check if adding another member would exceed the maximum team size
-    if (teamMembers.length < maxTeamSize - 1) {
-      setTeamMembers([...teamMembers, { name: "", email: "", cnic: "", phone: "" }]);
+    if (fields.length < maxTeamSize - 1) {
+      append({ name: "", email: "", cnic: "", phone: "" }); // Use append from useFieldArray
     } else {
       toast.error(`Maximum team size is ${maxTeamSize} members (including leader)`);
     }
@@ -337,11 +335,8 @@ const Registration = () => {
 
   // Remove a team member
   const removeTeamMember = (index) => {
-    // Check if removing a member would go below the minimum team size
-    if (teamMembers.length > minTeamSize - 1) {
-      const updatedMembers = [...teamMembers];
-      updatedMembers.splice(index, 1);
-      setTeamMembers(updatedMembers);
+    if (fields.length > minTeamSize - 1) {
+      remove(index); // Use remove from useFieldArray
     } else {
       toast.error(`Minimum team size is ${minTeamSize} members (including leader)`);
     }
@@ -444,7 +439,7 @@ const Registration = () => {
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-red-500">Team Members Information</h2>
                 <div className="text-sm text-gray-400">
-                  {teamMembers.length + 1}/{maxTeamSize} members (including leader)
+                  {fields.length + 1}/{maxTeamSize} members (including leader)
                 </div>
               </div>
 
@@ -456,14 +451,14 @@ const Registration = () => {
                 </p>
               </div>
 
-              {teamMembers.map((_, index) => (
-                <div key={index} className="bg-gray-800 p-4 rounded-lg mb-4">
+              {fields.map((member, index) => (
+                <div key={member.id} className="bg-gray-800 p-4 rounded-lg mb-4">
                   <div className="flex justify-between items-center mb-3">
                     <h3 className="text-lg font-semibold text-red-500">Member {index + 2}</h3>
-                    {teamMembers.length > minTeamSize - 1 && (
+                    {fields.length > minTeamSize - 1 && (
                       <button
                         type="button"
-                        onClick={() => removeTeamMember(index)}
+                        onClick={() => remove(index)}
                         className="p-1 text-red-400 hover:text-red-300 focus:outline-none"
                         aria-label="Remove member"
                       >
@@ -483,7 +478,7 @@ const Registration = () => {
               ))}
               
               {/* Only show Add Team Member button if we haven't reached max team size */}
-              {teamMembers.length < maxTeamSize - 1 && (
+              {fields.length < maxTeamSize - 1 && (
                 <button
                   type="button"
                   onClick={addTeamMember}
@@ -639,25 +634,25 @@ const Registration = () => {
               
               <div className="bg-gray-800 p-4 rounded-md">
                 <h3 className="text-lg font-medium text-red-400 mb-2">Team Members</h3>
-                {teamMembers.map((_, index) => (
+                {watchedValues.teamMembers.map((member, index) => (
                   <div key={index} className="mb-4 border-b border-gray-700 pb-4 last:border-0 last:pb-0">
                     <h4 className="text-white font-medium mb-2">Member {index + 1}</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                       <div>
                         <p className="text-gray-400">Name:</p>
-                        <p className="font-medium">{watchedValues.teamMembers?.[index]?.name || "-"}</p>
+                        <p className="font-medium">{member.name || "-"}</p>
                       </div>
                       <div>
                         <p className="text-gray-400">Email:</p>
-                        <p className="font-medium">{watchedValues.teamMembers?.[index]?.email || "-"}</p>
+                        <p className="font-medium">{member.email || "-"}</p>
                       </div>
                       <div>
                         <p className="text-gray-400">CNIC:</p>
-                        <p className="font-medium">{watchedValues.teamMembers?.[index]?.cnic || "-"}</p>
+                        <p className="font-medium">{member.cnic || "-"}</p>
                       </div>
                       <div>
                         <p className="text-gray-400">Phone:</p>
-                        <p className="font-medium">{watchedValues.teamMembers?.[index]?.phone || "-"}</p>
+                        <p className="font-medium">{member.phone || "-"}</p>
                       </div>
                     </div>
                   </div>
@@ -677,7 +672,7 @@ const Registration = () => {
               </div>
 
               {/* reCAPTCHA Component */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <ReCAPTCHA
                   sitekey="6LdUIdUqAAAAAM84Ki3WS2ARudCLK4Bf2QnI1qWi" // Replace with your reCAPTCHA site key
                   onChange={(value) => setCaptchaValue(value)} // Set the CAPTCHA value
@@ -685,7 +680,7 @@ const Registration = () => {
                 {!captchaValue && (
                   <p className="mt-1 text-sm text-red-500">Please complete the CAPTCHA.</p>
                 )}
-              </div>
+              </div> */}
             </motion.div>
           )}
 
@@ -729,5 +724,4 @@ const Registration = () => {
     </div>
   );
 };
-
 export default Registration;
