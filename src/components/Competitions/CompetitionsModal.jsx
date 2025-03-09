@@ -39,24 +39,24 @@ const ModuleModal = ({
                     onClick={handleClose} // Close modal when clicking outside
                 >
                     <motion.div
-                        className="bg-[#1e1e1e] border border-[#333] rounded-lg w-[600px] h-[600px] p-6 shadow-lg overflow-auto relative"
+                        className="bg-[#1e1e1e] border border-[#333] rounded-lg w-[600px] m-4 p-6 shadow-lg overflow-auto relative"
                         initial={{ scale: 0.8 }}   // Initial scale (small size)
                         animate={{ scale: 1 }}     // Final scale (normal size)
                         exit={{ scale: 0.8 }}      // Scale down during exit animation
                         transition={{ duration: 0.3 }}  // Duration of the animation
                         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
                     >
-                        <div className="bg-[#9b2121] rounded-lg p-4 text-center">
+                        {/* <div className="bg-[#9b2121] rounded-lg p-4 text-center">
                             <img
                                 alt="Trophy icon"
                                 src="/logo.png"
                                 className="w-16 h-16 mx-auto"
                             />
-                        </div>
+                        </div> */}
                         <div className="text-2xl font-bold text-white mt-4 text-center">{title}</div>
-                        <div className="flex gap-2 justify-center mt-4">
+                        {/* <div className="flex gap-2 justify-center mt-4">
                             <div className="bg-[#d32f2f] rounded-full py-1 px-4 text-xs text-white">{category}</div>
-                        </div>
+                        </div> */}
                         <div className="flex justify-between mt-4 gap-2">
                             <div className="bg-[#333] p-4 rounded-lg w-1/2">
                                 <div className="text-[#d32f2f] text-xs flex items-center">
