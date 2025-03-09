@@ -7,7 +7,7 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ChevronLeft, ChevronRight, Check, Plus, Trash2 } from "lucide-react"
-import fetchCompetitions from "../../data/data-comp" // Import the fetch function
+import fetchCompetitions from "../../data/data-comp.js" // Import the fetch function
 
 // Define the base form validation schema
 const baseFormSchema = {
@@ -180,8 +180,20 @@ export default function MultiStepForm() {
   // Fetch competitions on component mount
   useEffect(() => {
     const loadCompetitions = async () => {
-      const competitions = await fetchCompetitions();
-      setCompetitionOptions(competitions);
+      const response = await fetch('https://dev-day-backend.vercel.app/Competition/allCompetitions');
+      const data = await response.json();
+      console.log("API Response:", data); // Log the full response for debugging
+      // Check if the response is valid and contains competitions
+      if (data.success && data.competitions) {
+        // Convert the competitions object into an array of competition objects
+        const competitionsArray = Object.entries(data.competitions).flatMap(([category, competitions]) => 
+          competitions.map(comp => ({ ...comp, category }))
+        );
+        setCompetitionOptions(competitionsArray);
+      } else {
+        console.error("Fetched competitions is not valid:", data);
+        setCompetitionOptions([]); // Reset to empty array if not valid
+      }
     };
 
     loadCompetitions();
@@ -190,22 +202,22 @@ export default function MultiStepForm() {
   // Update entry fee and team size limits when selected competition changes
   useEffect(() => {
     if (selectedCompetition) {
-      const competition = competitionOptions.find(comp => comp.title === selectedCompetition);
+      const competition = competitionOptions.find(comp => comp.Competition_Name === selectedCompetition);
       if (competition) {
-        const fee = parseFloat(competition.entryFee);
+        const fee = parseFloat(competition.Entry_Fee);
         setFormData(prev => ({ ...prev, entryFee: fee }));
         setValue('entryFee', fee); // Update the form value directly
         setEntryFeeAmount(fee); // Update the entry fee amount state
         
         // Set team size limits based on competition
-        if (competition.minParticipants) {
-          setMinTeamSize(competition.minParticipants);
+        if (competition.Min_Participants) {
+          setMinTeamSize(competition.Min_Participants);
           // Initialize with minimum required members
-          setTeamMembers(competition.minParticipants - 1); // Update to set the correct number of team members
+          setTeamMembers(competition.Min_Participants - 1); // Update to set the correct number of team members
         }
         
-        if (competition.maxParticipants) {
-          setMaxTeamSize(competition.maxParticipants);
+        if (competition.Max_Participants) {
+          setMaxTeamSize(competition.Max_Participants);
         }
       }
     }
@@ -494,7 +506,7 @@ export default function MultiStepForm() {
 
   // Filter competition options based on selected category
   const filteredCompetitions = selectedCategory
-    ? competitionOptions.filter(comp => comp.category === selectedCategory)
+    ? competitionOptions[selectedCategory] || [] // Access competitions by category
     : [];
 
   // Add a team member
@@ -548,6 +560,22 @@ export default function MultiStepForm() {
   useEffect(() => {
     console.log("Watched values:", watchedValues);
   }, [watchedValues]);
+
+  // Render competition categories and names
+  {competitionOptions.length > 0 && (
+    <div>
+      {Array.from(new Set(competitionOptions.map(comp => comp.category))).map((category) => (
+        <div key={category}>
+          <h2 className="text-xl font-semibold text-red-500">{category}</h2>
+          <ul>
+            {competitionOptions.filter(comp => comp.category === category).map(comp => (
+              <li key={comp.id} className="text-gray-200">{comp.Competition_Name}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )}
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 md:p-8">
@@ -637,12 +665,14 @@ export default function MultiStepForm() {
                 <select
                   id="competitionCategory"
                   {...register("competitionCategory")}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    setSelectedCompetition(""); // Reset selected competition when category changes
+                  }}
                   className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   <option value="">Select Category</option>
                   {[...new Set(competitionOptions.map(comp => comp.category))].map((category, index) => {
-                    // Map specific values to their display names
                     const displayName = category === "EE" ? "Electrical Engineering Competitions" :
                                         category === "CS" ? "Computer Science Competitions" :
                                         category === "GC" ? "General Competitions" :
@@ -670,10 +700,9 @@ export default function MultiStepForm() {
                   onChange={(e) => {
                     setSelectedCompetition(e.target.value);
                     // Set entry fee when competition changes
-                    const competition = competitionOptions.find(comp => comp.title === e.target.value);
+                    const competition = competitionOptions.find(comp => comp.Competition_Name === e.target.value);
                     if (competition) {
-                      // Update the form data with the entry fee
-                      const fee = parseFloat(competition.entryFee);
+                      const fee = parseFloat(competition.Entry_Fee);
                       setFormData(prev => ({ ...prev, entryFee: fee }));
                       setValue('entryFee', fee); // Update the form value directly
                       setEntryFeeAmount(fee); // Update the entry fee amount state
@@ -682,9 +711,9 @@ export default function MultiStepForm() {
                   className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   <option value="">Select Competition</option>
-                  {filteredCompetitions.map((option, index) => (
-                    <option key={`${option.title}-${index}`} value={option.title}>
-                      {option.title}
+                  {competitionOptions.filter(comp => comp.category === selectedCategory).map((option, index) => (
+                    <option key={`${option.id}-${index}`} value={option.Competition_Name}>
+                      {option.Competition_Name}
                     </option>
                   ))}
                 </select>
@@ -699,7 +728,7 @@ export default function MultiStepForm() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-gray-200">Entry Fee:</span>
                     <span className="text-lg font-bold text-red-400">
-                      PKR {parseFloat(competitionOptions.find(comp => comp.title === selectedCompetition)?.entryFee || 0)}
+                      PKR {parseFloat(competitionOptions.find(comp => comp.Competition_Name === selectedCompetition)?.Entry_Fee || 0)}
                     </span>
                   </div>
                 </div>
