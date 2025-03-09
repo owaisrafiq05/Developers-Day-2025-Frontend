@@ -5,7 +5,7 @@ import { toast, Toaster } from "sonner";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, Trash2, Plus } from "lucide-react";
 import SpotlightCard from "../SpotlightCard/SpotlightCard";
 
 // Define the base form validation schema
@@ -37,9 +37,7 @@ const baseFormSchema = {
   })).min(1, "At least one team member is required"),
 
   // Document
-  projectDocument: z.instanceof(File).refine(file => file.name.includes("project title"), {
-    message: "Document name must include the project title",
-  }),
+  projectDocument: z.instanceof(File),
 };
 
 // Define the form steps
@@ -52,14 +50,17 @@ const steps = [
 ];
 
 const Registration = () => {
-  const formRef = useRef(null);
-  const fieldsRef = useRef([]);
-
-  const [teamSize, setTeamSize] = useState(3);
+  const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
-  const [teamMembers, setTeamMembers] = useState([{ name: "", email: "", cnic: "", phone: "" }]); // Start with one member
+  const [teamMembers, setTeamMembers] = useState([
+    { name: "", email: "", cnic: "", phone: "" }, 
+    { name: "", email: "", cnic: "", phone: "" }
+  ]); 
+  const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
   const [validationSchema, setValidationSchema] = useState(z.object(baseFormSchema).passthrough());
+  const minTeamSize = 3;
+  const maxTeamSize = 4;
 
   const {
     register,
@@ -78,11 +79,25 @@ const Registration = () => {
   });
 
   const watchedValues = watch();
+  const delta = currentStep - previousStep;
 
   // Update team members fields in steps array
   useEffect(() => {
-    steps[2].fields = teamMembers.map((_, index) => `member${index + 1}`);
+    steps[2].fields = teamMembers.map((_, index) => `teamMembers[${index}]`);
   }, [teamMembers]);
+
+  // Handle file upload
+  const handleFileChange = (event) => {
+    console.log("File change event:", event.target.files);
+    const files = Array.from(event.target.files);
+    setUploadedFiles(files); // Store the actual file objects
+    console.log("Uploaded files:", files);
+    
+    // Set the file in the form data
+    if (files.length > 0) {
+      setValue("projectDocument", files[0]);
+    }
+  };
 
   // Handle next step navigation
   const next = async () => {
@@ -102,29 +117,118 @@ const Registration = () => {
     // Validate fields for the current step
     const output = await trigger(fields, { shouldFocus: true });
     if (!output) {
-      toast.error("Please fill all required fields correctly");
+      // Get specific error messages for the current step's fields
+      const currentErrors = fields.reduce((acc, field) => {
+        if (errors[field]) {
+          acc.push(`${field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${errors[field].message}`);
+        }
+        return acc;
+      }, []);
+
+      if (currentErrors.length > 0) {
+        // Show specific error messages
+        toast.error(
+          <div>
+            <p>Please fix the following errors:</p>
+            <ul className="list-disc pl-4 mt-1">
+              {currentErrors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        );
+      } else {
+        toast.error("Please fill all required fields correctly");
+      }
       return;
     }
 
+    setPreviousStep(currentStep);
     setCurrentStep((step) => step + 1);
   };
 
   // Handle previous step navigation
   const prev = () => {
     if (currentStep > 0) {
+      setPreviousStep(currentStep);
       setCurrentStep((step) => step - 1);
     }
   };
 
   // Process form submission
   const processForm = async (data) => {
-    console.log("Form submitted with data:", data);
-    // Handle form submission logic here
-    toast.success("Registration successful!");
+    try {
+      console.log("Form submitted with data:", data);
+      
+      // Validate that we have at least the minimum number of team members
+      if (teamMembers.length < minTeamSize - 1) {
+        toast.error(`This project requires at least ${minTeamSize} team members (including leader).`);
+        return;
+      }
+      
+      // Validate that payment screenshot is uploaded
+      if (uploadedFiles.length === 0) {
+        toast.error("Please upload a project document");
+        return;
+      }
+
+      // Here you would typically send the data to your backend
+      // For now, we'll just show a success message
+      toast.success("Registration successful!");
+      
+      // You could redirect to a success page here
+      // window.location.href = "/registration/success";
+    } catch (error) {
+      console.error("API Error:", error);
+      toast.error("An error occurred while submitting the form: " + error.message);
+    }
+  };
+
+  // Function to format CNIC input
+  const formatCnic = (value) => {
+    const cleaned = value.replace(/\D/g, "").slice(0, 13); // Limit to 13 digits
+    const formatted = cleaned.replace(/(\d{5})(\d{7})(\d?)/, "$1-$2-$3").slice(0, 15); // Format as 00000-0000000-0
+    return formatted;
+  };
+
+  // Function to format phone number input
+  const formatPhone = (value) => {
+    // If the value doesn't start with +92, add it
+    if (!value.startsWith('+92')) {
+      // Remove any non-digit characters
+      const digits = value.replace(/\D/g, "");
+      // Add +92 prefix
+      value = `+92${digits}`;
+    }
+    
+    // Clean the value (remove non-digits) and limit to 12 digits total
+    const cleaned = value.replace(/\D/g, "").slice(0, 12);
+    
+    // Format as +92XXXXXXXXXX
+    const formatted = `+92${cleaned.slice(2)}`;
+    
+    return formatted;
+  };
+
+  // Function to normalize email input
+  const normalizeEmail = (value) => {
+    // Trim whitespace and convert to lowercase
+    return value.trim().toLowerCase();
+  };
+
+  // Validate email format
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
   };
 
   // Render input field with label and error message
-  const renderField = (name, label, type = "text", placeholder = "") => {
+  const renderField = (name, label, type = "text", placeholder = "", onChange) => {
+    // Check if this is a phone field
+    const isPhoneField = name.toLowerCase().includes('phone');
+    // Check if this is an email field
+    const isEmailField = name.toLowerCase().includes('email');
+    
     return (
       <div className="mb-4">
         <label htmlFor={name} className="block text-sm font-medium text-gray-200 mb-1">
@@ -134,7 +238,40 @@ const Registration = () => {
           type={type}
           id={name}
           {...register(name)}
-          placeholder={placeholder}
+          onChange={(e) => {
+            // Apply special formatting for phone fields
+            if (isPhoneField && onChange) {
+              onChange(e);
+            }
+            // Apply normalization for email fields
+            else if (isEmailField) {
+              const normalizedValue = normalizeEmail(e.target.value);
+              e.target.value = normalizedValue;
+              
+              // Update React Hook Form's internal state with the normalized value
+              register(name).onChange(e);
+
+              // Provide immediate feedback on email format
+              if (normalizedValue && !validateEmail(normalizedValue)) {
+                e.target.classList.add('border-red-500');
+                e.target.classList.add('focus:ring-red-500');
+              } else {
+                e.target.classList.remove('border-red-500');
+                e.target.classList.add('focus:ring-blue-500');
+              }
+            }
+            // Call the original onChange if provided
+            else if (onChange) {
+              onChange(e);
+            }
+          }}
+          placeholder={isPhoneField ? "+92XXXXXXXXXX" : isEmailField ? "example@domain.com" : placeholder}
+          onFocus={(e) => {
+            // If this is a phone field and it's empty, add +92
+            if (isPhoneField && !e.target.value) {
+              e.target.value = "+92";
+            }
+          }}
           className={`w-full px-3 py-2 bg-gray-900 border rounded-md text-white focus:outline-none focus:ring-2 ${
             errors[name] ? "border-red-500 focus:ring-red-500" : "border-gray-700 focus:ring-blue-500"
           }`}
@@ -147,9 +284,51 @@ const Registration = () => {
     );
   };
 
+  // Add a team member
+  const addTeamMember = () => {
+    // Check if adding another member would exceed the maximum team size
+    if (teamMembers.length < maxTeamSize - 1) {
+      setTeamMembers([...teamMembers, { name: "", email: "", cnic: "", phone: "" }]);
+    } else {
+      toast.error(`Maximum team size is ${maxTeamSize} members (including leader)`);
+    }
+  };
+
+  // Remove a team member
+  const removeTeamMember = (index) => {
+    // Check if removing a member would go below the minimum team size
+    if (teamMembers.length > minTeamSize - 1) {
+      const updatedMembers = [...teamMembers];
+      updatedMembers.splice(index, 1);
+      setTeamMembers(updatedMembers);
+    } else {
+      toast.error(`Minimum team size is ${minTeamSize} members (including leader)`);
+    }
+  };
+
   return (
     <div className="min-h-screen text-white flex flex-col items-center justify-center p-4 md:p-8">
-      <Toaster position="bottom-left" theme="dark" />
+      <Toaster 
+        position="bottom-left" 
+        theme="dark"
+        toastOptions={{
+          success: {
+            style: {
+              background: 'rgba(34, 197, 94, 0.9)',
+              color: 'white',
+              border: '1px solid rgb(22, 163, 74)',
+            },
+            icon: <Check className="w-5 h-5" />,
+          },
+          error: {
+            style: {
+              background: 'rgba(239, 68, 68, 0.9)',
+              color: 'white',
+              border: '1px solid rgb(220, 38, 38)',
+            },
+          },
+        }}
+      />
       <div className="w-full max-w-4xl bg-gray-900 rounded-lg shadow-xl overflow-hidden">
         <div className="bg-gradient-to-r from-red-800 to-red-600 p-4 md:p-6">
           <h1 className="text-2xl md:text-3xl font-bold text-white">Project Xtreme Registration</h1>
@@ -176,11 +355,11 @@ const Registration = () => {
         </nav>
 
         {/* Form */}
-        <form ref={formRef} className="p-4 md:p-6" onSubmit={handleSubmit(processForm)} noValidate>
+        <form className="p-4 md:p-6" onSubmit={handleSubmit(processForm)} noValidate>
           {/* Step 1: Project Details */}
           {currentStep === 0 && (
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: delta >= 0 ? "50%" : "-50%" }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
               className="space-y-4"
@@ -195,7 +374,7 @@ const Registration = () => {
           {/* Step 2: Team Leader Information */}
           {currentStep === 1 && (
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: delta >= 0 ? "50%" : "-50%" }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
               className="space-y-4"
@@ -203,92 +382,252 @@ const Registration = () => {
               <h2 className="text-xl font-semibold text-red-500 mb-4">Team Leader Information</h2>
               {renderField("leaderName", "Full Name", "text", "Enter leader's full name")}
               {renderField("leaderEmail", "Email Address", "email", "Enter leader's email")}
-              {renderField("leaderCnic", "CNIC Number", "text", "Enter leader's CNIC")}
-              {renderField("leaderPhone", "Phone Number", "tel", "Enter leader's phone number")}
+              {renderField("leaderCnic", "CNIC Number", "text", "Enter leader's CNIC", (e) => {
+                e.target.value = formatCnic(e.target.value);
+              })}
+              {renderField("leaderPhone", "Phone Number", "tel", "Enter leader's phone number", (e) => {
+                e.target.value = formatPhone(e.target.value);
+              })}
             </motion.div>
           )}
 
           {/* Step 3: Team Members */}
           {currentStep === 2 && (
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: delta >= 0 ? "50%" : "-50%" }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
               className="space-y-4"
             >
-              <h2 className="text-xl font-semibold text-red-500 mb-4">Team Members Information</h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold text-red-500">Team Members Information</h2>
+                <div className="text-sm text-gray-400">
+                  {teamMembers.length + 1}/{maxTeamSize} members (including leader)
+                </div>
+              </div>
+
+              {/* Team size requirements info */}
+              <div className="p-3 bg-gray-800 rounded-md mb-4">
+                <p className="text-sm text-gray-300">
+                  This project requires a minimum of <span className="font-bold text-red-400">{minTeamSize}</span> and 
+                  a maximum of <span className="font-bold text-red-400">{maxTeamSize}</span> team members (including leader).
+                </p>
+              </div>
+
               {teamMembers.map((_, index) => (
-                <div key={index} className="bg-gray-800 p-4 rounded-lg">
-                  <h3 className="text-lg font-semibold text-red-500 mb-2">Member {index + 1}</h3>
-                  {renderField(`member${index + 1}Name`, "Full Name", "text", "Enter member's full name")}
-                  {renderField(`member${index + 1}Email`, "Email Address", "email", "Enter member's email")}
-                  {renderField(`member${index + 1}Cnic`, "CNIC Number", "text", "Enter member's CNIC")}
-                  {renderField(`member${index + 1}Phone`, "Phone Number", "tel", "Enter member's phone number")}
+                <div key={index} className="bg-gray-800 p-4 rounded-lg mb-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-lg font-semibold text-red-500">Member {index + 2}</h3>
+                    {teamMembers.length > minTeamSize - 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeTeamMember(index)}
+                        className="p-1 text-red-400 hover:text-red-300 focus:outline-none"
+                        aria-label="Remove member"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+                  {renderField(`teamMembers[${index}].name`, "Full Name", "text", "Enter member's full name")}
+                  {renderField(`teamMembers[${index}].email`, "Email Address", "email", "Enter member's email")}
+                  {renderField(`teamMembers[${index}].cnic`, "CNIC Number", "text", "Enter member's CNIC", (e) => {
+                    e.target.value = formatCnic(e.target.value);
+                  })}
+                  {renderField(`teamMembers[${index}].phone`, "Phone Number", "tel", "Enter member's phone number", (e) => {
+                    e.target.value = formatPhone(e.target.value);
+                  })}
                 </div>
               ))}
-              <button
-                type="button"
-                onClick={() => setTeamMembers([...teamMembers, { name: "", email: "", cnic: "", phone: "" }])}
-                className="mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md"
-              >
-                Add Team Member
-              </button>
+              
+              {/* Only show Add Team Member button if we haven't reached max team size */}
+              {teamMembers.length < maxTeamSize - 1 && (
+                <button
+                  type="button"
+                  onClick={addTeamMember}
+                  className="w-full py-2 px-4 mt-4 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-md flex items-center justify-center transition-colors"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Team Member
+                </button>
+              )}
             </motion.div>
           )}
 
           {/* Step 4: Upload Document */}
           {currentStep === 3 && (
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: delta >= 0 ? "50%" : "-50%" }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
               className="space-y-4"
             >
               <h2 className="text-xl font-semibold text-red-500 mb-4">Upload Document</h2>
-          <input
-                type="file"
-                accept=".pdf,.doc,.docx"
-                className="p-3 bg-gray-800 rounded-lg border border-gray-700 focus:border-red-600 hover:border-red-600 outline-none w-full"
-                required
-              />
-              <p className="text-sm text-gray-400">Document must include project title and abstract. Name of the file must be the project title.</p>
+              
+              <div className="group relative w-full">
+                <div className="relative overflow-hidden rounded-2xl bg-slate-950 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-red-500/10">
+                  <div className="relative p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">Upload Project Document</h3>
+                        <p className="text-sm text-slate-400">Drag & drop your file here</p>
+                      </div>
+                      <div className="rounded-lg bg-red-500/10 p-2">
+                        <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div className="group/dropzone mt-6">
+                      <div className="relative rounded-xl border-2 border-dashed border-slate-700 bg-slate-900/50 p-8 transition-colors group-hover/dropzone:border-red-500/50">
+                        <input
+                          type="file"
+                          className="absolute inset-0 z-50 h-full w-full cursor-pointer opacity-0"
+                          accept=".pdf,.doc,.docx"
+                          onChange={handleFileChange}
+                        />
+                        <div className="space-y-6 text-center">
+                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-900">
+                            <svg className="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 13h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                          </div>
+
+                          <div className="space-y-2">
+                            <p className="text-base font-medium text-white">Drop your file here or browse</p>
+                            <p className="text-sm text-slate-400">Support files: PDF, DOC, DOCX</p>
+                            <p className="text-xs text-slate-400">Max file size: 10MB</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 space-y-4">
+                      {uploadedFiles.map((file, index) => (
+                        <div key={`${file.name}-${index}`} className="rounded-xl bg-slate-900/50 p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="rounded-lg bg-red-500/10 p-2">
+                                <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <p className="font-medium text-white">{file.name}</p>
+                                <p className="text-xs text-slate-400">File uploaded</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <button 
+                                type="button"
+                                onClick={() => setUploadedFiles([])}
+                                className="text-slate-400 transition-colors hover:text-white"
+                              >
+                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <p className="text-sm text-gray-400">Document must include project title and abstract.</p>
             </motion.div>
           )}
 
           {/* Step 5: Review & Submit */}
           {currentStep === 4 && (
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: delta >= 0 ? "50%" : "-50%" }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
               <h2 className="text-xl font-semibold text-red-500 mb-4">Review Your Information</h2>
-              {/* Display all collected information for review */}
+              
               <div className="bg-gray-800 p-4 rounded-md">
                 <h3 className="text-lg font-medium text-red-400 mb-2">Project Details</h3>
-                <p>Project Title: {watchedValues.projectTitle}</p>
-                <p>Institute Name: {watchedValues.instituteName}</p>
-                <p>Brand Ambassador Code: {watchedValues.brandAmbassadorCode || "Not provided"}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-400">Project Title:</p>
+                    <p className="font-medium">{watchedValues.projectTitle || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Institute Name:</p>
+                    <p className="font-medium">{watchedValues.instituteName || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Brand Ambassador Code:</p>
+                    <p className="font-medium">{watchedValues.brandAmbassadorCode || "Not provided"}</p>
+                  </div>
+                </div>
               </div>
+              
               <div className="bg-gray-800 p-4 rounded-md">
                 <h3 className="text-lg font-medium text-red-400 mb-2">Team Leader</h3>
-                <p>Name: {watchedValues.leaderName}</p>
-                <p>Email: {watchedValues.leaderEmail}</p>
-                <p>CNIC: {watchedValues.leaderCnic}</p>
-                <p>Phone: {watchedValues.leaderPhone}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-400">Name:</p>
+                    <p className="font-medium">{watchedValues.leaderName || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Email:</p>
+                    <p className="font-medium">{watchedValues.leaderEmail || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">CNIC:</p>
+                    <p className="font-medium">{watchedValues.leaderCnic || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Phone:</p>
+                    <p className="font-medium">{watchedValues.leaderPhone || "-"}</p>
+                  </div>
+                </div>
               </div>
+              
               <div className="bg-gray-800 p-4 rounded-md">
                 <h3 className="text-lg font-medium text-red-400 mb-2">Team Members</h3>
                 {teamMembers.map((_, index) => (
-                  <div key={index}>
-                    <h4 className="text-white font-medium">Member {index + 1}</h4>
-                    <p>Name: {watchedValues[`member${index + 1}Name`]}</p>
-                    <p>Email: {watchedValues[`member${index + 1}Email`]}</p>
-                    <p>CNIC: {watchedValues[`member${index + 1}Cnic`]}</p>
-                    <p>Phone: {watchedValues[`member${index + 1}Phone`]}</p>
+                  <div key={index} className="mb-4 border-b border-gray-700 pb-4 last:border-0 last:pb-0">
+                    <h4 className="text-white font-medium mb-2">Member {index + 1}</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-gray-400">Name:</p>
+                        <p className="font-medium">{watchedValues.teamMembers?.[index]?.name || "-"}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400">Email:</p>
+                        <p className="font-medium">{watchedValues.teamMembers?.[index]?.email || "-"}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400">CNIC:</p>
+                        <p className="font-medium">{watchedValues.teamMembers?.[index]?.cnic || "-"}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400">Phone:</p>
+                        <p className="font-medium">{watchedValues.teamMembers?.[index]?.phone || "-"}</p>
+                      </div>
+                    </div>
                   </div>
                 ))}
+              </div>
+              
+              <div className="bg-gray-800 p-4 rounded-md">
+                <h3 className="text-lg font-medium text-red-400 mb-2">Uploaded Document</h3>
+                {uploadedFiles.length > 0 ? (
+                  <div className="text-sm">
+                    <p className="text-gray-400">File Name:</p>
+                    <p className="font-medium">{uploadedFiles[0].name}</p>
+                  </div>
+                ) : (
+                  <p className="text-yellow-500 text-sm">No document uploaded yet</p>
+                )}
               </div>
             </motion.div>
           )}
