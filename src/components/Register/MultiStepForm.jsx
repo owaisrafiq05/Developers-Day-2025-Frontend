@@ -878,6 +878,7 @@ export default function MultiStepForm() {
                     <p className="text-gray-400">Email:</p>
                     <p className="font-medium">{watchedValues.leaderEmail || "-"}</p>
                   </div>
+                  
                   <div>
                     <p className="text-gray-400">CNIC:</p>
                     <p className="font-medium">{watchedValues.leaderCnic || "-"}</p>
@@ -963,15 +964,12 @@ export default function MultiStepForm() {
                 </div>
               </div>
 
-              {/* reCAPTCHA Component */}
-              <div className="mb-4">
-                <ReCAPTCHA
-                  sitekey="6LdUIdUqAAAAAM84Ki3WS2ARudCLK4Bf2QnI1qWi"
-                  onChange={(value) => setCaptchaValue(value)} // Set the CAPTCHA value
-                />
-                {!captchaValue && (
-                  <p className="mt-1 text-sm text-red-500">Please complete the CAPTCHA.</p>
-                )}
+              {/* New Section for Note */}
+              <div className="bg-red-800  p-4 rounded-md">
+                <h3 className="text-lg font-medium text-white mb-2">Note</h3>
+                <p className="text-white">
+                  An email will be sent to you upon successful registration and success screen would be shown. If you face any issues while registering, please contact Mr. Shaheer Luqman (Tech Lead) at <span className="font-bold">+92 310 0124127</span>.
+                </p>
               </div>
 
               <div className="group relative w-full">
@@ -1039,6 +1037,19 @@ export default function MultiStepForm() {
                         </div>
                       ))}
                     </div>
+
+
+              {/* reCAPTCHA Component */}
+              <div className="mb-4">
+                <ReCAPTCHA
+                  sitekey="6LdUIdUqAAAAAM84Ki3WS2ARudCLK4Bf2QnI1qWi"
+                  onChange={(value) => setCaptchaValue(value)} // Set the CAPTCHA value
+                />
+                {!captchaValue && (
+                  <p className="mt-1 text-sm text-red-500">Please complete the CAPTCHA.</p>
+                )}
+              </div>
+
                   </div>
                 </div>
               </div>
@@ -1087,7 +1098,7 @@ export default function MultiStepForm() {
                 )}
               </button>
             ) : (
-              // Next button for all other steps
+              
           <button
             type="button"
             onClick={next}
