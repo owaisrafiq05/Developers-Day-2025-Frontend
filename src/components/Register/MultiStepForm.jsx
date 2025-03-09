@@ -394,7 +394,7 @@ export default function MultiStepForm() {
     setCurrentStep((step) => step + 1);
 };
 
-  // Handle previous step navigation
+
   const prev = () => {
     if (currentStep > 0) {
       setPreviousStep(currentStep);
