@@ -152,7 +152,7 @@ const Registration = () => {
   const processForm = async (data) => {
     try {
       // Validate that we have at least the minimum number of team members
-      if (data.teamMembers.length < minTeamSize) {
+      if (data.teamMembers.length < (minTeamSize-1)) {
         toast.error(`This project requires at least ${minTeamSize} team members (including leader).`);
         return;
       }
@@ -175,7 +175,6 @@ const Registration = () => {
       // Add all form fields
       formData.append("Team_Name", data.teamName);
       formData.append("Institution_Name", data.instituteName);
-      formData.append("BA_Code","BA123");
       formData.append("Project_Name", data.projectTitle);
       formData.append("L_Name", data.leaderName);
       formData.append("L_Email", data.leaderEmail);
@@ -194,9 +193,7 @@ const Registration = () => {
       formData.append("Members", JSON.stringify(members));
 
       // Append brand ambassador code if available
-      if (data.brandAmbassadorCode) {
         formData.append("BA_Code", data.brandAmbassadorCode);
-      }
 
       // Append the project document
       if (uploadedFiles[0]) {
