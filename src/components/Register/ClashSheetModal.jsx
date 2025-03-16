@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import {useState } from "react"
 import Image from 'next/image';
 
 export default function ClashSheetModal() {
@@ -19,6 +19,7 @@ export default function ClashSheetModal() {
     <>
       {/* Desktop View - Full Screen Image */}
       <div className="hidden md:block w-full">
+      <h2 className="text-2xl font-semibold text-white py-4 text-center">Competition time slots</h2>
         <Image
           src={imageUrl}
           alt="Clash Sheet"
@@ -35,6 +36,7 @@ export default function ClashSheetModal() {
           onClick={() => setIsModalOpen(true)}
           className="w-full relative"
         >
+            <h2 className="text-2xl font-semibold text-white py-4 text-center">Competition time slots</h2>
           <Image
             src={imageUrl}
             alt="Clash Sheet"
