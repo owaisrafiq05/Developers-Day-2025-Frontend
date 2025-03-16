@@ -6,7 +6,7 @@ import Image from 'next/image';
 export default function ClashSheetModal() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
-  const imageUrl = "https://res.cloudinary.com/dgjmm3usy/image/upload/v1742136511/clashSheet_lvyjq8.png";
+  const imageUrl = "https://i.ibb.co/1ffbMxYB/clash-Sheet.png";
 
   // Handle click outside modal
   const handleBackdropClick = (e) => {
