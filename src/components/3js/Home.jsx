@@ -51,6 +51,43 @@ const PageHeader = () => {
           <div className="ml-10">
             <span className="text-xl lg-text-3xl md:ml-2">17th April 2025 at FAST NUCES, Karachi</span>
           </div>
+
+          <div className="ml-10 mt-8">
+            <a 
+              href="/registration"
+              className="relative inline-flex items-center justify-center px-8 py-4 
+                overflow-hidden font-bold rounded-lg group bg-gradient-to-br 
+                from-[#ff3333] to-[#ff6666] text-white
+                transition-all duration-300 ease-out
+                hover:scale-105 hover:shadow-[0_0_40px_rgba(255,51,51,0.4)]
+                active:scale-95
+                before:absolute before:inset-0
+                before:bg-gradient-to-br before:from-[#ff4444] before:to-[#ff7777]
+                before:transition-all before:duration-300 before:ease-out before:opacity-0
+                hover:before:opacity-100
+                after:absolute after:inset-0 after:-z-10
+                after:bg-gradient-to-br after:from-[#ff3333] after:to-[#ff6666]
+                after:blur-xl after:transition-all after:duration-300
+                after:scale-105 after:opacity-40
+                hover:after:scale-110 hover:after:opacity-70"
+            >
+              <span className="relative z-10 flex items-center">
+                Register Now
+                <svg 
+                  className="ml-2 -mr-1 w-4 h-4" 
+                  fill="currentColor" 
+                  viewBox="0 0 20 20" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path 
+                    fillRule="evenodd" 
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" 
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </a>
+          </div>
         </div>
       </div>
 
