@@ -110,7 +110,7 @@ export default function Module() {
   }, {})
 
   // Custom order for categories
-  const categoryOrder = ["Computer Science Competitions", "Electrical Engineering Competitions", "General Competitions", "ESports Competitions"]
+  const categoryOrder = ["Computer Science Competitions", "Electrical Engineering Competitions", "General Competitions", "Business Competitions", "ESports Competitions"]
 
   // Sort categories according to the custom order
   const sortedCategories = Object.keys(filteredData).sort((a, b) => {

@@ -691,6 +691,7 @@ export default function MultiStepForm() {
                     const displayName = category === "EE" ? "Electrical Engineering Competitions" :
                                         category === "CS" ? "Computer Science Competitions" :
                                         category === "GC" ? "General Competitions" :
+                                        category === "BC" ? "Business Competitions" :
                                         category; // Default to the original category if no match
                     return (
                       <option key={`${category}-${index}`} value={category}>
