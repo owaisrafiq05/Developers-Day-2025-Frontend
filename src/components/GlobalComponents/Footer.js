@@ -42,7 +42,7 @@ const developers = [
   {
     name: "Hashir Ali",
     role: "Deputy of Frontend Team",
-    linkedin: "https://www.linkedin.com/mwlite/profile/in/hashir-ali-978620279",
+    linkedin: "https://www.linkedin.com/in/hashir-ali-978620279",
   },
 ]
 
