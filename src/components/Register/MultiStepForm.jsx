@@ -727,7 +727,7 @@ export default function MultiStepForm() {
                   className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   <option value="">Select Competition</option>
-                  {competitionOptions.filter(comp => comp.category === selectedCategory).map((option, index) => (
+                  {competitionOptions.filter(comp => comp.category === selectedCategory && !comp.is_filled).map((option, index) => (
                     <option key={`${option.id}-${index}`} value={option.Competition_Name}>
                       {option.Competition_Name}
                     </option>
