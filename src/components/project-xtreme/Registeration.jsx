@@ -40,6 +40,8 @@ const baseFormSchema = {
 
   // Document
   projectDocument: z.instanceof(File),
+  paymentScreenshots: z.instanceof(File),
+  entryFee: z.literal(4000), // Entry fee for the competition
 };
 
 // Define the form steps
@@ -48,7 +50,8 @@ const steps = [
   { id: "Step 2", name: "Team Leader Information", fields: ["leaderName", "leaderEmail", "leaderCnic", "leaderPhone"] },
   { id: "Step 3", name: "Team Members", fields: [] }, // Will be populated dynamically based on team size
   { id: "Step 4", name: "Upload Document", fields: ["projectDocument"] },
-  { id: "Step 5", name: "Review & Submit", fields: [] },
+  { id: "Step 5", name: "Review", fields: [] },
+  { id: "Step 6", name: "Payment", fields: ["paymentScreenshots", "entryFee"]},
 ];
 
 const Registration = () => {
@@ -56,7 +59,9 @@ const Registration = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
+  const [paymentScreenshots, setPaymentScreenshots] = useState([]); // State for payment screenshot
   const [validationSchema, setValidationSchema] = useState(z.object(baseFormSchema).passthrough());
+  const [entryFeeAmount, setEntryFeeAmount] = useState(4000); // State to track entry fee amount
   const minTeamSize = 3;
   const maxTeamSize = 4;
   const [captchaValue, setCaptchaValue] = useState(null); // State for CAPTCHA value
@@ -98,6 +103,14 @@ const Registration = () => {
     setUploadedFiles(files); // Store the actual file objects
     if (files.length > 0) {
       setValue("projectDocument", files[0]);
+    }
+  };
+
+  const handleScreenshotChange = (event) => {
+    const files = Array.from(event.target.files);
+    setPaymentScreenshots(files); // Store the actual file objects
+    if (files.length > 0) {
+      setValue("paymentScreenshots", files[0]);
     }
   };
 
@@ -173,6 +186,13 @@ const Registration = () => {
         return;
       }
 
+      // Validate that a project document is uploaded
+      if (paymentScreenshots.length === 0) {
+        toast.error("Please upload a project document");
+        setIsSubmitting(false); // Reset loading state
+        return;
+      }
+
       // Validate CAPTCHA
       if (!captchaValue) {
         toast.error("Please complete the CAPTCHA.");
@@ -211,6 +231,10 @@ const Registration = () => {
       // Append the project document
       if (uploadedFiles[0]) {
         formData.append("Project_Report", uploadedFiles[0]);
+      }
+
+      if(paymentScreenshots[0]) {
+        formData.append("Payment_Photo", paymentScreenshots[0]);
       }
 
       // Send the API request
@@ -590,6 +614,133 @@ const Registration = () => {
             </motion.div>
           )}
 
+          {/* Step 5: Payment */}
+          {currentStep === 5 && (
+            <motion.div
+              initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="space-y-6"
+            >
+              <h2 className="text-xl font-semibold text-red-500 mb-4">Payment</h2>
+
+              {/* Hidden input to ensure entryFee is registered with the form */}
+              <input 
+                type="hidden" 
+                {...register("entryFee")} 
+                value={parseFloat(watchedValues.entryFee || formData.entryFee || entryFeeAmount || 0)} 
+              />
+              
+              <div className="bg-gray-800 p-4 rounded-md">
+                <h3 className="text-lg font-medium text-red-400 mb-2">Payment Details</h3>
+                <p className="text-gray-400">Account Title: MUHAMMAD HASSAAN</p>
+                <p className="text-gray-400">IBAN: PK30MPBL9971727140101389</p>
+                <p className="text-gray-400">Account No: 6-99-71-29310-714-101389</p>
+                <p className="text-gray-400">Bank: Habib Metropolitan Bank Limited</p>
+                <p className="text-gray-400">Branch: IBB Baitul Mukarram Branch, Karachi</p>
+                
+                {/* Highlighted Entry Fee */}
+                <div className="mt-4 p-3 bg-red-900/30 border border-red-500 rounded-md">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-white">Entry Fee:</span>
+                    <span className="text-xl font-bold text-red-400">
+                      PKR {parseFloat(watchedValues.entryFee || formData.entryFee || entryFeeAmount || 0)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* New Section for Note */}
+              <div className="bg-red-800  p-4 rounded-md">
+                <h3 className="text-lg font-medium text-white mb-2">Note</h3>
+                <p className="text-white">
+                  An email will be sent to you upon successful registration and success screen would be shown. If you face any issues while registering, please contact Mr. Shaheer Luqman (Tech Lead) at <span className="font-bold">+92 310 0124127</span>.
+                </p>
+              </div>
+
+              <div className="group relative w-full">
+                <div className="relative overflow-hidden rounded-2xl bg-slate-950 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-500/10">
+                  <div className="relative p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">Upload Receipt Screenshot</h3>
+                        <p className="text-sm text-slate-400">Drag & drop your files here</p>
+                      </div>
+                      <div className="rounded-lg bg-cyan-500/10 p-2">
+                        <svg className="h-6 w-6 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div className="group/dropzone mt-6">
+                      <div className="relative rounded-xl border-2 border-dashed border-slate-700 bg-slate-900/50 p-8 transition-colors group-hover/dropzone:border-cyan-500/50">
+                        <input
+                          type="file"
+                          className="absolute inset-0 z-50 h-full w-full cursor-pointer opacity-0"
+                          multiple=""
+                          onChange={handleScreenshotChange} // Handle file change
+                        />
+                        <div className="space-y-6 text-center">
+                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-900">
+                            <svg className="h-10 w-10 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 13h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                          </div>
+
+                          <div className="space-y-2">
+                            <p className="text-base font-medium text-white">Drop your files here or browse</p>
+                            <p className="text-sm text-slate-400">Support files: PDF, DOC, DOCX, JPG, PNG</p>
+                            <p className="text-xs text-slate-400">Max file size: 10MB</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 space-y-4">
+                      {paymentScreenshots.map((file, index) => (
+                        <div key={`${file.name}-${index}`} className="rounded-xl bg-slate-900/50 p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="rounded-lg bg-cyan-500/10 p-2">
+                                <svg className="h-6 w-6 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <p className="font-medium text-white">{file.name}</p>
+                                <p className="text-xs text-slate-400">File uploaded</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <button className="text-slate-400 transition-colors hover:text-white">
+                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+              {/* reCAPTCHA Component */}
+              <div className="mb-4">
+                <ReCAPTCHA
+                  sitekey="6LdUIdUqAAAAAM84Ki3WS2ARudCLK4Bf2QnI1qWi" // Replace with your reCAPTCHA site key
+                  onChange={(value) => setCaptchaValue(value)} // Set the CAPTCHA value
+                />
+                {!captchaValue && (
+                  <p className="mt-1 text-sm text-red-500">Please complete the CAPTCHA.</p>
+                )}
+              </div>
+
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* Step 5: Review & Submit */}
           {currentStep === 4 && (
             <motion.div
@@ -683,16 +834,7 @@ const Registration = () => {
                 )}
               </div>
 
-              {/* reCAPTCHA Component */}
-              <div className="mb-4">
-                <ReCAPTCHA
-                  sitekey="6LdUIdUqAAAAAM84Ki3WS2ARudCLK4Bf2QnI1qWi" // Replace with your reCAPTCHA site key
-                  onChange={(value) => setCaptchaValue(value)} // Set the CAPTCHA value
-                />
-                {!captchaValue && (
-                  <p className="mt-1 text-sm text-red-500">Please complete the CAPTCHA.</p>
-                )}
-              </div>
+              
             </motion.div>
           )}
 

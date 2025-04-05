@@ -95,7 +95,7 @@ const steps = [
   },
   {
     id: "Step 4",
-    name: "Review & Submit",
+    name: "Review",
     fields: [],
   },
   {
