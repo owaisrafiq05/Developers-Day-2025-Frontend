@@ -119,12 +119,6 @@ const Registration = () => {
     // Update form data with current values
     setFormData((prev) => ({ ...prev, ...watchedValues }));
 
-    // If we're on the review step, submit the form
-    if (currentStep === steps.length - 1) {
-      await handleSubmit(processForm)();
-      return;
-    }
-
     // Get the fields for the current step
     const fields = steps[currentStep].fields;
 
@@ -155,6 +149,17 @@ const Registration = () => {
       return;
     }
 
+    // If we're on the final step (Payment), submit the form
+    if (currentStep === steps.length - 1) {
+      try {
+        await processForm(watchedValues);
+      } catch (error) {
+        console.error("Form submission error:", error);
+      }
+      return;
+    }
+
+    // Otherwise, proceed to the next step
     setPreviousStep(currentStep);
     setCurrentStep((step) => step + 1);
   };
@@ -188,7 +193,7 @@ const Registration = () => {
 
       // Validate that a project document is uploaded
       if (paymentScreenshots.length === 0) {
-        toast.error("Please upload a project document");
+        toast.error("Please upload a payment screenshot");
         setIsSubmitting(false); // Reset loading state
         return;
       }
@@ -427,7 +432,14 @@ const Registration = () => {
         </nav>
 
         {/* Form */}
-        <form className="p-4 md:p-6" onSubmit={handleSubmit(processForm)} noValidate>
+        <form className="p-4 md:p-6" onSubmit={(e) => {
+          e.preventDefault(); // Prevent default form submission
+          if (currentStep === steps.length - 1) {
+            processForm(watchedValues);
+          } else {
+            next();
+          }
+        }} noValidate>
           {/* Step 1: Project Details */}
           {currentStep === 0 && (
             <motion.div
@@ -857,7 +869,13 @@ const Registration = () => {
             {currentStep === steps.length - 1 ? (
               <button
                 type="button"
-                onClick={handleSubmit(processForm)}
+                onClick={() => {
+                  if (!isSubmitting) {
+                    // Handle manual form submission on the final step
+                    const currentValues = watch();
+                    processForm(currentValues);
+                  }
+                }}
                 disabled={isSubmitting}
                 className="px-4 py-2 rounded-md flex items-center bg-red-600 text-white hover:bg-red-700 disabled:bg-red-800 disabled:cursor-not-allowed"
               >
