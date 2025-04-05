@@ -25,6 +25,10 @@ const rules = [
     title: "Participation Fee", 
     description: "<ul class='list-disc pl-5 mt-2'><li>Participation fee is <b>4,000 PKR</b>.</li></ul>" 
   },
+  {
+    title: "Registration Deadline",
+    description: "<ul class='list-disc pl-5 mt-2'><li>Deadline for registration is <b>April 10, 2025</b>.</li></ul>"
+  },
 ];
 
 const Rules = () => {
