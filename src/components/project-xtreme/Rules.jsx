@@ -7,7 +7,7 @@ import gsap from "gsap";
 const rules = [
   { 
     title: "Project Requirements", 
-    description: "<ul class='list-disc pl-5 mt-2'><li>The idea must be unique.</li><li>If selected for the onsite round, teams must present some tangible results, a platform, or a working project.</li></ul>" 
+    description: "<ul class='list-disc pl-5 mt-2'><li>The idea must be unique.</li><li>Teams must present some tangible results, a platform, or a working project.</li></ul>" 
   },
   { 
     title: "Team Formation", 
@@ -15,15 +15,15 @@ const rules = [
   },
   { 
     title: "Competition Structure", 
-    description: "<ul class='list-disc pl-5 mt-2'><li>Round 1: Teams must submit an abstract of their project.</li><li>Evaluation Criteria: Projects will be judged by a jury based on:<ul class='list-disc pl-5 mt-1'><li>Problem Complexity</li><li>Creativity</li><li>Innovation</li></ul></li><li>Selection for Onsite Round: Only 40 projects will qualify for the onsite round.</li></ul>" 
+    description: "<ul class='list-disc pl-5 mt-2'><li>Teams will be provided a designated space to present their project.</li><li>A jury of industry experts will evaluate the projects.</li><li>Evaluation Criteria: Projects will be judged by a jury based on:<ul class='list-disc pl-5 mt-1'><li>Problem Complexity</li><li>Creativity</li><li>Innovation</li></ul></li><li>Only 40 projects will compete in this competition.</li></ul>" 
   },
   { 
-    title: "Onsite Round", 
-    description: "<ul class='list-disc pl-5 mt-2'><li>Selected teams will be provided a designated space to present their project.</li><li>A jury of industry experts will evaluate the projects.</li></ul>" 
+    title: "Who can Participate?", 
+    description: "<ul class='list-disc pl-5 mt-2'><li>Any team who has developed a well-executed, innovative project and can effectively showcase its impact and functionality.</li></ul>" 
   },
   { 
     title: "Participation Fee", 
-    description: "<ul class='list-disc pl-5 mt-2'><li>Teams selected for the onsite round must pay a fee of <b>4000 PKR</b>.</li></ul>" 
+    description: "<ul class='list-disc pl-5 mt-2'><li>Participation fee is <b>4,000 PKR</b>.</li></ul>" 
   },
 ];
 
