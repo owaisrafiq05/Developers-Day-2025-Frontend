@@ -107,7 +107,7 @@ const ProjectXtreme = () => {
 
       <SpotlightCard
         spotlightColor="rgba(0, 0, 0, 0)"
-        className=" rounded-xl  p-6 md:p-8 bg-transparent border-0"
+        className=" rounded-xl p-2 md:p-8 bg-transparent border-0"
       >
         {/* Main Content Section */}
         <motion.section
