@@ -69,7 +69,7 @@ const Rules = () => {
         </div>
 
         {/* Spotlight Card */}
-        <SpotlightCard className="bg-transparent">
+        <SpotlightCard className="bg-transparent p-4 md:p-8">
           <div className="absolute inset-0 bg-gray-900 to-transparent opacity-30 blur-xl" />
 
           {/* Rules List */}

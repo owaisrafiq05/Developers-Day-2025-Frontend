@@ -34,7 +34,7 @@ const Stats = () => {
           transition={{ duration: 0.4, delay: 0.4 }}
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
-          <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+          <SpotlightCard className="absolute top-0 left-0 p-8 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
             <h1 className="text-5xl text-left w-full mb-2">
               <CountUp
                 from={0}
@@ -58,7 +58,7 @@ const Stats = () => {
           transition={{ duration: 0.4, delay: 0.4 }}
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
-          <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+          <SpotlightCard className="absolute top-0 left-0 p-8 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
             <h1 className="text-5xl text-left w-full mb-2">
               <CountUp
                 from={0}
@@ -82,7 +82,7 @@ const Stats = () => {
           transition={{ duration: 0.4, delay: 0.4 }}
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
-          <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+          <SpotlightCard className="absolute top-0 left-0 p-8 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
             <h1 className="text-5xl text-left w-full mb-2">
               <CountUp
                 from={0}
@@ -106,7 +106,7 @@ const Stats = () => {
           transition={{ duration: 0.4, delay: 0.4 }}
           className="relative z-10 w-[275px] min-h-[200px] rounded-2xl flex flex-col justify-center items-center gap-3 text-center"
         >
-          <SpotlightCard className="absolute top-0 left-0 p-10 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
+          <SpotlightCard className="absolute top-0 left-0 p-8 w-full h-full bg-gradient-to-br from-[#6e0a0a] to-[#3f070a]">
             <h1 className="text-5xl text-left w-full mb-2">
               <CountUp
                 from={0}

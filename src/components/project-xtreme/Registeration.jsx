@@ -414,11 +414,11 @@ const Registration = () => {
 
         {/* Progress steps */}
         <nav className="p-4 border-b border-gray-800">
-          <ol className="flex flex-wrap justify-between">
+          <ol className="flex flex-wrap justify-between gap-auto sm:gap-2">
             {steps.map((step, index) => (
-              <li key={step.name} className={`flex items-center ${index > 0 ? "ml-2" : ""}`}>
+              <li key={step.name} className={`flex items-center`}>
                 <div
-                  className={`flex items-center justify-center w-8 h-8 rounded-full mr-2 
+                  className={`flex items-center justify-center w-8 h-8 rounded-full md:mr-2
                     ${currentStep > index ? "bg-red-600 text-white" : currentStep === index ? "bg-red-500 text-white" : "bg-gray-700 text-gray-300"}`}
                 >
                   {currentStep > index ? <Check className="w-5 h-5" /> : <span>{index + 1}</span>}

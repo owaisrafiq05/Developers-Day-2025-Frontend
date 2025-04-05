@@ -56,7 +56,7 @@ const WhatIsProjectXtreme = () => {
           <div className="space-y-6">
             <SpotlightCard
               spotlightColor="rgba(255, 0, 0, 0.4)"
-              className="rounded-xl p-6 md:p-8 bg-transparent border-0"
+              className="rounded-xl p-2 md:p-8 bg-transparent border-0"
             >
               <p className="text-lg leading-relaxed">
                 Project Xtreme is the ultimate competition for 
@@ -76,7 +76,7 @@ const WhatIsProjectXtreme = () => {
 
           {/* Key highlights with SpotlightCard */}
           <div className="bg-transparent rounded-lg shadow-lg">
-            <SpotlightCard className="rounded-lg p-6 md:p-8 bg-red-900/80">
+            <SpotlightCard className="rounded-lg p-4 md:p-8 bg-red-900/80">
               <h2 className="text-2xl font-bold mb-4 text-white">
                 Key Highlights
               </h2>

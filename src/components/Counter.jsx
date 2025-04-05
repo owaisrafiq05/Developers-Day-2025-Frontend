@@ -57,7 +57,7 @@ export default function Countdown() {
           transition={{ duration: 0.4, delay: 0.4 }}
           className="relative z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 flex flex-col justify-center items-center gap-1 text-center border-0"
         >
-          <SpotlightCard className="absolute top-0 left-0 w-full h-full bg-gradient-to-br bg-transparent border-white transition duration-300 hover:shadow-lg  hover:shadow-red-500/50 group">
+          <SpotlightCard className="absolute top-0 left-0 w-full h-full bg-gradient-to-br bg-transparent border-white transition duration-300 hover:shadow-lg p-8 hover:shadow-red-500/50 group">
           <div
             key={unit.label}
             className="flex flex-col items-center justify-center bg-transparent 
