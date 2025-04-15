@@ -1,6 +1,5 @@
 import RegisterHero from '@/components/Register/RegisterHero'
 import Squares from "@/components/Squares/Squares";
-import MultiStepForm from '@/components/Register/MultiStepForm';
 import ClashSheetModal from '@/components/Register/ClashSheetModal';
 
 export default function Register() {
@@ -16,7 +15,10 @@ export default function Register() {
         </div>
         <div className="relative z-2">
           <ClashSheetModal />
-          <MultiStepForm />
+          <div className="container mx-auto py-16 px-4 text-center">
+            <h2 className="text-3xl font-bold mb-4">Registration Has Ended</h2>
+            <p className="text-xl">Thank you for your interest. The registration period for this event has now closed.</p>
+          </div>
         </div>
       </div>
     </main>
