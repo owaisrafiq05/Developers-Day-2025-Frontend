@@ -63,7 +63,7 @@ export default function SponsorShowcase() {
           possible. Their support drives innovation and enables us to create
           meaningful impact.
         </motion.p>
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -74,16 +74,15 @@ export default function SponsorShowcase() {
               Become a Sponsor
             </button>
           </a>
-        </motion.div>
+        </motion.div> */}
       </header>
 
-      <div className="container m-auto">
-      <Squares
-                squareSize={40}
-                borderColor="#000"
-              />
-        {/* Title Sponsor Section */}
-        <section className="mb-20 z-30 relative px-4">
+      <div className="container mb-20">
+        <Squares
+          squareSize={40}
+          borderColor="#000"
+        />
+        {/* <section className="mb-20 z-30 relative px-4">
           <div className="mb-8 flex items-center">
             <div className="h-px flex-1 bg-gray-800"></div>
             <h2 className="mx-4 text-2xl font-bold text-red-600">
@@ -106,14 +105,13 @@ export default function SponsorShowcase() {
               )}
             </div>
           </div>
-        </section>
+        </section> */}
 
-        {Object.keys(sponsors).filter(tier => tier !== 'title').map((tier) => (
+        {/* {Object.keys(sponsors).filter(tier => tier !== 'title').map((tier) => (
           <section key={tier} className="mb-20 z-30 relative px-4">
             <div className="mb-8 flex items-center">
               <div className="h-px flex-1 bg-gray-800"></div>
               <h2 className="mx-4 text-2xl font-bold text-red-600">
-                {/* {tier.toUpperCase()}  */}
                 {tier === "recruitmentpartners" && " RECRUITMENT PARTNERS" || tier === "cotitle" && "CO TITLE" || tier.toUpperCase() } SPONSORS
               </h2>
               <div className="h-px flex-1 bg-gray-800"></div>
@@ -168,12 +166,14 @@ export default function SponsorShowcase() {
               </div>
             ))}
           </div>
-        </section>
-
+        </section> */}
+        <div className="flex justify-center">
+          <img src="/sponsors poster.jpg" className="z-10 w-[95%] relative " alt="" />
+        </div>
 
       </div>
 
-      <footer className="mt-2 text-center px-4 pb-8">
+      {/* <footer className="mt-2 text-center px-4 pb-8">
         <p className="text-gray-500">
           Interested in becoming a sponsor?{" "}
           <a href="/contact-us" className="text-red-600 hover:underline">
@@ -181,7 +181,7 @@ export default function SponsorShowcase() {
           </a>{" "}
           for more information.
         </p>
-      </footer>
+      </footer> */}
     </main>
   );
 }
