@@ -123,7 +123,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4 h-full">
+          {/* <div className="space-y-4 h-full">
             <h3 className="text-xl font-bold text-white relative inline-block">
               Quick Links
               <span className="absolute -bottom-1 left-0 w-1/2 h-1 bg-red-500 rounded-full"></span>
@@ -143,7 +143,7 @@ export default function Footer() {
                 </Link>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Developer Info */}
           <div className="space-y-4">

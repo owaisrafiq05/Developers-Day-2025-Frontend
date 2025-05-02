@@ -46,7 +46,7 @@ const PageHeader = () => {
             <span className="text-xl lg-text-3xl md:ml-2">17th April 2025 at FAST NUCES, Karachi</span>
           </div>
 
-          <div className="ml-10 mt-8">
+          {/* <div className="ml-10 mt-8">
             <Link href="/registration">
               <span 
                 className="relative inline-flex items-center justify-center px-8 py-4 
@@ -83,7 +83,7 @@ const PageHeader = () => {
                 </span>
               </span>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

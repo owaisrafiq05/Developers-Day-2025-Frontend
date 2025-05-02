@@ -50,6 +50,7 @@ export default function Menu() {
               <Image src="/logo.png" alt="Logo" width={90} height={90} className="rounded-full" />
               <span className="text-3xl font-bold text-white hidden sm:block">Developers Day 2025</span>
             </Link>
+            {/* Hamburger icon hidden
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -58,6 +59,7 @@ export default function Menu() {
             >
               {isOpen ? <FiX size={30} /> : <FiMenu size={30} />}
             </motion.button>
+            */}
           </div>
         </div>
       </motion.nav>
