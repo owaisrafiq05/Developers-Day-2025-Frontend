@@ -28,8 +28,22 @@ export default function Home() {
             Thank you for your interest!
           </div>
           
-          <div className="text-xl md:text-2xl bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent p-4 mb-4 border border-red-800 rounded-lg inline-block">
-            <span className="font-bold">This event has concluded</span>
+          <div className="flex flex-col items-center gap-4 mb-6">
+            <div className="w-full max-w-xl text-xl md:text-2xl bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent p-4 border border-red-800 rounded-lg">
+              <span className="font-bold">This event has concluded</span>
+            </div>
+
+            <div className="w-full max-w-xl text-base md:text-lg bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent p-4 border border-emerald-700 rounded-lg">
+              <span className="font-bold">Developers Day 2026 registrations are now open.</span>{" "}
+              <a
+                href="https://devday26.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-4"
+              >
+                Check out Developers Day 2026
+              </a>
+            </div>
           </div>
           
           <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto">
